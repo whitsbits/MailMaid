@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "extends": ["react-app", "prettier","plugin:jest/recommended"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 80,
+        "singleQuote": true,
+        "endOfLine": "auto",
+      }
+    ]
+  },
+  "globals": {
+    "OAuth1": true,
+    "OAuth2": true
+  }
+}
