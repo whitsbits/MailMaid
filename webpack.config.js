@@ -1,10 +1,10 @@
 /**
  * @file webpack.config.js
- * @author Amit Agarwal
+ * @author Stewart Whitman
  * @email amit@labnol.org
  *
- * Google Apps Script Starter Kit
- * https://github.com/labnol/apps-script-starter
+ * GMail Retnetion Manager
+ * https://github.com/slwhitman/
  */
 
 const path = require('path');
