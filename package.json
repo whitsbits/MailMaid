@@ -1,5 +1,5 @@
 {
-  "name": "GMailRetentionManager",
+  "name": "gmailretention",
   "version": "1.0.0",
   "description": "Allow scheduled management of Gmail retention",
   "author": "Stewart Whitman <stewart.l.whitman@gmail.com>",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/slwhitman/GMail-Maintenance"
+    "url": "git+https://github.com/slwhitman/GMail-Retention"
   },
   "keywords": [
     "google-apps-script",
