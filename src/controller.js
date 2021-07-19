@@ -2,14 +2,14 @@ function controller() {
     removePurgeMoreTriggers();
     if (loopBreak == 0) {
       set_countStart();
-      switch(type) {
-        case "0":
+      switch(action) {
+        case "Archive":
           Logger.log('Start Archive Script');
           const type = 0; // main inbox
           inBoxLooper(type);
           Logger.log(`${archiveCounter} total Category threads archived`);
           break;
-        case "1":
+        case "Purge":
           Logger.log('Start Purge Script');
           const type = 1; // category tabs
           inBoxLooper(type);
