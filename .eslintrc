@@ -7,7 +7,7 @@
       {
         "printWidth": 80,
         "singleQuote": true,
-        "endOfLine": "auto",
+        "endOfLine": "auto"
       }
     ]
   },
