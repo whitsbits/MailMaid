@@ -1,3 +1,5 @@
+import controller from "./controller"
+
 const scriptStart = new Date();
 const inc = 200; // InBox Iteration Increment
 const inboxCnt = 0;
@@ -14,7 +16,6 @@ const archiveDays = 365; // Enter # of days before messages are moved to archive
 const archiveDate = new Date();
 archiveDate.setDate(archiveDate.getDate() - archiveDays);
 Logger.log(`Archive Date is ${archiveDate}`);
-
-import controller from "./controller"
+let type=0;
 
 global.controller = controller;

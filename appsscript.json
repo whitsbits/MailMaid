@@ -7,7 +7,7 @@
         "serviceId": "gmail",
         "version": "v1"
       }
-    ],
+    ]
   },
   "webapp": {
     "access": "ANYONE",
