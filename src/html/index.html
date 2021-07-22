@@ -9,27 +9,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="text/javascript" src='../jsonFile.js'> </script>
     <script>
         $(document).ready(function () {
           $('select').formSelect();
         });
 
-        function controller(e) {
-          e.preventDefault();
+        function captureData(e) {
+          e.preventDefault();     
           const data = {
-    action: $('#action').val(),
-    searchString: $('#searchString').val(),
-    days: $('#days').val(),
-  };
-          $('button').attr('disabled', 'disabled');
-          google.script.run
-    .withSuccessHandler(function (text) {
+            action: $('#action').val(),
+            searchString: $('#searchString').val(),
+            days: $('#days').val(),
+            };
+            writeData(data)
+        /*  $('button').attr('disabled', 'disabled');
+          writeData(data).withSuccessHandler(function (text) {
               M.toast({ html: text });
               $('button').removeAttr('disabled');
-            })
-    .sendEmail(data);
-        }
+            });
+        */
+       }
+        
     </script>
+
 </head>
 
 <body>
@@ -39,14 +42,14 @@
                 <h4 class="light">GMail Retention Manager</h4>
             </div>
         </div>
-        <form onsubmit="controller(event)">
+        <form onsubmit="captureData(event)">
             <div class="row">
                 <div class="input-field col s12">
                     <select name="action" id="action">
                             <option value="Purge">Purge</option>
                             <option value="Archive">Archive</option>
                     </select>
-                    <label for="action">Which Function ?</label>
+                    <label for="action">Which Function?</label>
                 </div>
                 <div class="input-field col s12">
                     <textarea id="searchString" class="materialize-textarea" placeholder="Enter Gmail Search criteria"></textarea>

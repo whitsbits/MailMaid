@@ -11,3 +11,5 @@ function removePurgeMoreTriggers() {
   }
   Logger.log('Purge Triggers Removed');
 }
+
+export { removePurgeMoreTriggers };

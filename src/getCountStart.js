@@ -1,7 +1,7 @@
-function set_countStart() {
+function getCountStart() {
   // find the size of the inBox and reduce it by the increment to start counting each batch
   if (inboxCnt == 0) {
-    inboxCnt = set_inboxCount();
+    inboxCnt = getInboxCount();
   }
   if (inboxCnt < inc) {
     countStart = inboxCnt;
@@ -12,3 +12,5 @@ function set_countStart() {
   Logger.log(`set Count Start at ${countStart}`);
   return countStart;
 }
+
+export { getCountStart };
