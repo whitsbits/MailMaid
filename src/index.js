@@ -1,3 +1,5 @@
-import controller from "./controller"
+import captureFormData from "./captureFormData"
+import writeData from "./writeData";
 
-global.controller = controller;
+global.captureFormData = captureFormData;
+global.writeData = writeData;
