@@ -10,7 +10,8 @@
     "build": "webpack",
     "upload": "clasp push",
     "deploy": "npm run build && npm run upload",
-    "test": "jest"
+    "test": "jest",
+    "trans": "babel src -d lib"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
     "@babel/core": "^7.14.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.13.8",
     "@babel/preset-env": "^7.14.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "@google/clasp": "^2.3.1",
     "@types/google-apps-script": "^1.0.32",
     "babel-eslint": "^10.1.0",

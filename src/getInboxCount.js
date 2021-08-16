@@ -1,4 +1,4 @@
-function set_inboxCount() {
+function getInboxCount() {
   Logger.log('Starting InBox Count');
   const cached = cache.get('inBoxCnt');
   if (cached != null) {
@@ -18,7 +18,7 @@ function set_inboxCount() {
         break;
       }
     }
-    var page = GmailApp.search('-in:inbox OR category:primary', tot, inc);
+    const page = GmailApp.search('', tot, inc);
     tot += page.length;
     // Logger.log (tot + " threads counted")
   } while (page.length == inc);
@@ -26,3 +26,5 @@ function set_inboxCount() {
   cache.put('inBoxCnt', tot, 1800); // cache for 30 minutes
   return tot;
 }
+
+export { getInboxCount };

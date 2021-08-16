@@ -21,6 +21,7 @@ module.exports = {
   mode: 'none',
   context: __dirname,
   entry: getSrcPath('/index.js'),
+  target: 'node',
   output: {
     filename: `[contenthash].js`,
     path: path.resolve(__dirname, 'dist'),
