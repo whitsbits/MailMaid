@@ -1,26 +1,33 @@
 {
   "timeZone": "America/New_York",
   "runtimeVersion": "V8",
-  "dependencies": {
-    "enabledAdvancedServices": [{
-        "userSymbol": "Gmail",
-        "serviceId": "gmail",
-        "version": "v1"
+  "addOns": {
+    "common": {
+      "name": "GMail Retention",
+      "logoUrl": "https://github.com/slwhitman/GMail-Retention/blob/master/src/html/W%20Bits%20Logo.jpg",
+      "layoutProperties": {
+        "primaryColor": "#2772ed"
+      },
+      "homepageTrigger": {
+        "runFunction": "onHomepage",
+        "enabled": true
       }
-    ]
-  },
-  "webapp": {
-    "access": "ANYONE",
-    "executeAs": "USER_ACCESSING"
-  },
+    },
+    "gmail": {
+      "homepageTrigger": {
+          "enabled": true,
+          "runFunction":"onHomepage"
+        }
+      }
+    },
+
   "exceptionLogging": "STACKDRIVER",
   "oauthScopes": [
-    "https://www.googleapis.com/auth/gmail.send",
-    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+    "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",
+    "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/script.external_request",
-    "https://www.googleapis.com/auth/script.scriptapp",
-    "https://www.googleapis.com/auth/script.send_mail",
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/script.container.ui"
+    "https://www.googleapis.com/auth/script.locale",
+    "https://www.googleapis.com/auth/script.scriptapp"
   ]
 }
