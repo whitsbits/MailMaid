@@ -45,16 +45,17 @@ function inBoxLooper(action, searchString, days) {
         }
       };
 
-      if (action == 'archive'){
-        Logger.log(`${counter} total threads archived`);
-      };
-      if (action == 'purge'){
-        Logger.log(`${counter} total threads deleted`);
-      };
-
-      Logger.log(`Finished processing from Inbox index ${countStart} to ${countStart + inc}`);
   
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
     } while (countStart > -1);
+
+    if (action == 'archive'){
+      Logger.log(`${counter} total threads archived`);
+    };
+    if (action == 'purge'){
+      Logger.log(`${counter} total threads deleted`);
+    };
+
+    Logger.log(`Finished processing from Inbox index ${countStart} to ${countStart + inc}`);
   };

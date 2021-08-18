@@ -54,28 +54,9 @@ function captureFormData(e) {
     catch (e) {
         return `Error: ${e.toString()}`;
       }
-      removePurgeMoreTriggers();
-      clearCache();
-      callRetention();
     return notify(`Settings Saved`);
   }
   
-  function runNow() {
-    removePurgeMoreTriggers();
-    clearCache();
-    callRetention();
-  }
-
-  function callRetention () {
-  var userProperties = PropertiesService.getUserProperties();
-  var retentionSchedule = userProperties.getProperties();
-  Logger.log (retentionSchedule)
-        for (var key in retentionSchedule) {
-            Logger.log('Key: %s, Value: %s', key, retentionSchedule[key]);
-        }
-        inBoxLooper (retentionSchedule.action, retentionSchedule.search, retentionSchedule.days);
-  };
-
   function notify(message) {
     const notification = CardService.newNotification().setText(message);
     return CardService.newActionResponseBuilder()
