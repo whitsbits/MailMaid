@@ -1,18 +1,11 @@
 {
-  "root": true,
-  "extends": ["react-app", "prettier","plugin:jest/recommended"],
-  "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "printWidth": 80,
-        "singleQuote": true,
-        "endOfLine": "auto"
-      }
-    ]
+  "extends": "google",
+  "parserOptions": {
+    "ecmaVersion": 2018
   },
-  "globals": {
-    "OAuth1": true,
-    "OAuth2": true
+  "rules": {
+    "no-var": 1,
+    "no-unused-vars": "off",
+    "max-len": ["error", {"code": 100, "ignoreUrls": true}]
   }
 }

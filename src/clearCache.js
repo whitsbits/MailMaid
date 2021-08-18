@@ -1,3 +1,3 @@
 function clearCache() {
-  cache.remove('inBoxCnt');
+  cache.remove('inBoxCache');
 }
