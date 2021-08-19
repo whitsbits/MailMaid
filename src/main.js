@@ -8,7 +8,7 @@
   
     const search = CardService.newTextInput().setTitle('GMail Search String')
         .setFieldName('search')
-        .setValue('/"category:promotions/"')
+        .setValue('category:promotions')
         .setHint(`Use standard GMail Query Language`);
   
     const days = CardService.newTextInput().setTitle('How many days until action')
@@ -54,6 +54,7 @@ function captureFormData(e) {
     catch (e) {
         return `Error: ${e.toString()}`;
       }
+      setTrigger();
     return notify(`Settings Saved`);
   }
   

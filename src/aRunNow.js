@@ -1,6 +1,6 @@
 function aRunNow() {
   removePurgeMoreTriggers();
-  makeCache(70000);
+  makeCache(35000);
   inBoxLooper ('purge','from:contact@email.cbssports.com',10)
   //callRetention();
 }
