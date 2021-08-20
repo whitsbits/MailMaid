@@ -17,7 +17,7 @@ function captureFormData(e) {
 
     try {
       var userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({[newKey] : jarray});
+      userProperties.setProperties({[newKey] : rule});
     } 
     catch (e) {
         return `Error: ${e.toString()}`;
