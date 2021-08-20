@@ -11,7 +11,6 @@ function aRunNow() {
 
     function aRunCleanNow() {
     removePurgeMoreTriggers();
-    clearCache();
     callRetention();
   }
 
