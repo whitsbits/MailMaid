@@ -5,5 +5,11 @@
         for (var key in retentionSchedule) {
             Logger.log('Key: %s, Value: %s', key, retentionSchedule[key]);
         }
-        inBoxLooper (retentionSchedule.action, retentionSchedule.search, retentionSchedule.days);
+        for (var key in retentionSchedule){
+          var action = retentionSchedule[0];
+          var search = retentionSchedule[1];
+          var days = retentionSchedule[2];
+          inBoxLooper (action, search, days);
+          Logger.log (`Completed processing retention schedule ${key}`)
+        } 
   };

@@ -13,51 +13,33 @@
   
     const days = CardService.newTextInput().setTitle('How many days until action')
         .setFieldName('days')
-        .setValue('200')
+        .setValue('15')
         .setHint(`How many days before the retention manager processes the action.`);
   
-    const submitAction = CardService.newAction()
+    const saveAction = CardService.newAction()
         .setFunctionName('captureFormData')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const submitButton = CardService.newTextButton()
-        .setText('Save Retention Settings')
-        . setOnClickAction(submitAction);
+    const saveButton = CardService.newTextButton()
+        .setText('Save Retention Rule')
+        .setOnClickAction(saveAction);
+
+    const runAction = CardService.newAction()
+        .setFunctionName('aRunCleanNow')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const runButton = CardService.newTextButton()
+        .setText('Run retention process')
+        .setOnClickAction(runAction);
+
     const optionsSection = CardService.newCardSection()
         .addWidget(search)
         .addWidget(days)
-        .addWidget(submitButton);
+        .addWidget(saveButton)
+        .addWidget(runButton);
   
     builder.addSection(optionsSection);
     return builder.build();
   }
 
-/**
- * Action for saving user inputs.
- * @param {Object} e - Event from add-on server
- * @return {CardService.ActionResponse} result of action
- */
-
-function captureFormData(e) {
-    
-    var search = e.formInput.search;
-    var days = e.formInput.days;
-    var action = 'purge'; //TODO: Make this a choice
-  
-    try {
-      var userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({
-        'search': search,
-        'days': days,
-        'action': action
-      },true);
-    } 
-    catch (e) {
-        return `Error: ${e.toString()}`;
-      }
-      setTrigger();
-    return notify(`Settings Saved`);
-  }
-  
   function notify(message) {
     const notification = CardService.newNotification().setText(message);
     return CardService.newActionResponseBuilder()

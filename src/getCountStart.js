@@ -1,3 +1,8 @@
+/**
+ * DEPRICATRED
+ * set where to start the counting of the index in the inbox
+ */
+
 function getCountStart(inboxCnt, inc) {
   // find the size of the inBox and reduce it by the increment to start counting each batch
   if (inboxCnt == 0) {

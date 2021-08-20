@@ -1,3 +1,7 @@
+/**
+ * Controller fucntions to hepl run scrips for debugging and operations.
+ */
+
 function aRunNow() {
   removePurgeMoreTriggers();
   makeCache(35000);
@@ -10,3 +14,10 @@ function aRunNow() {
     clearCache();
     callRetention();
   }
+
+  function getUserProps() {
+    var userProperties = PropertiesService.getUserProperties();
+    for (var kind in userProperties) {
+      Logger.log('A %s goes %s!', kind, userProperties[kind]);
+    }
+    }

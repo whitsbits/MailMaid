@@ -1,3 +1,10 @@
+/**
+ * Callback for rendering the main card.
+ * @param {Object} action - the action the script will take, e.g. purge, archive, etc.
+ * @param {Object} search - the Gmail search string for the mail to be processed
+ * @param {Object}  days - number of days after whcih the mail is processed
+ * @return processed messaages
+ */
 
 const scriptStart = new Date();
 let purgeCounter = 0;

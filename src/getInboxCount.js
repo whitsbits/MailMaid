@@ -1,3 +1,9 @@
+/**
+ * Action for saving user inputs.
+ * @param {inc} - Global variable for increment of page size in couting emails
+ * @return {total} total inbox count
+ */
+
 function getInboxCount(inc) {
   Logger.log('Starting InBox Count');
   const cached = cache.get('inBoxCache');
