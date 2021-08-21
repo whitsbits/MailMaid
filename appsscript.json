@@ -4,13 +4,9 @@
   "addOns": {
     "common": {
       "name": "GMail Retention",
-      "logoUrl": "https://github.com/slwhitman/GMail-Retention/blob/master/src/html/W%20Bits%20Logo.jpg",
+      "logoUrl": "https://github.com/slwhitman/GMail-Retention/blob/0870898453b593255e385c5e6b5f35f4c7e4651b/src/html/WBitsLogo.jpg",
       "layoutProperties": {
         "primaryColor": "#2772ed"
-      },
-      "homepageTrigger": {
-        "runFunction": "onHomepage",
-        "enabled": true
       }
     },
     "gmail": {
@@ -23,11 +19,13 @@
 
   "exceptionLogging": "STACKDRIVER",
   "oauthScopes": [
-    "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
-    "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",
+    "https://www.googleapis.com/auth/gmail.addons.execute",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/script.external_request",
     "https://www.googleapis.com/auth/script.locale",
-    "https://www.googleapis.com/auth/script.scriptapp"
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.modify",
+    "https://mail.google.com/"
   ]
 }

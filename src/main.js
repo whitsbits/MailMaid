@@ -1,4 +1,3 @@
-
 /**
  * Callback for rendering the main card.
  * @param {Object} e - Event from add-on server
@@ -7,57 +6,67 @@
  function onHomepage(e) {
     const builder = CardService.newCardBuilder();
   
-    const searchString = CardService.newTextInput().setTitle('GMail Search String')
-        .setFieldName('GMail Search String')
+    const search = CardService.newTextInput().setTitle('GMail Search String')
+        .setFieldName('search')
+        .setValue('category:promotions')
         .setHint(`Use standard GMail Query Language`);
   
     const days = CardService.newTextInput().setTitle('How many days until action')
         .setFieldName('days')
-        .setValue('200')
+        .setValue('15')
         .setHint(`How many days before the retention manager processes the action.`);
   
-    const submitAction = CardService.newAction()
+    const saveAction = CardService.newAction()
         .setFunctionName('captureFormData')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const submitButton = CardService.newTextButton()
-        .setText('Save Retention Settings')
-        . setOnClickAction(submitAction);
+    const saveButton = CardService.newTextButton()
+        .setText('Save Retention Rule')
+        .setOnClickAction(saveAction);
+
+    const showAction = CardService.newAction()
+        .setFunctionName('report')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const showButton = CardService.newTextButton()
+        .setText('Show Current Rules')
+        .setOnClickAction(showAction);
+
+    const runAction = CardService.newAction()
+        .setFunctionName('aRunCleanNow')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const runButton = CardService.newTextButton()
+        .setText('Run retention process')
+        .setOnClickAction(runAction);
+
     const optionsSection = CardService.newCardSection()
-        .addWidget(searchString)
+        .addWidget(search)
         .addWidget(days)
-        .addWidget(submitButton);
+        .addWidget(saveButton)
+        .addWidget(showButton)
+        .addWidget(runButton);
   
     builder.addSection(optionsSection);
     return builder.build();
   }
 
-/**
- * Action for saving user inputs.
- * @param {Object} e - Event from add-on server
- * @return {CardService.ActionResponse} result of action
- */
-
-function captureFormData(e) {
-    const action = 'Purge' //TODO: Make this a choice
-    const searchString = e.formInput.searchString;
-    let days = e.formInput.days;
-  
-    try {
-      let userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({
-        'action': action,
-        'searchString': searchString,
-        'days': days
-      });
-    } 
-    catch (e) {
-        return `Error: ${e.toString()}`;
-      }
-      var stuff = userProperties.getProperties();
-        for (var key in stuff) {
-            Logger.log('Key: %s, Value: %s', key, stuff[key]);
-}
-    return `Settings Saved`;
+  function report(e) {
+    var text = reportRules();  
+    const builder = CardService.newCardBuilder();
+    
+    const reportText = CardService.newTextParagraph()
+    .setText(
+        text
+        );
+    
+    const reportBody = CardService.newCardSection()
+        .addWidget(reportText); 
+            
+    builder.addSection(reportBody);
+    return builder.build();
   }
-  
-  
+
+  function notify(message) {
+    const notification = CardService.newNotification().setText(message);
+    return CardService.newActionResponseBuilder()
+        .setNotification(notification)
+        .build();
+  }
