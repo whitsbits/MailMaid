@@ -12,12 +12,12 @@ function captureFormData(e) {
         var rule = [action, search, days];
         var keys = userProperties.getKeys();
         var ruleNumber = keys.length;
-        var newKey = ('rule ' + ruleNumber);
+        var newKey = ('rule' + ruleNumber);
         var jarray = JSON.stringify(rule);
 
     try {
       var userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({[newKey] : rule});
+      userProperties.setProperties({[newKey] : jarray});
     } 
     catch (e) {
         return `Error: ${e.toString()}`;

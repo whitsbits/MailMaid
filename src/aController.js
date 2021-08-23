@@ -41,11 +41,44 @@ function clearCache() {
     cache.remove('inBoxCache');
   }
 
-function getUserProps() {
-  var userProperties = PropertiesService.getUserProperties();
-  var retentionSchedule = userProperties.getProperties();
-  Logger.log (retentionSchedule)
-        for (var key in retentionSchedule) {
-            Logger.log('Key: %s, Value: %s', key, retentionSchedule[key]);
-        }
-  }
+function getUserPropsArr() {
+      var userProperties = PropertiesService.getUserProperties();
+      var retentionSchedule = userProperties.getProperties();
+      var rules =[];
+      for (var rule in retentionSchedule){
+          var ruleArray = retentionSchedule[rule]
+          .replace(/[\[\]]/g,'')
+          .split(',');
+          rules.push(ruleArray)
+      }
+      return rules;
+  };
+
+  function reportRules () {
+    var rules = getUserPropsArr();
+    var text = ''
+    for (let i = 0; i < rules.length; i++) {
+        var action = rules[i][0];
+        var search = rules[i][1];
+        var days = rules[i][2];
+        Logger.log (action)
+        Logger.log (search)
+        Logger.log (days)
+        text += `Rule ${i}: \n   Action:${action} \n   Search:${search} \n   Days:${days} \n\n`
+    }
+    return text
+  };
+
+
+  function arrToString (arr) {
+    let str = '';
+      for(let i = 0; i < arr.length; i++){
+        if(Array.isArray(arr[i])){
+            str += `${arrayToString(arr[i])} `;
+        }else{
+            str += `${arr[i]} `;
+        };
+      };
+      Logger.log (str)
+      return str;
+    };

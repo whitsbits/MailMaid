@@ -23,6 +23,13 @@
         .setText('Save Retention Rule')
         .setOnClickAction(saveAction);
 
+    const showAction = CardService.newAction()
+        .setFunctionName('report')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const showButton = CardService.newTextButton()
+        .setText('Show Current Rules')
+        .setOnClickAction(showAction);
+
     const runAction = CardService.newAction()
         .setFunctionName('aRunCleanNow')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
@@ -34,9 +41,26 @@
         .addWidget(search)
         .addWidget(days)
         .addWidget(saveButton)
+        .addWidget(showButton)
         .addWidget(runButton);
   
     builder.addSection(optionsSection);
+    return builder.build();
+  }
+
+  function report(e) {
+    var text = reportRules();  
+    const builder = CardService.newCardBuilder();
+    
+    const reportText = CardService.newTextParagraph()
+    .setText(
+        text
+        );
+    
+    const reportBody = CardService.newCardSection()
+        .addWidget(reportText); 
+            
+    builder.addSection(reportBody);
     return builder.build();
   }
 
