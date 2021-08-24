@@ -18,9 +18,10 @@ function captureFormData(e) {
     try {
       var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({[newKey] : jarray});
+      setTrigger();
     } 
     catch (e) {
         return `Error: ${e.toString()}`;
       }
-    return notify(`Retention Settings Saved as ${newKey}`);
+    return notify(`Retention Settings Saved as ${newKey} \n Timer set to run nightly`);
   }

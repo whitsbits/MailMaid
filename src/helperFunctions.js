@@ -12,6 +12,27 @@ function RunCleanNow() {
   }
 
   /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+ function purgeMore() {
+  callRetention();
+}
+
+/**
+ * Deletes all triggers that call the purgeMore function.
+ */
+ function removePurgeMoreTriggers() {
+  const triggers = ScriptApp.getProjectTriggers();
+  for (let i = 0; i < triggers.length; i++) {
+    const trigger = triggers[i];
+    if (trigger.getHandlerFunction() === 'purgeMore') {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  }
+  Logger.log('Purge Triggers Removed');
+}
+
+  /**
  * Clears the PropertyService of any stored userProperties
  */
 function clearProperties() {

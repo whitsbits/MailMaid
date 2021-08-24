@@ -1,5 +1,5 @@
 /**
- * Create a trigger that executes the purgeMore function two minutes from now
+ * Create a trigger that executes the main function to run nightly
  */
  function setTrigger() {
   ScriptApp.newTrigger('GMailRetention')

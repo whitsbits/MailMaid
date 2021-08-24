@@ -1,9 +1,11 @@
 /**
- * Callback for rendering the main card.
+ * Find messages pertaining to the Search, 
+ * process them according to the action 
+ * based on number of days between message data and action days
+ * 
  * @param {Object} action - the action the script will take, e.g. purge, archive, etc.
  * @param {Object} search - the Gmail search string for the mail to be processed
  * @param {Object}  days - number of days after whcih the mail is processed
- * @return processed messaages
  */
 
 const scriptStart = new Date();
@@ -26,10 +28,9 @@ function inBoxLooper(action, searchString, days) {
           'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function in 2 minutes.'
         );
         setPurgeMoreTrigger();
-        cache.put('inBoxCache', countStart, 1800); // reset the cache for how far you got before timeOut
-        {
-          break;
-        }
+        cache.put('inBoxCache', countStart, 1800); // reset the cache for how far you got in the Inbox count before timeOut
+        Logger.log (`Set Inbox cache to ${countStart}`)
+        break;
       }
   
       const threads = GmailApp.search(searchString, countStart, inc);
@@ -63,6 +64,10 @@ function inBoxLooper(action, searchString, days) {
     if (action == 'purge'){
       Logger.log(`${counter} total threads deleted`);
     };
-
-    Logger.log(`Finished processing from Inbox index ${countStart} to ${countStart + inc}`);
+    let min = countStart;
+    let max = countStart + inc
+    Logger.log(`Finished processing from Inbox index ${min} to ${max}`);
   };
+
+
+

@@ -2,11 +2,10 @@
  * Debugging scripts to force a run any bypass InBoxCount and PropertiesService calls
  */
 
-function RunNow() {
+function runDebugNow() {
   removePurgeMoreTriggers();
   makeCache(35000);
-  inBoxLooper ('purge','from:contact@email.cbssports.com',10)
-  //callRetention();
+  callRetention();
 }
 
 /**
@@ -16,6 +15,13 @@ function setCache() {
   makeCache(35000);
 }
 
+/**
+ * Make synthetic InBox count to put in cache
+ */
+
+ function makeCache (total) {
+  cache.put('inBoxCache', total, 1800)
+}
 
 /**
  * Debugging to synthetically load the PropertiesService

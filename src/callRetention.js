@@ -7,6 +7,6 @@
 
       Logger.log (`Processing inbox with rule set: ${action}, ${search}, ${days}`);
       inBoxLooper (action, search, days);
-      Logger.log (`Completed processing retention schedule ${rule}`)
+      Logger.log (`Completed processing retention schedule rule${i}`)
   }
 };
