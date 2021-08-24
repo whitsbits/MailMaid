@@ -14,12 +14,11 @@
     const days = CardService.newTextInput().setTitle('How many days until action')
         .setFieldName('days')
         .setValue('15')
-        .setHint(`How many days before the retention manager processes the action.`);
+        .setHint('How many days before the retention manager processes the action.');
 
     const action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setTitle('Which action do you want the retention manager to take?')
-        .setHint(`Purge moves to trash. Archive moves out of Inbox view, but retains the email for search`)
         .setFieldName('action')
         .addItem('Purge', 'purge', true)
         .addItem('Archive', 'archive', false);
