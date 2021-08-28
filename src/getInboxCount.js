@@ -18,7 +18,7 @@ function getInboxCount(inc) {
     var page = GmailApp.search('', total, inc); /** * GAS wont accept 'let' here, need to use 'var'. 
     * Must use null 'GmailApp.search' vs 'GmailApp.getInboxThreads' to return any archived messages. */ 
    
-    if (isTimeUp_(scriptStart, 240000)) {
+    if (isTimeUp_(scriptStart, 270000)) {
       /** * When script runs close to the 5 min timeout limit take the count, 
        * cache it and set a trigger to researt after 2 mins */
       Logger.log(

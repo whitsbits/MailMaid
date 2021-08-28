@@ -1,47 +1,48 @@
 /**
- * Controller fucntions to help run scrips for debugging and operations.
+ * Helper fucntions to help run scrips.
  */
 
-function RunNow() {
-  removePurgeMoreTriggers();
-  makeCache(35000);
-  inBoxLooper ('purge','from:contact@email.cbssports.com',10)
-  //callRetention();
-}
-
-function setCache() {
-  makeCache(35000);
-}
-
-function loadProperties() {
-  var userProperties = PropertiesService.getUserProperties();
-  var search = 'foo';
-  var days = 31;
-  var action = 'purge'; //TODO: HARDCODED Make this a choice in the UI
-  var rule = [action, search, days];
-  var keys = userProperties.getKeys();
-  var ruleNumber = keys.length;
-  var newKey = ('rule ' + ruleNumber);
-  var jarray = JSON.stringify(rule);
-var userProperties = PropertiesService.getUserProperties();
-userProperties.setProperties({[newKey] : jarray});
-}
+/**
+ * Sets the environmental variable to baseline before running the main process
+ */
 
 function RunCleanNow() {
-    removePurgeMoreTriggers();
+    removeTriggers('purgeMore');
     callRetention();
   }
 
+  /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+ function purgeMore() {
+  callRetention();
+}
+
+
+
+  /**
+ * Clears the PropertyService of any stored userProperties
+ */
 function clearProperties() {
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteAllProperties();
   }
 
-function clearCache() {
+  /**
+ * Clears the InBox count cache
+ */
+
+  function clearCache() {
     cache.remove('inBoxCache');
   }
 
-function getUserPropsArr() {
+/**
+ * Returns userProperties in the PropertyService
+ * and converts the object to an array 
+ *  * @return {rules} an 2D array with [ruleNum][rule atribute]
+ */
+
+  function getUserPropsArr() {
       var userProperties = PropertiesService.getUserProperties();
       var retentionSchedule = userProperties.getProperties();
       var rules =[];
@@ -53,6 +54,12 @@ function getUserPropsArr() {
       }
       return rules;
   };
+
+/**
+ * Returns userProperties in the PropertyService 
+ * as text for reporting in UI
+ *  * @return {text} a text blob of current userProperties rules
+ */
 
   function reportRules () {
     var rules = getUserPropsArr();
@@ -66,9 +73,15 @@ function getUserPropsArr() {
         Logger.log (days)
         text += `Rule ${i}: \n   Action:${action} \n   Search:${search} \n   Days:${days} \n\n`
     }
+    Logger.log (`Returning ruleset: \n ${text}`)
     return text
   };
 
+/**
+ * Not currently used
+ * Returns values from 2D array as string
+ *  * @return {str} a string
+  */
 
   function arrToString (arr) {
     let str = '';

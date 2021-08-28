@@ -5,19 +5,23 @@
  */
 
 function captureFormData(e) {
-        var userProperties = PropertiesService.getUserProperties();
-        var search = e.formInput.search;
-        var days = e.formInput.days;
-        var action = 'purge'; //TODO: HARDCODED Make this a choice in the UI
-        var rule = [action, search, days];
+        const userProperties = PropertiesService.getUserProperties();
+        const search = e.formInput.search;
+        const days = e.formInput.days;
+        const action = e.formInput.action;
+        const rule = {
+          action: this.action,
+          search: this.search,
+          days: this.days
+        };
         var keys = userProperties.getKeys();
         var ruleNumber = keys.length;
         var newKey = ('rule' + ruleNumber);
-        var jarray = JSON.stringify(rule);
-
+        //var jarray = JSON.stringify(rule);
+        Logger.log (rule)
+        Logger.log (typeof rule)
     try {
-      var userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({[newKey] : jarray});
+      userProperties.setProperties({[newKey] : rule});
     } 
     catch (e) {
         return `Error: ${e.toString()}`;
