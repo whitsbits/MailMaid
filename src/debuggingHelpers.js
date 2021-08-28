@@ -3,7 +3,7 @@
  */
 
 function runDebugNow() {
-  removePurgeMoreTriggers();
+  removeTriggers('purgeMore');
   makeCache(35000);
   callRetention();
 }

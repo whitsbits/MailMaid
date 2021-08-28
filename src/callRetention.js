@@ -41,19 +41,19 @@ for (let i = 0; i < rules.length; i++) {
   
       const threads = GmailApp.search(searchString, countStart, inc);
             
-      for (let i = 0; i < threads.length; i++) {
-        const msgDate = threads[i].getLastMessageDate();
+      for (let j = 0; j < threads.length; j++) {
+        const msgDate = threads[j].getLastMessageDate();
   
         if (action == 'archive') {
                     
           if (msgDate < actionDate) {
-            threads[i].moveToArchive();
+            threads[j].moveToArchive();
             ++counter;
           }
         }
           if (action == 'purge') {
           if (msgDate < actionDate) {
-            threads[i].moveToTrash();
+            threads[j].moveToTrash();
             ++counter;
           }
         }
@@ -61,7 +61,7 @@ for (let i = 0; i < rules.length; i++) {
   
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
-    } while (countStart > -1);
+    } while (countStart > 0);
 
     if (action == 'archive'){
       Logger.log(`${counter} total threads archived`);

@@ -7,7 +7,7 @@
  */
 
 function RunCleanNow() {
-    removePurgeMoreTriggers();
+    removeTriggers('purgeMore');
     callRetention();
   }
 
@@ -21,7 +21,7 @@ function RunCleanNow() {
 /**
  * Deletes all triggers that call the purgeMore function.
  */
- function removePurgeMoreTriggers() {
+ function removeTriggers(triggerName) {
   const triggers = ScriptApp.getProjectTriggers();
   for (let i = 0; i < triggers.length; i++) {
     const trigger = triggers[i];
