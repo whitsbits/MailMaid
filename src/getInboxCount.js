@@ -1,5 +1,12 @@
 /**
- * Action for saving user inputs.
+ * Action for coutning the inbox
+ * Checks first if a prior count value was stored in the cache
+ * Do a search for ALL (included archived) messages
+ * Count number thread returned in the batch 
+ *    (will be = to 'inc' until the last page of threads)
+ * For Inboxes larger than 17,000 the script wont finish before the time limit,
+ *    so the script will take the max count reached and put it into the cache when time is up.
+ * 
  * @param {inc} - Global variable for increment of page size in couting emails
  * @return {total} total inbox count
  */

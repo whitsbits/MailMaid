@@ -18,20 +18,6 @@ function RunCleanNow() {
   callRetention();
 }
 
-/**
- * Deletes all triggers that call the purgeMore function.
- */
- function removeTriggers(triggerName) {
-  const triggers = ScriptApp.getProjectTriggers();
-  for (let i = 0; i < triggers.length; i++) {
-    const trigger = triggers[i];
-    if (trigger.getHandlerFunction() === 'purgeMore') {
-      ScriptApp.deleteTrigger(trigger);
-    }
-  }
-  Logger.log('Purge Triggers Removed');
-}
-
   /**
  * Clears the PropertyService of any stored userProperties
  */
@@ -60,7 +46,7 @@ function clearProperties() {
       var rules =[];
       for (var rule in retentionSchedule){
           var ruleArray = retentionSchedule[rule]
-          .replace(/[\[\]]/g,'')
+          .replace(/[\[\]"]/g,'')
           .split(',');
           rules.push(ruleArray)
       }
