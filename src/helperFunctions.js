@@ -91,7 +91,7 @@ function clearProperties() {
         Logger.log (action)
         Logger.log (search)
         Logger.log (days)
-        text += `Rule ${i + 1}: \n   Action:${action} \n   Search:${search} \n   Days:${days} \n\n`
+        text += `Rule ${i + 1}: \n   Action: ${action} \n   Search: ${search} \n   Days: ${days} \n\n`
     }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text

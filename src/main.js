@@ -32,7 +32,7 @@ const card = CardService.newCardBuilder();
   * @return {CardService.Section} Return the section to build the card.
  */
   function rulesSection() {
-    var rulesText = reportRules();  
+    var rulesText = `Your current rules are: \n\n ${reportRules()}`;  
     const rulesBodyText = CardService.newTextParagraph()
         .setText(
             rulesText
@@ -41,7 +41,7 @@ const card = CardService.newCardBuilder();
         .setFunctionName('addRule')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const addRuleButton = CardService.newTextButton()
-        .setText('Edit/Add New Retention Rule')
+        .setText('Manage Rules')
         .setOnClickAction(addRuleAction);
 
     const rulesBody = CardService.newCardSection()        
@@ -56,7 +56,7 @@ const card = CardService.newCardBuilder();
   * @return {CardService.Section} Return the section to build the card.
  */
   function scheduleSection() {
-    const scheduleText = "TBD" //TODO 
+    const scheduleText = "You are currently running the schedule as:" //TODO 
     const scheduleBodyText = CardService.newTextParagraph()
         .setText(
             scheduleText
