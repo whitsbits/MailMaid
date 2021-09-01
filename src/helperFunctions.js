@@ -7,7 +7,7 @@
  */
 
 function RunCleanNow() {
-    removePurgeMoreTriggers();
+    removeTriggers('purgeMore');
     callRetention();
   }
 
@@ -21,15 +21,15 @@ function RunCleanNow() {
 /**
  * Deletes all triggers that call the purgeMore function.
  */
- function removePurgeMoreTriggers() {
+ function removeTriggers(triggerName) {
   const triggers = ScriptApp.getProjectTriggers();
   for (let i = 0; i < triggers.length; i++) {
     const trigger = triggers[i];
-    if (trigger.getHandlerFunction() === 'purgeMore') {
+    if (trigger.getHandlerFunction() === triggerName) {
       ScriptApp.deleteTrigger(trigger);
     }
   }
-  Logger.log('Purge Triggers Removed');
+  Logger.log(`Trigger ${triggerName} removed`);
 }
 
   /**
@@ -38,6 +38,7 @@ function RunCleanNow() {
 function clearProperties() {
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteAllProperties();
+    gotoRootCard();
   }
 
   /**
@@ -54,18 +55,18 @@ function clearProperties() {
  *  * @return {rules} an 2D array with [ruleNum][rule atribute]
  */
 
-  function getUserPropsArr() {
-      var userProperties = PropertiesService.getUserProperties();
-      var retentionSchedule = userProperties.getProperties();
-      var rules =[];
-      for (var rule in retentionSchedule){
-          var ruleArray = retentionSchedule[rule]
-          .replace(/[\[\]]/g,'')
-          .split(',');
-          rules.push(ruleArray)
-      }
-      return rules;
-  };
+ function getUserPropsArr() {
+  var userProperties = PropertiesService.getUserProperties();
+  var retentionSchedule = userProperties.getProperties();
+  var rules =[];
+  for (var rule in retentionSchedule){
+      var ruleArray = retentionSchedule[rule]
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+      rules.push(ruleArray)
+  }
+  return rules;
+};
 
 /**
  * Returns userProperties in the PropertyService 
@@ -83,7 +84,7 @@ function clearProperties() {
         Logger.log (action)
         Logger.log (search)
         Logger.log (days)
-        text += `Rule ${i}: \n   Action:${action} \n   Search:${search} \n   Days:${days} \n\n`
+        text += `Rule ${i + 1}: \n   Action:${action} \n   Search:${search} \n   Days:${days} \n\n`
     }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text
