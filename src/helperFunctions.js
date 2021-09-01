@@ -58,9 +58,16 @@ function clearProperties() {
  function getUserPropsArr() {
   var userProperties = PropertiesService.getUserProperties();
   var retentionSchedule = userProperties.getProperties();
+  var retentionScheduleSorted = Object.keys(retentionSchedule)
+    .sort()
+    .reduce(function (result, key){
+      result[key] = retentionSchedule[key];
+      return result;
+    },
+    {});
   var rules =[];
-  for (var rule in retentionSchedule){
-      var ruleArray = retentionSchedule[rule]
+  for (var rule in retentionScheduleSorted){
+      var ruleArray = retentionScheduleSorted[rule]
       .replace(/[\[\]"]/g,'')
       .split(',');
       rules.push(ruleArray)
