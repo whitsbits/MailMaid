@@ -11,14 +11,13 @@ function captureFormData(e) {
         var action = e.formInput.action;
         var rule = [action, search, days];
         var keys = userProperties.getKeys();
-        var ruleNumber = keys.length;
+        var ruleNumber = keys.length + 1;
         var newKey = ('rule' + ruleNumber);
         var jarray = JSON.stringify(rule);
 
     try {
       var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({[newKey] : jarray});
-      setTrigger();
     } 
     catch (e) {
         return `Error: ${e.toString()}`;
