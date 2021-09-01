@@ -42,11 +42,12 @@ const card = CardService.newCardBuilder();
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const addRuleButton = CardService.newTextButton()
         .setText('Manage Rules')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(addRuleAction);
 
     const rulesBody = CardService.newCardSection()        
-        .addWidget(rulesBodyText)
-        .addWidget(addRuleButton);
+    .addWidget(addRuleButton)
+    .addWidget(rulesBodyText);
 
     return rulesBody;
     };
@@ -98,6 +99,7 @@ const card = CardService.newCardBuilder();
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const saveMoreButton = CardService.newTextButton()
         .setText('Save Rule and Add More')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(saveMoreAction);
         
     const clearAction = CardService.newAction()
@@ -105,6 +107,7 @@ const card = CardService.newCardBuilder();
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const clearButton = CardService.newTextButton()
         .setText('Clear all Retention Rules')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(clearAction);
 
     const optionsSection = CardService.newCardSection()
@@ -171,10 +174,12 @@ const card = CardService.newCardBuilder();
      function buildPreviousAndRootButtonSet() {
         var previousButton = CardService.newTextButton()
             .setText('Back')
+            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
             .setOnClickAction(CardService.newAction()
                 .setFunctionName('gotoPreviousCard'));
         var toRootButton = CardService.newTextButton()
             .setText('HOME')
+            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
             .setOnClickAction(CardService.newAction()
                 .setFunctionName('gotoRootCard'));
     
