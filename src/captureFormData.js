@@ -22,5 +22,30 @@ function captureFormData(e) {
     catch (e) {
         return `Error: ${e.toString()}`;
       }
-    return notify(`Retention Settings Saved as ${newKey} \n Timer set to run nightly`);
+    return notify(`Retention Settings Saved as ${newKey}`);
   }
+
+
+  /**
+ * Build InBox Processing rule into Array and save user inputs to PropertiesService.
+ * @param {Object} e - Event from add-on server
+ * @return {Notify} Retention shchedule set to Triggers
+ */
+
+function captureScheduleFormData(e) {
+  var atHour = e.formInput.atHour;
+  var amPM = e.formInput
+  var everyDays = e.formInput.everyDays;
+if (amPM = PM){
+  militaryTime = atHour + 12;
+}else{
+  militaryTime = atHour;
+}
+try {
+  setTrigger(militaryTime, everyDays)
+} 
+catch (e) {
+  return `Error: ${e.toString()}`;
+}
+return notify(`Retention schedule saved to run every ${everyDays} at ${atHour} ${amPM}`);
+}

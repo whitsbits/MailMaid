@@ -18,20 +18,6 @@ function RunCleanNow() {
   callRetention();
 }
 
-/**
- * Deletes all triggers that call the purgeMore function.
- */
- function removeTriggers(triggerName) {
-  const triggers = ScriptApp.getProjectTriggers();
-  for (let i = 0; i < triggers.length; i++) {
-    const trigger = triggers[i];
-    if (trigger.getHandlerFunction() === triggerName) {
-      ScriptApp.deleteTrigger(trigger);
-    }
-  }
-  Logger.log(`Trigger ${triggerName} removed`);
-}
-
   /**
  * Clears the PropertyService of any stored userProperties
  */
@@ -88,14 +74,16 @@ function clearProperties() {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        Logger.log (action)
-        Logger.log (search)
-        Logger.log (days)
         text += `Rule ${i + 1}: \n   Action: ${action} \n   Search: ${search} \n   Days: ${days} \n\n`
     }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text
   };
+
+  function reportSchedule () {
+    var text = `Every Day at 1 AM`;
+    return text;
+  }
 
 /**
  * Not currently used

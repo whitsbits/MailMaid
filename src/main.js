@@ -57,12 +57,21 @@ const card = CardService.newCardBuilder();
   * @return {CardService.Section} Return the section to build the card.
  */
   function scheduleSection() {
-    const scheduleText = "You are currently running the schedule as:" //TODO 
+    const scheduleText = `Your current schedule is: \n\n ${reportSchedule()}`;
     const scheduleBodyText = CardService.newTextParagraph()
         .setText(
             scheduleText
         );
+
+    const changeScheduleAction = CardService.newAction()
+        .setFunctionName('addRule')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const changeScheduleButton = CardService.newTextButton()
+        .setText('Manage Schedule')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(changeScheduleAction);    
     const scheduleBody = CardService.newCardSection()
+        .addWidget(changeScheduleButton)
         .addWidget(scheduleBodyText);
 
     return scheduleBody;
