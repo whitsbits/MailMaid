@@ -24,6 +24,7 @@ function RunCleanNow() {
 function clearProperties() {
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteAllProperties();
+    gotoRootCard();
   }
 
   /**
@@ -40,18 +41,24 @@ function clearProperties() {
  *  * @return {rules} an 2D array with [ruleNum][rule atribute]
  */
 
-  function getUserPropsArr() {
-      var userProperties = PropertiesService.getUserProperties();
-      var retentionSchedule = userProperties.getProperties();
-      var rules =[];
-      for (var rule in retentionSchedule){
-          var ruleArray = retentionSchedule[rule]
-          .replace(/[\[\]"]/g,'')
-          .split(',');
-          rules.push(ruleArray)
-      }
-      return rules;
-  };
+ function getUserPropsArr() {
+  var data = userProperties.getProperties();
+  var dataSorted = Object.keys(data)
+    .sort()
+    .reduce(function (result, key){
+      result[key] = data[key];
+      return result;
+    },
+    {});
+  var properties =[];
+  for (var property in dataSorted){
+      var propertyArray = dataSorted[property]
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+      properties.push(propertyArray)
+  }
+  return properties;
+};
 
 /**
  * Returns userProperties in the PropertyService 
@@ -60,20 +67,37 @@ function clearProperties() {
  */
 
   function reportRules () {
-    var rules = getUserPropsArr();
+    var properties = getUserPropsArr();
     var text = ''
-    for (let i = 0; i < rules.length; i++) {
-        var action = rules[i][0];
-        var search = rules[i][1];
-        var days = rules[i][2];
-        Logger.log (action)
-        Logger.log (search)
-        Logger.log (days)
-        text += `Rule ${i}: \n   Action:${action} \n   Search:${search} \n   Days:${days} \n\n`
+    var keys = userProperties.getKeys();
+    for (let i = 0; i < properties.length; i++) {
+      if (keys.startsWith('Rule')){
+        var action = properties[i][0];
+        var search = properties[i][1];
+        var days = properties[i][2];
+        text += `Rule ${i + 1}: \n   Action: ${action} \n   Search: ${search} \n   Days: ${days} \n\n`
     }
+  }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text
   };
+
+  function reportSchedule () {
+    var properties = getUserPropsArr();
+    var keys = userProperties.getKeys();
+    var text = ''
+    for (let i = 0; i < properties.length; i++) {
+      if (keys==='Schedule'){
+        var everyDays = properties[i][0];
+        var atHour = properties[i][1];
+        var amPM = properties[i][2];
+        text += `You are currentl running the shedule every ${everyDays} days at ${atHour} ${amPM} \n\n`
+      }
+    }
+    Logger.log (`Returning schedule: \n ${text}`)
+    return text
+  };
+
 
 /**
  * Not currently used

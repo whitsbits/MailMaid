@@ -4,7 +4,7 @@
 
 function runDebugNow() {
   removeTriggers('purgeMore');
-  makeCache(35000);
+  makeCache(15000);
   callRetention();
 }
 
@@ -12,7 +12,7 @@ function runDebugNow() {
  * Sets the cache as a syntetic value to skip the Inbox count
  */
 function setCache() {
-  makeCache(35000);
+  makeCache(15000);
 }
 
 /**
@@ -39,38 +39,3 @@ function loadProperties() {
 var userProperties = PropertiesService.getUserProperties();
 userProperties.setProperties({[newKey] : jarray});
 }
-
-
-function testLoadProperties() {
-  const userProperties = PropertiesService.getUserProperties();
-          const rule = new Object();
-          rule.searchString = 'bar';
-          rule.days = 35;
-          rule.action = 'purge';
-          var keys = userProperties.getKeys();
-          var ruleNumber = keys.length;
-          var newKey = ('Rule' + ruleNumber);
-          Logger.log (rule)
-          Logger.log (rule.days);
-          userProperties.setProperties({[newKey] : (rule)});
-  }
-
-/**
- * Testing the format of various methods
- */
-
- function testUserProps() {
-  var userProperties = PropertiesService.getUserProperties();
-  var retentionSchedule = userProperties.getProperties();
-  var handMade = {rule1:{searchString:'foo', action:'purge', days:35}}
-  Logger.log(whatAmI (retentionSchedule));
-  Logger.log(whatAmI (handMade));
-  Logger.log ('+_+_+_+_+_+_+_+_')
-  Logger.log (retentionSchedule)
-  Logger.log (retentionSchedule.rule0);
-  Logger.log (retentionSchedule.rule0.days);
-  Logger.log ('+_+_+_+_+_+_+_+_')
-  Logger.log (handMade);
-  Logger.log (handMade.rule1);
-  Logger.log (handMade.rule1.days);
-  }

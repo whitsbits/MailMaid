@@ -13,7 +13,13 @@
       "homepageTrigger": {
           "enabled": true,
           "runFunction":"onHomepage"
+        },
+      "contextualTriggers":[
+        {
+          "unconditional":{},
+          "onTriggerFunction": "onHomepage"
         }
+      ]  
       }
     },
 
