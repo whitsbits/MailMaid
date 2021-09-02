@@ -1,5 +1,5 @@
 /**
- * Get the currnet triggers for reporting to user
+ * Get the current triggers for reporting to user
  */
 
 function getTriggers () {

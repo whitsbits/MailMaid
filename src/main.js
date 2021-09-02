@@ -213,39 +213,4 @@ const card = CardService.newCardBuilder();
     return button;
   }
 
-
-
-  /**
-   *  Create a child card, with buttons leading to each of the other
-   *  child cards, and then navigate to it.
-   *  @param {Object} e object containing the id of the card to build.
-   *  @return {ActionResponse}
-   */
-  function gotoChildCard(e) {
-    var id = parseInt(e.parameters.id);  // Current card ID
-    var id2 = (id==3) ? 1 : id + 1;      // 2nd card ID
-    var id3 = (id==1) ? 3 : id - 1;      // 3rd card ID
-    var title = 'CARD ' + id;
-
-    // Create buttons that go to the other two child cards.
-    var buttonSet = CardService.newButtonSet()
-      .addButton(createToCardButton(id2))
-      .addButton(createToCardButton(id3));
-
-    // Build the child card.
-    var card = CardService.newCardBuilder()
-        .setHeader(CardService.newCardHeader().setTitle(title))
-        .addSection(CardService.newCardSection()
-            .addWidget(buttonSet)
-            .addWidget(buildPreviousAndRootButtonSet()))
-        .build();
-
-    // Create a Navigation object to push the card onto the stack.
-    // Return a built ActionResponse that uses the navigation object.
-    var nav = CardService.newNavigation().pushCard(card);
-    return CardService.newActionResponseBuilder()
-        .setNavigation(nav)
-        .build();
-  }
-
   

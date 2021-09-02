@@ -81,7 +81,7 @@ function clearProperties() {
   };
 
   function reportSchedule () {
-    var text = `Every Day at 1 AM`;
+    var text = `Every Day at 1 AM`; //TODO Build this out
     return text;
   }
 

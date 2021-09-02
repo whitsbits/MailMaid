@@ -3,8 +3,8 @@
  */
 
 function runDebugNow() {
-  removePurgeMoreTriggers();
-  makeCache(35000);
+  removeTriggers('purgeMore');
+  makeCache(15000);
   callRetention();
 }
 
@@ -12,7 +12,7 @@ function runDebugNow() {
  * Sets the cache as a syntetic value to skip the Inbox count
  */
 function setCache() {
-  makeCache(35000);
+  makeCache(15000);
 }
 
 /**
