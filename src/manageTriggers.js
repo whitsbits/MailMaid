@@ -11,8 +11,8 @@ function getTriggers () {
 /**
  * Create a trigger that executes the main function to run nightly
  */
- function setTrigger(atHour, everyDays) {
-  ScriptApp.newTrigger('GMailRetention')
+ function setTrigger(triggerName, atHour, everyDays) {
+  ScriptApp.newTrigger(triggerName)
     .timeBased()
     .atHour(atHour)
     .everyDays(everyDays) // Frequency is required if you are using atHour() or nearMinute()

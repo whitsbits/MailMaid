@@ -1,4 +1,5 @@
 const card = CardService.newCardBuilder();
+const userProperties = PropertiesService.getUserProperties();
 
 /**
  * Callback for rendering the main card.
@@ -64,7 +65,7 @@ const card = CardService.newCardBuilder();
         );
 
     const changeScheduleAction = CardService.newAction()
-        .setFunctionName('addRule')
+        .setFunctionName('addSchedule')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const changeScheduleButton = CardService.newTextButton()
         .setText('Manage Schedule')
@@ -104,7 +105,7 @@ const card = CardService.newCardBuilder();
         .addItem('Archive', 'archive', false);
   
     const saveMoreAction = CardService.newAction()
-        .setFunctionName('captureFormData')
+        .setFunctionName('captureRuleFormData')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const saveMoreButton = CardService.newTextButton()
         .setText('Save Rule and Add More')
@@ -112,7 +113,7 @@ const card = CardService.newCardBuilder();
         .setOnClickAction(saveMoreAction);
         
     const clearAction = CardService.newAction()
-        .setFunctionName('clearProperties')
+        .setFunctionName('clearRules')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const clearButton = CardService.newTextButton()
         .setText('Clear all Retention Rules')
@@ -133,6 +134,56 @@ const card = CardService.newCardBuilder();
     card.addSection(buttonSection);
     return card.build();
   };
+
+
+/**
+ * Callback for rendering the addRule card.
+ * @param {Object} e - Event from add-on server
+ * @return {CardService.Card} The card to show to the user.
+ */
+ function addSchedule(e) {
+    const card = CardService.newCardBuilder();
+  
+    const everyDays = CardService.newTextInput().setTitle('Run every')
+        .setFieldName('everyDays')
+        .setValue('1')
+        .setHint(`Set how frequently you want the schedule to run`);
+  
+    const atHour = CardService.newTextInput().setTitle('What time of day?')
+        .setFieldName('atHour')
+        .setValue('2')
+        .setHint('Set the hour of the day (use 24h time) for the schedule to run');
+  
+    const saveMoreAction = CardService.newAction()
+        .setFunctionName('captureScheduleFormData')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const saveMoreButton = CardService.newTextButton()
+        .setText('Save Schedule')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(saveMoreAction);
+        
+    const clearAction = CardService.newAction()
+        .setFunctionName('clearSchedule')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const clearButton = CardService.newTextButton()
+        .setText('Clear the schedule')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(clearAction);
+
+    const optionsSection = CardService.newCardSection()
+        .addWidget(everyDays)
+        .addWidget(atHour);
+
+    const buttonSection = CardService.newCardSection()
+        .addWidget(saveMoreButton)
+        .addWidget(clearButton)
+        .addWidget(buildPreviousAndRootButtonSet());
+  
+    card.addSection(optionsSection);
+    card.addSection(buttonSection);
+    return card.build();
+  };
+
 
 
   /**
@@ -162,7 +213,7 @@ const card = CardService.newCardBuilder();
 
   /**
    *  Return to the initial add-on card.
-   *  @return {ActionResponse}
+   *  @return {ActionResponse} 
    */
   function gotoRootCard() {
     var nav = CardService.newNavigation()

@@ -8,12 +8,25 @@ function runDebugNow() {
   callRetention();
 }
 
+function clearTriggers() {
+  removeTriggers('GMailRetention');
+  removeTriggers('purgeMore');
+}
+
 /**
  * Sets the cache as a syntetic value to skip the Inbox count
  */
 function setCache() {
   makeCache(15000);
 }
+
+  /**
+ * Clears the InBox count cache
+ */
+
+   function clearCache() {
+    cache.remove('inBoxCache');
+  }
 
 /**
  * Make synthetic InBox count to put in cache
@@ -22,6 +35,20 @@ function setCache() {
  function makeCache (total) {
   cache.put('inBoxCache', total, 1800)
 }
+
+  /**
+ * Clears the PropertyService of any stored userProperties
+ */
+   function clearProperties() {
+    var userProperties = PropertiesService.getUserProperties();
+    userProperties.deleteAllProperties();
+  }
+
+
+  function listProperties() {
+    var userProperties = PropertiesService.getUserProperties();
+    Logger.log (userProperties.getProperties());
+  }
 
 /**
  * Debugging to synthetically load the PropertiesService
@@ -39,3 +66,22 @@ function loadProperties() {
 var userProperties = PropertiesService.getUserProperties();
 userProperties.setProperties({[newKey] : jarray});
 }
+
+/**
+ * Not currently used
+ * Returns values from 2D array as string
+ *  * @return {str} a string
+  */
+
+ function arrToString (arr) {
+  let str = '';
+    for(let i = 0; i < arr.length; i++){
+      if(Array.isArray(arr[i])){
+          str += `${arrayToString(arr[i])} `;
+      }else{
+          str += `${arr[i]} `;
+      };
+    };
+    Logger.log (str)
+    return str;
+  };
