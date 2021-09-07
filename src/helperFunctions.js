@@ -123,7 +123,7 @@ function objectLength( object ) {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        text += `Rule ${i + 1}: \n   Action: ${action} \n   Search: ${search} \n   Days: ${days} \n\n`
+        text += `Rule ${i + 1}: \n   Action to take: ${action} \n   Search string: ${search} \n   Take action after\: ${days} days \n\n`
   }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text
@@ -145,4 +145,10 @@ function objectLength( object ) {
     return text
   };
 
-
+    // Generate a log, then email it to the person who ran the script.
+function sendLogEmail() {
+  var recipient = Session.getActiveUser().getEmail();
+  var subject = 'Gmail Retention Results';
+  var body = Logger.getLog();
+  MailApp.sendEmail(recipient, subject, body);
+}

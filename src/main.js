@@ -1,5 +1,11 @@
+/**
+ * Global Variables
+ */
+
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
+const cache = CacheService.getUserCache();
+
 
 /**
  * Callback for rendering the main card.
