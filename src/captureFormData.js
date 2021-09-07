@@ -4,14 +4,14 @@
  * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
  */
 
-function captureFormData(e) {
+function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
         var rule = [action, search, days];
         var keys = userProperties.getKeys();
-        var ruleNumber = keys.length + 1;
+        var ruleNumber = keys.length + 1; //TODO Fix this to only look at RULE Keys.
         var newKey = ('rule' + ruleNumber);
         var jarray = JSON.stringify(rule);
 
@@ -33,19 +33,25 @@ function captureFormData(e) {
  */
 
 function captureScheduleFormData(e) {
-  var atHour = e.formInput.atHour;
-  var amPM = e.formInput
-  var everyDays = e.formInput.everyDays;
-if (amPM = PM){
-  militaryTime = atHour + 12;
-}else{
-  militaryTime = atHour;
-}
+  var everyDays = parseInt(e.formInput.everyDays,10);
+  var atHour = parseInt(e.formInput.atHour,10);
+  var schedule = [everyDays, atHour];
+  var jarray = JSON.stringify(schedule);
+
 try {
-  setTrigger(militaryTime, everyDays)
+  var userProperties = PropertiesService.getUserProperties();
+  var data = userProperties.getProperty('schedule');
+  if (data == null){
+    userProperties.setProperties({'schedule' : jarray});
+    setTrigger(atHour,everyDays);  
+  }
+  userProperties.deleteProperty('schedule')
+  userProperties.setProperties({'schedule' : jarray});
+  removeTriggers('GMailRetention');
+  setTrigger('GMailRetention', atHour, everyDays);
 } 
 catch (e) {
   return `Error: ${e.toString()}`;
 }
-return notify(`Retention schedule saved to run every ${everyDays} at ${atHour} ${amPM}`);
+return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`);
 }
