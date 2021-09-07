@@ -115,7 +115,7 @@ function objectLength( object ) {
   function reportRules () {
     var rules = getRulesArr();
     var text = ''
-    if (rules.length === 0) {
+    if (rules === null) {
       text = `You do not currently have any rules set`;
       return text
     }

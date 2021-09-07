@@ -10,8 +10,7 @@ function captureRuleFormData(e) {
         var days = e.formInput.days;
         var action = e.formInput.action;
         var rule = [action, search, days];
-        var keys = userProperties.getKeys();
-        var ruleNumber = keys.length + 1; //TODO Fix this to only look at RULE Keys.
+        var ruleNumber = (getRulesArr().length + 1);
         var newKey = ('rule' + ruleNumber);
         var jarray = JSON.stringify(rule);
 
@@ -43,7 +42,8 @@ try {
   var data = userProperties.getProperty('schedule');
   if (data == null){
     userProperties.setProperties({'schedule' : jarray});
-    setTrigger(atHour,everyDays);  
+    removeTriggers('GMailRetention');
+    setTrigger('GMailRetention', atHour, everyDays);  
   }
   userProperties.deleteProperty('schedule')
   userProperties.setProperties({'schedule' : jarray});
