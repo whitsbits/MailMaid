@@ -18,22 +18,24 @@ function RunCleanNow() {
   callRetention();
 }
 
-  /**
- * Clears the PropertyService of any stored userProperties
- */
-function clearProperties() {
+
+function clearRules() {
+  var numRules =  objectLength(userProperties.getProperties());
+  for (var i=1; i < numRules + 1; i++){
+    var data = userProperties.deleteProperty(`rule${i}`);
+  };
+  gotoRootCard();  
+};
+
+
+function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
-    userProperties.deleteAllProperties();
+    userProperties.deleteProperty('schedule')
+    removeTriggers('GmailRetention')
     gotoRootCard();
-  }
+  };
 
-  /**
- * Clears the InBox count cache
- */
 
-  function clearCache() {
-    cache.remove('inBoxCache');
-  }
 
 /**
  * Returns userProperties in the PropertyService
@@ -60,6 +62,50 @@ function clearProperties() {
   return properties;
 };
 
+function getRulesArr() {
+  var rulesArr =[];
+  var numRules =  objectLength(userProperties.getProperties());
+    if (numRules==0) {
+      return null;
+    }
+  for (var i=1; i < numRules + 1; i++){
+
+    var data = userProperties.getProperty(`rule${i}`);
+    if (data===null) {
+      return rulesArr;
+    }
+    var rule = data
+    .replace(/[\[\]"]/g,'')
+    .split(',');
+    rulesArr.push(rule);
+  }
+
+  return rulesArr;
+};
+
+function getScheduleArr() {
+    var data = userProperties.getProperty(`schedule`);
+    if (data == null) {
+      return data;
+    }
+    var schedule = data
+    .replace(/[\[\]"]/g,'')
+    .split(',');
+
+  return schedule;
+};
+
+
+function objectLength( object ) {
+  var length = 0;
+  for( var key in object ) {
+      if( object.hasOwnProperty(key) ) {
+          ++length;
+      }
+  }
+  return length;
+};
+
 /**
  * Returns userProperties in the PropertyService 
  * as text for reporting in UI
@@ -67,53 +113,36 @@ function clearProperties() {
  */
 
   function reportRules () {
-    var properties = getUserPropsArr();
+    var rules = getRulesArr();
     var text = ''
-    var keys = userProperties.getKeys();
-    for (let i = 0; i < properties.length; i++) {
-      if (keys.startsWith('Rule')){
-        var action = properties[i][0];
-        var search = properties[i][1];
-        var days = properties[i][2];
-        text += `Rule ${i + 1}: \n   Action: ${action} \n   Search: ${search} \n   Days: ${days} \n\n`
+    if (rules === null) {
+      text = `You do not currently have any rules set`;
+      return text
     }
+    for (let i = 0; i < rules.length; i++) {
+        var action = rules[i][0];
+        var search = rules[i][1];
+        var days = rules[i][2];
+        text += `Rule ${i + 1}: \n   Action: ${action} \n   Search: ${search} \n   Days: ${days} \n\n`
   }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text
   };
 
   function reportSchedule () {
-    var properties = getUserPropsArr();
-    var keys = userProperties.getKeys();
-    var text = ''
-    for (let i = 0; i < properties.length; i++) {
-      if (keys==='Schedule'){
-        var everyDays = properties[i][0];
-        var atHour = properties[i][1];
-        var amPM = properties[i][2];
-        text += `You are currentl running the shedule every ${everyDays} days at ${atHour} ${amPM} \n\n`
-      }
+    var schedule = getScheduleArr();
+      var text = ''
+    Logger.log (schedule);
+    if (schedule == null) {
+      text = `You do not currently have any schedule set`;
+      return text
     }
-    Logger.log (`Returning schedule: \n ${text}`)
+        var everyDays = schedule[0];
+        var militaryTime = schedule[1];
+
+      text = `You are running the schedule: \n   Every: ${everyDays} day(s) \n   Hour: ${militaryTime}h \n\n`
+    Logger.log (`Returning Schedule: \n ${text}`)
     return text
   };
 
 
-/**
- * Not currently used
- * Returns values from 2D array as string
- *  * @return {str} a string
-  */
-
-  function arrToString (arr) {
-    let str = '';
-      for(let i = 0; i < arr.length; i++){
-        if(Array.isArray(arr[i])){
-            str += `${arrayToString(arr[i])} `;
-        }else{
-            str += `${arr[i]} `;
-        };
-      };
-      Logger.log (str)
-      return str;
-    };

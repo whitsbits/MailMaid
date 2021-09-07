@@ -4,14 +4,13 @@
  * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
  */
 
-function captureFormData(e) {
+function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
         var rule = [action, search, days];
-        var keys = userProperties.getKeys();
-        var ruleNumber = keys.length + 1;
+        var ruleNumber = (getRulesArr().length + 1);
         var newKey = ('rule' + ruleNumber);
         var jarray = JSON.stringify(rule);
 
@@ -33,26 +32,26 @@ function captureFormData(e) {
  */
 
 function captureScheduleFormData(e) {
-  var everyDays = e.formInput.everyDays;
-  var atHour = e.formInput.atHour;
-  var amPM = e.formInput
-    if (amPM = PM){
-      var militaryTime = atHour + 12;
-    }else{
-      var militaryTime = atHour;
-    };
-  var schedule = [everyDays, atHour, amPM];
-  var keys = userProperties.getKeys();
-  //var ruleNumber = keys.length + 1;
-  var jarray = JSON.stringify(rule);
+  var everyDays = parseInt(e.formInput.everyDays,10);
+  var atHour = parseInt(e.formInput.atHour,10);
+  var schedule = [everyDays, atHour];
+  var jarray = JSON.stringify(schedule);
 
 try {
-var userProperties = PropertiesService.getUserProperties();
-userProperties.setProperties({'Schedule' : jarray});
-setTrigger(militaryTime, everyDays)
+  var userProperties = PropertiesService.getUserProperties();
+  var data = userProperties.getProperty('schedule');
+  if (data == null){
+    userProperties.setProperties({'schedule' : jarray});
+    removeTriggers('GMailRetention');
+    setTrigger('GMailRetention', atHour, everyDays);  
+  }
+  userProperties.deleteProperty('schedule')
+  userProperties.setProperties({'schedule' : jarray});
+  removeTriggers('GMailRetention');
+  setTrigger('GMailRetention', atHour, everyDays);
 } 
 catch (e) {
   return `Error: ${e.toString()}`;
 }
-return notify(`Retention schedule saved to run every ${everyDays} at ${atHour} ${amPM}`);
+return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`);
 }
