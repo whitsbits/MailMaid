@@ -138,8 +138,12 @@ const cache = CacheService.getUserCache();
     const buttonSection = CardService.newCardSection()
         .addWidget(buttonSet)
         .addWidget(buildPreviousAndRootButtonSet());
+
+    const selectRulesSection = CardService.newCardSection()
+    .addWidget(selectRules());
   
     card.addSection(optionsSection);
+    card.addSection(selectRulesSection);
     card.addSection(buttonSection);
     return card.build();
   };
@@ -192,6 +196,22 @@ const cache = CacheService.getUserCache();
     card.addSection(buttonSection);
     return card.build();
   };
+
+/**
+ *  selection of the rules to allow editing 
+ */
+
+function selectRules() {
+    var rules = reportRules();
+    const selectRulesBody = CardService.newSelectionInput()
+    .setType(CardService.SelectionInputType.RADIO_BUTTON)
+    .setTitle('Which rule do you want to edit?')
+    .setFieldName('editRule');
+    for (let i = 0; i < rules.length; i++) {
+        selectRulesBody.addItem(rules[i], 'Rule', false);
+    }
+    return selectRulesBody
+}
 
 
 
