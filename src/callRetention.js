@@ -8,18 +8,15 @@
  * 
  */
 
-
-
 function callRetention() {
-  let counter = 0;
-  let countStart = getInboxCount(inc);
-  var rules = getUserPropsArr();
-  const scriptStart = new Date();
-  const cache = CacheService.getUserCache();
   const inc = 500; // InBox Iteration Increment
+  var rules = getRulesArr();
+  const scriptStart = new Date();
 
 for (let i = 0; i < rules.length; i++) {
-    var action = rules[i][0];
+  let counter = 0;
+  let countStart = getInboxCount(inc);
+  var action = rules[i][0];
     var searchString = rules[i][1];
     var days = rules[i][2];
     const actionDate = new Date();
@@ -35,8 +32,6 @@ for (let i = 0; i < rules.length; i++) {
           'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function in 2 minutes.'
         );
         setPurgeMoreTrigger();
-        cache.put('inBoxCache', countStart, 1800); // reset the cache for how far you got in the Inbox count before timeOut
-        Logger.log (`Set Inbox cache to ${countStart}`)
         break;
       }
   
@@ -72,7 +67,9 @@ for (let i = 0; i < rules.length; i++) {
     };
     const cached = cache.get('inBoxCache');
     Logger.log(`Finished processing from Inbox from index ${cached}`);
+
   }
+  sendLogEmail();
   };
 
 

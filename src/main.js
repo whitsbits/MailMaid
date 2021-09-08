@@ -1,5 +1,11 @@
+/**
+ * Global Variables
+ */
+
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
+const cache = CacheService.getUserCache();
+
 
 /**
  * Callback for rendering the main card.
@@ -104,21 +110,25 @@ const userProperties = PropertiesService.getUserProperties();
         .addItem('Purge', 'purge', true)
         .addItem('Archive', 'archive', false);
   
-    const saveMoreAction = CardService.newAction()
+    const saveAction = CardService.newAction()
         .setFunctionName('captureRuleFormData')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const saveMoreButton = CardService.newTextButton()
-        .setText('Save Rule and Add More')
+    const saveButton = CardService.newTextButton()
+        .setText('Save New Rule')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-        .setOnClickAction(saveMoreAction);
+        .setOnClickAction(saveAction);
         
     const clearAction = CardService.newAction()
         .setFunctionName('clearRules')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const clearButton = CardService.newTextButton()
-        .setText('Clear all Retention Rules')
+        .setText('Clear All Rules')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(clearAction);
+
+    const buttonSet = CardService.newButtonSet()
+    .addButton(saveButton)
+    .addButton(clearButton);    
 
     const optionsSection = CardService.newCardSection()
         .addWidget(search)
@@ -126,8 +136,7 @@ const userProperties = PropertiesService.getUserProperties();
         .addWidget(action);
 
     const buttonSection = CardService.newCardSection()
-        .addWidget(saveMoreButton)
-        .addWidget(clearButton)
+        .addWidget(buttonSet)
         .addWidget(buildPreviousAndRootButtonSet());
   
     card.addSection(optionsSection);
