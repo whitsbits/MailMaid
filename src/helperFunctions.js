@@ -6,7 +6,7 @@
  * Sets the environmental variable to baseline before running the main process
  */
 
-function RunCleanNow() {
+function GMailRetention() {
     removeTriggers('purgeMore');
     callRetention();
   }
@@ -114,19 +114,18 @@ function objectLength( object ) {
 
   function reportRules () {
     var rules = getRulesArr();
-    var text = ''
+    var ruleTextArr = [];
     if (rules === null) {
-      text = `You do not currently have any rules set`;
-      return text
+      return `You do not currently have any rules set`;
     }
     for (let i = 0; i < rules.length; i++) {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        text += `Rule ${i + 1}: \n   Action to take: ${action} \n   Search string: ${search} \n   Take action after\: ${days} days \n\n`
+        ruleTextArr.push (`Rule ${i + 1}: \n   Action to take: ${action} \n   Search string: ${search} \n   Take action after\: ${days} days \n\n`)
   }
-    Logger.log (`Returning ruleset: \n ${text}`)
-    return text
+    Logger.log (`Returning ruleset: \n ${ruleTextArr}`)
+    return ruleTextArr
   };
 
   function reportSchedule () {
