@@ -12,10 +12,13 @@ function getTriggers () {
  * Create a trigger that executes the main function to run nightly
  */
  function setTrigger(triggerName, atHour, everyDays) {
+  var userTimeZone = Session.getScriptTimeZone();
+  Logger.log (userTimeZone)
   ScriptApp.newTrigger(triggerName)
     .timeBased()
     .atHour(atHour)
     .everyDays(everyDays) // Frequency is required if you are using atHour() or nearMinute()
+    .inTimezone(userTimeZone)
     .create();
 }
 
