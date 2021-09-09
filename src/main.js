@@ -138,12 +138,8 @@ const cache = CacheService.getUserCache();
     const buttonSection = CardService.newCardSection()
         .addWidget(buttonSet)
         .addWidget(buildPreviousAndRootButtonSet());
-
-    const selectRulesSection = CardService.newCardSection()
-    .addWidget(selectRules());
   
     card.addSection(optionsSection);
-    card.addSection(selectRulesSection);
     card.addSection(buttonSection);
     return card.build();
   };
@@ -201,7 +197,7 @@ const cache = CacheService.getUserCache();
  *  selection of the rules to allow editing 
  */
 
-function selectRules() {
+ function selectRules() {
     var rules = reportRules();
     const selectRulesBody = CardService.newSelectionInput()
     .setType(CardService.SelectionInputType.RADIO_BUTTON)
@@ -212,8 +208,6 @@ function selectRules() {
     }
     return selectRulesBody
 }
-
-
 
   /**
    *  Create a popup message
