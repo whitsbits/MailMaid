@@ -114,16 +114,15 @@ function objectLength( object ) {
 
   function reportRules () {
     var rules = getRulesArr();
-    var text = ''
+    var text = "";
     if (rules === null) {
-      text = `You do not currently have any rules set`;
-      return text
+      return `You do not currently have any rules set`;
     }
     for (let i = 0; i < rules.length; i++) {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        text += `Rule ${i + 1}: \n   Action to take: ${action} \n   Search string: ${search} \n   Take action after\: ${days} days \n\n`
+        text += ("Rule " + i + ": \n   Action to take:" + action + "\n   Search string:" + search + "\n   Take action after\: " + days + "days \n\n")
   }
     Logger.log (`Returning ruleset: \n ${text}`)
     return text
