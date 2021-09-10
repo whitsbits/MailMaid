@@ -11,7 +11,7 @@ function captureRuleFormData(e) {
         var action = e.formInput.action;
         var key = e.formInput.key;
         var rule = [action, search, days];
-        var ruleNumber = (getRulesArr().length + 1);
+        var ruleNumber = ([getRulesArr().length] + 1);
         Logger.log (key)
         if (key = null) {
           key = ('rule' + ruleNumber);
@@ -66,7 +66,7 @@ return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${at
  * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
  */
 
-function captureRuleFormData(e) {
+function captureRuleFormDataToo(e) {
         var userProperties = PropertiesService.getUserProperties();
         var search = e.formInput.search;
         var days = e.formInput.days;

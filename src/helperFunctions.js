@@ -59,13 +59,14 @@ function clearSchedule(){
       .split(',');
       properties.push(propertyArray)
   }
+  Logger.log (`Returning userPropertiesArr ${properties}`)
   return properties;
 };
 
 function getRulesArr() {
   var rulesArr =[];
   var numRules =  objectLength(userProperties.getProperties());
-    if (numRules==0) {
+    if (numRules===0) {
       return null;
     }
   for (var i=1; i < numRules + 1; i++){
@@ -79,7 +80,7 @@ function getRulesArr() {
     .split(',');
     rulesArr.push(rule);
   }
-
+  Logger.log (`Returning rulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -91,7 +92,7 @@ function getScheduleArr() {
     var schedule = data
     .replace(/[\[\]"]/g,'')
     .split(',');
-
+    Logger.log (`Returning scheduleArr ${schedule}}`)
   return schedule;
 };
 
@@ -103,6 +104,7 @@ function objectLength( object ) {
           ++length;
       }
   }
+  Logger.log (`Returning objectLength ${length}`)
   return length;
 };
 
@@ -112,20 +114,36 @@ function objectLength( object ) {
  *  * @return {text} a text blob of current userProperties rules
  */
 
-  function reportRules () {
+  function reportRulesText () {
     var rules = getRulesArr();
     var text = "";
-    if (rules === null) {
+    if ((rules === null || rules.length === 0)) {
       return `You do not currently have any rules set`;
     }
     for (let i = 0; i < rules.length; i++) {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        text += ("Rule " + i + ": \n   Action to take:" + action + "\n   Search string:" + search + "\n   Take action after\: " + days + "days \n\n")
+        text += ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning ruleset: \n ${text}`)
+    Logger.log (`Returning ruleset text: \n ${text}`)
     return text
+  };
+
+  function reportRulesArr () {
+    var rules = getRulesArr();
+    var reportRulesArr = [];
+    if ((rules === null || rules.length === 0)) {
+      return `You do not currently have any rules set`;
+    }
+    for (let i = 0; i < rules.length; i++) {
+        var action = rules[i][0];
+        var search = rules[i][1];
+        var days = rules[i][2];
+        reportRulesArr.push ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
+  }
+    Logger.log (`Returning ruleset Arr: \n ${reportRulesArr}`)
+    return reportRulesArr
   };
 
   function reportSchedule () {
@@ -140,7 +158,7 @@ function objectLength( object ) {
         var militaryTime = schedule[1];
 
       text = `You are running the schedule: \n   Every: ${everyDays} day(s) \n   Hour: ${militaryTime}h \n\n`
-    Logger.log (`Returning Schedule: \n ${text}`)
+    Logger.log (`Returning Schedule Text: \n ${text}`)
     return text
   };
 
@@ -150,4 +168,5 @@ function sendLogEmail() {
   var subject = 'Gmail Retention Results';
   var body = Logger.getLog();
   MailApp.sendEmail(recipient, subject, body);
+  Logger.log (`Email sent to ${recipient}`);
 }
