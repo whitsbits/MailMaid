@@ -22,7 +22,7 @@ function GMailRetention() {
 function clearRules() {
   var numRules =  objectLength(userProperties.getProperties());
   for (var i=1; i < numRules + 1; i++){
-    var data = userProperties.deleteProperty(`rule${i}`);
+  UserProperties.deleteProperty(`rule${i}`);
   };
   gotoRootCard();  
 };
@@ -67,7 +67,7 @@ function getRulesArr() {
   var rulesArr =[];
   var numRules =  objectLength(userProperties.getProperties());
     if (numRules===0) {
-      return null;
+      return `You do not currently have any rules set`;
     }
   for (var i=1; i < numRules + 1; i++){
 

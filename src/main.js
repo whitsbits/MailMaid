@@ -39,7 +39,7 @@ const cache = CacheService.getUserCache();
   * @return {CardService.Section} Return the section to build the card.
  */
   function rulesSection() {
-    var rulesText = `Your current rules are: \n\n ${reportRules()}`;  
+    var rulesText = `Your current rules are: \n\n ${reportRulesText()}`;  
     const rulesBodyText = CardService.newTextParagraph()
         .setText(
             rulesText
@@ -92,7 +92,7 @@ const cache = CacheService.getUserCache();
  * @return {CardService.Card} The card to show to the user.
  */
   function addRuleData(e) {   
-        card.addSection(selectRules());
+        card.addSection(selectRulesArr());
         card.addSection(rulesInputForm());
         card.addSection(ruleButtons());
     return card.build();
@@ -128,26 +128,25 @@ const cache = CacheService.getUserCache();
   function rulesInputForm(search, days, action) {
     const _search = CardService.newTextInput().setTitle('GMail Search String')
         .setFieldName('search')
-        .setValue(search)
+        .setValue("search")
         .setHint(`Use standard GMail Query Language`);
 
     const _days = CardService.newTextInput().setTitle('How many days until action')
         .setFieldName('days')
-        .setValue(days)
+        .setValue("days")
         .setHint('How many days before the retention manager processes the action.');
-
+/*
     if (action = 'purge') {
         var item1 = true
     }else if (action = 'archive'){
         var item2 = true
-    };
-
+    }; */
     const _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setTitle('Which action do you want the retention manager to take?')
         .setFieldName('action')
-        .addItem('Purge', 'purge', [item1])
-        .addItem('Archive', 'archive', [item2]);
+        .addItem('Purge', 'purge', true)
+        .addItem('Archive', 'archive', false);
     
     const optionsSection = CardService.newCardSection()
         .addWidget(_search)
@@ -157,9 +156,13 @@ const cache = CacheService.getUserCache();
     return optionsSection
   }
 
-  function selectRules() {
+  function selectRulesArr() {
     var rules = getRulesArr();
-    const selectRulesBody = CardService.newSelectionInput()
+    if ((rules === null || rules.length === 0)) {
+        var selectRulesBody = CardService.newTextParagraph()
+        .setText(rules);
+    }//fix the if it is not a array issue    
+    var selectRulesBody = CardService.newSelectionInput()
     .setType(CardService.SelectionInputType.RADIO_BUTTON)
     .setTitle('Which rule do you want to edit?')
     .setFieldName('editRule')
@@ -172,8 +175,47 @@ const cache = CacheService.getUserCache();
         var search = rules[i][1];
         var days = rules[i][2];
         selectRulesBody.addItem(rulePres, ruleNum, false);
-        selectRulesBody.setOnChangeAction(rulesInputForm([search], [days], [action]))
     }   
+
+    const selectRulesBodySection = CardService.newCardSection()
+        .addWidget(selectRulesBody);
+    return selectRulesBodySection
+  }
+
+  function onModeChange(e) {
+    console.log(e.formInput.action)
+}
+
+  function selectRulesReportArr() {
+    var rules = reportRulesArr();
+    const selectRulesBody = CardService.newSelectionInput()
+    .setType(CardService.SelectionInputType.RADIO_BUTTON)
+    .setTitle('Which rule do you want to edit?')
+    .setFieldName('editRule')
+
+    for (let i = 0; i < rules.length; i++) {
+        var ruleItem = rules[i];
+        var ruleNum = `rule${i}`;
+        selectRulesBody.addItem(ruleItem, ruleNum, false);
+    }   
+
+    const selectRulesBodySection = CardService.newCardSection()
+        .addWidget(selectRulesBody);
+    return selectRulesBodySection
+  }
+
+  function selectRulesReportText() {
+    var rules = reportRulesText();
+    const selectRulesBody = CardService.newSelectionInput()
+    .setType(CardService.SelectionInputType.RADIO_BUTTON)
+    .setTitle('Which rule do you want to edit?')
+    .setFieldName('editRule')
+
+    for (let i = 0; i < rules.length; i++) {
+        var ruleItem = rules[i];
+        var ruleNum = `rule${i}`;
+        selectRulesBody.addItem(ruleItem, ruleNum, false);
+    }   //This is currently parsing the individual letters
 
     const selectRulesBodySection = CardService.newCardSection()
         .addWidget(selectRulesBody);
