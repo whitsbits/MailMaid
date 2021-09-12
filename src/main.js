@@ -95,6 +95,7 @@ const cache = CacheService.getUserCache();
         card.addSection(selectRulesArr());
         card.addSection(rulesInputForm());
         card.addSection(ruleButtons());
+        card.addSection(navButtonSet());
     return card.build();
   };
 
@@ -263,10 +264,11 @@ const cache = CacheService.getUserCache();
     const buttonSection = CardService.newCardSection()
         .addWidget(saveMoreButton)
         .addWidget(clearButton)
-        .addWidget(buildPreviousAndRootButtonSet());
+        
   
     card.addSection(optionsSection);
     card.addSection(buttonSection);
+    card.addSection(navButtonSet());
     return card.build();
   };
 
@@ -289,7 +291,7 @@ const cache = CacheService.getUserCache();
    */
    function refreshCard(cardName) {
     var nav = CardService.newNavigation()
-            .updateCard([cardName]());
+            .updateCard(eval(cardName));
     return CardService.newActionResponseBuilder()
         .setNavigation(nav)
         .build();
@@ -328,7 +330,7 @@ const cache = CacheService.getUserCache();
    *  last card and another that returns to the original (root) card.
    *  @return {ButtonSet}
    */
-     function buildPreviousAndRootButtonSet() {
+     function navButtonSet() {
         var previousButton = CardService.newTextButton()
             .setText('Back')
             .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
@@ -339,11 +341,12 @@ const cache = CacheService.getUserCache();
             .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
             .setOnClickAction(CardService.newAction()
                 .setFunctionName('gotoRootCard'));
-    
-        // Return a new ButtonSet containing these two buttons.
-        return CardService.newButtonSet()
+        var navButtonSet = CardService.newButtonSet()
             .addButton(previousButton)
             .addButton(toRootButton);
+        // Return a new ButtonSet containing these two buttons.
+        var navButtonSection = CardService.newCardSection().addWidget(navButtonSet);
+        return navButtonSection;
       }
 
  /**

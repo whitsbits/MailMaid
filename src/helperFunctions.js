@@ -22,9 +22,10 @@ function GMailRetention() {
 function clearRules() {
   var numRules =  objectLength(userProperties.getProperties());
   for (var i=1; i < numRules + 1; i++){
-  UserProperties.deleteProperty(`rule${i}`);
+    userProperties.deleteProperty(`rule${i}`);
   };
-  gotoRootCard();  
+  Logger.log (`Deleted ${i - 1} rules.`)
+  refreshCard(addRuleData());  
 };
 
 

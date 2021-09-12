@@ -6,19 +6,21 @@
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
-        /*
+    
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
-        var key = e.formInput.key;
-        */
-        var search = "foo";
+        var key = null//e.formInput.key; //TODO get this to accept the push from the seleciton
+
+        //Keep for dev debugging without needing UI 
+       /* var search = "foo";
         var days = 7;
         var action = "purge";
         var key = null;
-
+      */
         var rule = [action, search, days];
-        var ruleNumber = parseInt(([getRulesArr().length] + 1),10);
+        var ruleNumber =  objectLength(userProperties.getProperties());
+        ruleNumber = ruleNumber + 1; 
         Logger.log (key)
         if (key === null) {
           key = ('rule' + ruleNumber);
