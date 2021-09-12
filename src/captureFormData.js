@@ -6,10 +6,17 @@
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
+        /*
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
         var key = e.formInput.key;
+        */
+        var search = "foo";
+        var days = 7;
+        var action = "purge";
+        var key = null;
+
         var rule = [action, search, days];
         var ruleNumber = parseInt(([getRulesArr().length] + 1),10);
         Logger.log (key)
