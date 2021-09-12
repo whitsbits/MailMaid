@@ -11,9 +11,9 @@ function captureRuleFormData(e) {
         var action = e.formInput.action;
         var key = e.formInput.key;
         var rule = [action, search, days];
-        var ruleNumber = ([getRulesArr().length] + 1);
+        var ruleNumber = parseInt(([getRulesArr().length] + 1),10);
         Logger.log (key)
-        if (key = null) {
+        if (key === null) {
           key = ('rule' + ruleNumber);
         }
         var jarray = JSON.stringify(rule);

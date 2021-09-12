@@ -117,8 +117,9 @@ function objectLength( object ) {
   function reportRulesText () {
     var rules = getRulesArr();
     var text = "";
-    if ((rules === null || rules.length === 0)) {
-      return `You do not currently have any rules set`;
+    if (typeof rules === "string") {
+      text = rules
+      return text;
     }
     for (let i = 0; i < rules.length; i++) {
         var action = rules[i][0];

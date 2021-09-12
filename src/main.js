@@ -158,25 +158,25 @@ const cache = CacheService.getUserCache();
 
   function selectRulesArr() {
     var rules = getRulesArr();
-    if ((rules === null || rules.length === 0)) {
+    if (typeof rules === "string") {
         var selectRulesBody = CardService.newTextParagraph()
         .setText(rules);
-    }//fix the if it is not a array issue    
+    }else{    
     var selectRulesBody = CardService.newSelectionInput()
-    .setType(CardService.SelectionInputType.RADIO_BUTTON)
-    .setTitle('Which rule do you want to edit?')
-    .setFieldName('editRule')
+        .setType(CardService.SelectionInputType.RADIO_BUTTON)
+        .setTitle('Which rule do you want to edit?')
+        .setFieldName('editRule')
 
-    for (let i = 0; i < rules.length; i++) {
-        var ruleItem = rules[i];
-        var ruleNum = `rule${i}`;
-        var rulePres = `Rule ${i + 1}: ${ruleItem}`
-        var action = rules[i][0];
-        var search = rules[i][1];
-        var days = rules[i][2];
-        selectRulesBody.addItem(rulePres, ruleNum, false);
-    }   
-
+        for (let i = 0; i < rules.length; i++) {
+            var ruleItem = rules[i];
+            var ruleNum = `rule${i}`;
+            var rulePres = `Rule ${i + 1}: ${ruleItem}`
+            var action = rules[i][0];
+            var search = rules[i][1];
+            var days = rules[i][2];
+            selectRulesBody.addItem(rulePres, ruleNum, false);
+        }   
+    }    
     const selectRulesBodySection = CardService.newCardSection()
         .addWidget(selectRulesBody);
     return selectRulesBodySection
