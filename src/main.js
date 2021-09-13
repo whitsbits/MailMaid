@@ -6,7 +6,7 @@ const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
 
-
+//-----------------HOMEPAGE CARD---------------------------//
 /**
  * Callback for rendering the main card.
  * @param {Object} e - Event from add-on server
@@ -14,15 +14,19 @@ const cache = CacheService.getUserCache();
  */
  function onHomepage(e) {
 
-    card.addSection(introSection());
-    card.addSection(scheduleSection());
-    card.addSection(rulesSection());
+    card.addSection(homepageIntroSection());
+    card.addSection(homepageScheduleSection());
+    card.addSection(homepageRulesSection());
+    card.setName('homepage')
 
     return card.build();
   };
 
-
-  function introSection() {
+  /**
+ * Callback for rendering the intro section.
+  * @return {CardService.Section} Return the section to build the card.
+ */
+  function homepageIntroSection() {
     var introText = "GMail retention automatically manages your email by setting rules that find messages based on GMail search criteria and can archive or purge them according to the number of days since the message was received. "
     const introBodyText = CardService.newTextParagraph()
         .setText(
@@ -38,14 +42,14 @@ const cache = CacheService.getUserCache();
  * Callback for rendering the rules section.
   * @return {CardService.Section} Return the section to build the card.
  */
-  function rulesSection() {
+  function homepageRulesSection() {
     var rulesText = `Your current rules are: \n\n ${reportRulesText()}`;  
     const rulesBodyText = CardService.newTextParagraph()
         .setText(
             rulesText
         );  
     const addRuleDataAction = CardService.newAction()
-        .setFunctionName('addRuleData')
+        .setFunctionName('addRule')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const addRuleDataButton = CardService.newTextButton()
         .setText('Manage Rules')
@@ -63,39 +67,34 @@ const cache = CacheService.getUserCache();
  * Callback for rendering the schedule section.
   * @return {CardService.Section} Return the section to build the card.
  */
-  function scheduleSection() {
-    const scheduleText = `Your current schedule is: \n\n ${reportSchedule()}`;
-    const scheduleBodyText = CardService.newTextParagraph()
-        .setText(
-            scheduleText
-        );
-
+  function homepageScheduleSection() {
     const changeScheduleAction = CardService.newAction()
-        .setFunctionName('addSchedule')
+        .setFunctionName('scheduleCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const changeScheduleButton = CardService.newTextButton()
         .setText('Manage Schedule')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(changeScheduleAction);    
     
-        const scheduleBody = CardService.newCardSection()
+    const scheduleSection = CardService.newCardSection()
         .addWidget(changeScheduleButton)
-        .addWidget(scheduleBodyText);
+        .addWidget(scheduleReportWidget());
 
-    return scheduleBody;
+    return scheduleSection;
   };
 
-
+//-----------------RULES CARD---------------------------//
   /**
  * Callback for rendering the addRule card.
  * @param {Object} e - Event from add-on server
  * @return {CardService.Card} The card to show to the user.
  */
-  function addRuleData(e) {   
+  function addRule(e) {   
         card.addSection(selectRulesArr());
         card.addSection(rulesInputForm());
         card.addSection(ruleButtons());
         card.addSection(navButtonSet());
+        card.setName('addRule')
     return card.build();
   };
 
@@ -186,61 +185,88 @@ const cache = CacheService.getUserCache();
   function onModeChange(e) {
     console.log(e.formInput.action)
 }
+//-----------------END RULES CARD---------------------------//
 
-  function selectRulesReportArr() {
-    var rules = reportRulesArr();
-    const selectRulesBody = CardService.newSelectionInput()
-    .setType(CardService.SelectionInputType.RADIO_BUTTON)
-    .setTitle('Which rule do you want to edit?')
-    .setFieldName('editRule')
 
-    for (let i = 0; i < rules.length; i++) {
-        var ruleItem = rules[i];
-        var ruleNum = `rule${i}`;
-        selectRulesBody.addItem(ruleItem, ruleNum, false);
-    }   
-
-    const selectRulesBodySection = CardService.newCardSection()
-        .addWidget(selectRulesBody);
-    return selectRulesBodySection
-  }
-
-  function selectRulesReportText() {
-    var rules = reportRulesText();
-    const selectRulesBody = CardService.newSelectionInput()
-    .setType(CardService.SelectionInputType.RADIO_BUTTON)
-    .setTitle('Which rule do you want to edit?')
-    .setFieldName('editRule')
-
-    for (let i = 0; i < rules.length; i++) {
-        var ruleItem = rules[i];
-        var ruleNum = `rule${i}`;
-        selectRulesBody.addItem(ruleItem, ruleNum, false);
-    }   //This is currently parsing the individual letters
-
-    const selectRulesBodySection = CardService.newCardSection()
-        .addWidget(selectRulesBody);
-    return selectRulesBodySection
-  }
+//-----------------SCHEDULE CARD---------------------------//
 
 /**
  * Callback for rendering the addSchedule card.
  * @param {Object} e - Event from add-on server
  * @return {CardService.Card} The card to show to the user.
  */
- function addSchedule(e) {
-    const card = CardService.newCardBuilder();
+ function scheduleCard(e) {
+    card.addSection(scheduleReportSection())
+    card.addSection(scheduleFieldsSection());
+    card.addSection(scheduleButtonsSection());
+    card.addSection(navButtonSet());
+    card.setName('schedule')
+    return card.build();
+  };
+
+  function rebuildScheduleCard(e) {
+    card.addSection(scheduleReportSection())
+    card.addSection(scheduleFieldsSection());
+    card.addSection(scheduleButtonsSection());
+    card.addSection(navButtonSet());
+    card.setName('schedule')
+    return CardService.newNavigation().updateCard(card.build())
+  };
+
+/**
+ * Callback for rendering the schedule report section.
+ * @return {CardService.Section} The card to show to the user.
+ */
+function scheduleReportSection() {
+    const scheduleReportSection = CardService.newCardSection()
+        .addWidget(scheduleReportWidget());
+    return scheduleReportSection;
+}  
+
+/**
+ * Callback for rendering the schedule report widget.
+ * @return {CardService.Widget} The card to show to the user.
+ */
   
+function scheduleReportWidget() {
+    const scheduleText = `Your current schedule is: \n\n ${reportSchedule()}`;
+    const scheduleReportWidget = CardService.newTextParagraph()
+        .setText(
+            scheduleText
+        );
+
+    return scheduleReportWidget
+}
+
+/**
+ * Callback for rendering the schedule fields section
+ * @return {CardService.Section} The card to show to the user.
+ */
+function scheduleFieldsSection() {
     const everyDays = CardService.newTextInput().setTitle('Run every')
         .setFieldName('everyDays')
         .setValue('1')
         .setHint(`Set how frequently you want the schedule to run`);
-  
+
     const atHour = CardService.newTextInput().setTitle('What time of day?')
         .setFieldName('atHour')
         .setValue('2')
         .setHint('Set the hour of the day (use 24h time) for the schedule to run');
-  
+
+    const scheduleFieldsSection = CardService.newCardSection()
+        .addWidget(everyDays)
+        .addWidget(atHour);
+
+    return scheduleFieldsSection
+}
+
+/**
+ * Callback for rendering the schedule buttons section
+ * @return {CardService.Section} The card to show to the user.
+ */
+
+function scheduleButtonsSection() {
+
     const saveMoreAction = CardService.newAction()
         .setFunctionName('captureScheduleFormData')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
@@ -248,6 +274,7 @@ const cache = CacheService.getUserCache();
         .setText('Save Schedule')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(saveMoreAction);
+        //.setOnClickAction(CardService.newAction().setFunctionName("rebuildScheduleCard"));
         
     const clearAction = CardService.newAction()
         .setFunctionName('clearSchedule')
@@ -256,23 +283,16 @@ const cache = CacheService.getUserCache();
         .setText('Clear the schedule')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(clearAction);
+        //.setOnClickAction(CardService.newAction().setFunctionName("rebuildScheduleCard"));
 
-    const optionsSection = CardService.newCardSection()
-        .addWidget(everyDays)
-        .addWidget(atHour);
-
-    const buttonSection = CardService.newCardSection()
+    const scheduleButtonsSection = CardService.newCardSection()
         .addWidget(saveMoreButton)
         .addWidget(clearButton)
-        
-  
-    card.addSection(optionsSection);
-    card.addSection(buttonSection);
-    card.addSection(navButtonSet());
-    return card.build();
-  };
 
+    return scheduleButtonsSection
+}
 
+//-----------------END SCHEDULE CARD---------------------------//
 
   /**
    *  Create a popup message
@@ -283,20 +303,10 @@ const cache = CacheService.getUserCache();
     const notification = CardService.newNotification().setText(message);
     return CardService.newActionResponseBuilder()
         .setNotification(notification)
+        .setStateChanged(true)
         .build();
   }
-  /**
-   *  Rebuild current card from the stack.
-   *  @return {ActionResponse}
-   */
-   function refreshCard(cardName) {
-    var nav = CardService.newNavigation()
-            .updateCard(eval(cardName));
-    return CardService.newActionResponseBuilder()
-        .setNavigation(nav)
-        .build();
-  }
-
+  
   /**
    *  Pop a card from the stack.
    *  @return {ActionResponse}
@@ -311,7 +321,7 @@ const cache = CacheService.getUserCache();
   }
 
   /**
-   *  Return to the initial add-on card.
+   *  Return to the initial homepage add-on card.
    *  @return {ActionResponse} 
    */
   function gotoRootCard() {
@@ -347,21 +357,52 @@ const cache = CacheService.getUserCache();
         // Return a new ButtonSet containing these two buttons.
         var navButtonSection = CardService.newCardSection().addWidget(navButtonSet);
         return navButtonSection;
-      }
+      };
 
- /**
-  * Unused UI card examples
-  */     
+      
 
-  /**
-   *  Create a button that navigates to the specified child card.
-   *  @return {TextButton}
-   */
-   function createToCardButton(cardName) {
-    var button = CardService.newTextButton()
-        .setText(cardName)
-        .setOnClickAction(action);
-    return button;
+
+
+  /** NOT USED, SAVE FOR FUTURE USE 
+   * 
+   * 
+   *   function selectRulesReportText() {
+    var rules = reportRulesText();
+    const selectRulesBody = CardService.newSelectionInput()
+    .setType(CardService.SelectionInputType.RADIO_BUTTON)
+    .setTitle('Which rule do you want to edit?')
+    .setFieldName('editRule')
+
+    for (let i = 0; i < rules.length; i++) {
+        var ruleItem = rules[i];
+        var ruleNum = `rule${i}`;
+        selectRulesBody.addItem(ruleItem, ruleNum, false);
+    }   //This is currently parsing the individual letters
+
+    const selectRulesBodySection = CardService.newCardSection()
+        .addWidget(selectRulesBody);
+    return selectRulesBodySection
   }
 
-  
+
+
+   function selectRulesReportArr() {
+    var rules = reportRulesArr();
+    const selectRulesBody = CardService.newSelectionInput()
+    .setType(CardService.SelectionInputType.RADIO_BUTTON)
+    .setTitle('Which rule do you want to edit?')
+    .setFieldName('editRule')
+
+    for (let i = 0; i < rules.length; i++) {
+        var ruleItem = rules[i];
+        var ruleNum = `rule${i}`;
+        selectRulesBody.addItem(ruleItem, ruleNum, false);
+    }   
+
+    const selectRulesBodySection = CardService.newCardSection()
+        .addWidget(selectRulesBody);
+    return selectRulesBodySection
+  }
+
+
+  */
