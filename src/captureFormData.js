@@ -18,23 +18,31 @@ function captureRuleFormData(e) {
         var action = "purge";
         var key = null;
       */
+        var ruleNum = 1
         var rule = [action, search, days];
-        var ruleNumber =  objectLength(userProperties.getProperties());
-        ruleNumber = ruleNumber + 1; 
-        Logger.log (key)
-        if (key === null) {
-          key = ('rule' + ruleNumber);
+        var numUserProps =  objectLength(userProperties.getProperties());
+        for (var i=1; i < numUserProps; i++){
+          var data = userProperties.getProperty(`rule${i}`);
+          if (data===null) {
+            var ruleNum = 0
+          }
+          ++ruleNum
         }
+          if (key === null) {
+            key = ('rule' + ruleNum);
+          }
         var jarray = JSON.stringify(rule);
-        Logger.log (key)
+        Logger.log (`Key set as ${key}`);
     try {
       var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({[key] : jarray});
     } 
     catch (e) {
-        return `Error: ${e.toString()}`;
+      Logger.log (`Error: ${e.toString()}`);  
+      return `Error: ${e.toString()}`;
       }
-    return notify(`Retention Settings Saved as ${key}`);
+      Logger.log (`Retention Settings Saved as ${key}`);
+      return notify(`Retention Settings Saved as ${key}`);
   }
 
 

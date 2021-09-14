@@ -24,16 +24,14 @@ function clearRules() {
   for (var i=1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log (`Deleted ${i - 1} rules.`)
-  refreshCard(addRuleData());  
+  Logger.log (`Deleted ${i - 1} rules.`);
 };
 
 
 function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
-    userProperties.deleteProperty('schedule')
-    removeTriggers('GmailRetention')
-    gotoRootCard();
+    userProperties.deleteProperty('schedule');
+    removeTriggers('GmailRetention');
   };
 
 
@@ -64,21 +62,20 @@ function clearSchedule(){
   return properties;
 };
 
-function getRulesArr() {
+function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
   var rulesArr =[];
-  var numRules =  objectLength(userProperties.getProperties());
-    if (numRules===0) {
-      return `You do not currently have any rules set`;
-    }
-  for (var i=1; i < numRules + 1; i++){
-
+  var numUserProps =  objectLength(userProperties.getProperties());
+  if (numUserProps === 0 ) {
+    return `You do not currently have any rules set`;
+  }
+  for (var i=1; numUserProps >= i; i++){
     var data = userProperties.getProperty(`rule${i}`);
     if (data===null) {
-      return rulesArr;
+      return `You do not currently have any rules set`;
     }
     var rule = data
-    .replace(/[\[\]"]/g,'')
-    .split(',');
+      .replace(/[\[\]"]/g,'')
+      .split(',');
     rulesArr.push(rule);
   }
   Logger.log (`Returning rulesArr ${rulesArr}`)
