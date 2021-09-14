@@ -90,15 +90,16 @@ const cache = CacheService.getUserCache();
  * @return {CardService.Card} The card to show to the user.
  */
   function addRule(e) {   
-        card.addSection(selectRulesArr());
-        card.addSection(rulesInputForm());
-        card.addSection(ruleButtons());
+        card.addSection(selectRulesSection());
+        card.addSection(rulesInputSection());
         card.addSection(navButtonSet());
         card.setName('addRule')
     return card.build();
   };
 
-    function ruleButtons() {
+
+
+    function ruleButtonsSet() {
         const saveAction = CardService.newAction()
             .setFunctionName('captureRuleFormData')
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
@@ -118,14 +119,11 @@ const cache = CacheService.getUserCache();
         const ruleButtonSet = CardService.newButtonSet()
             .addButton(saveButton)
             .addButton(clearButton);
-
-        const ruleButtonSection = CardService.newCardSection()
-            .addWidget(ruleButtonSet);
         
-    return ruleButtonSection
+    return ruleButtonSet
     } 
 
-  function rulesInputForm(search, days, action) {
+  function rulesInputSection(search, days, action) {
     const _search = CardService.newTextInput().setTitle('GMail Search String')
         .setFieldName('search')
         .setValue("search")
@@ -148,21 +146,29 @@ const cache = CacheService.getUserCache();
         .addItem('Purge', 'purge', true)
         .addItem('Archive', 'archive', false);
     
-    const optionsSection = CardService.newCardSection()
+    const rulesInputSection = CardService.newCardSection()
         .addWidget(_search)
         .addWidget(_days)
-        .addWidget(_action);
+        .addWidget(_action)
+        .addWidget(ruleButtonsSet());
 
-    return optionsSection
+    return rulesInputSection
+  }
+  
+  function selectRulesSection() {
+      const selectRulesSection = CardService.newCardSection()
+        .addWidget(selectRulesArrWidget());
+
+        return selectRulesSection;
   }
 
-  function selectRulesArr() {
+  function selectRulesArrWidget() {
     var rules = getRulesArr();
     if (typeof rules === "string") {
         var selectRulesBody = CardService.newTextParagraph()
         .setText(rules);
     }else{    
-    var selectRulesBody = CardService.newSelectionInput()
+    var selectRulesBodyWidget = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setTitle('Which rule do you want to edit?')
         .setFieldName('editRule')
@@ -177,9 +183,7 @@ const cache = CacheService.getUserCache();
             selectRulesBody.addItem(rulePres, ruleNum, false);
         }   
     }    
-    const selectRulesBodySection = CardService.newCardSection()
-        .addWidget(selectRulesBody);
-    return selectRulesBodySection
+    return selectRulesBodyWidget
   }
 
   function onModeChange(e) {
