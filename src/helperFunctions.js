@@ -64,20 +64,18 @@ function clearSchedule(){
 
 function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
   var rulesArr =[];
-  var numUserProps =  objectLength(userProperties.getProperties());
-  if (numUserProps === 0 ) {
-    return `You do not currently have any rules set`;
+  var numRules = countRules();
+  if (numRules === null ) {
+    rulesArr = `You do not currently have any rules set`;
   }
-  for (var i=1; numUserProps >= i; i++){
+  for (var i = 1; i <= numRules; i++){
     var data = userProperties.getProperty(`rule${i}`);
-    if (data===null) {
-      return `You do not currently have any rules set`;
-    }
     var rule = data
       .replace(/[\[\]"]/g,'')
       .split(',');
     rulesArr.push(rule);
-  }
+    }
+    
   Logger.log (`Returning rulesArr ${rulesArr}`)
   return rulesArr;
 };
@@ -105,6 +103,19 @@ function objectLength( object ) {
   Logger.log (`Returning objectLength ${length}`)
   return length;
 };
+
+function countRules() {
+  var numRules = parseInt(0,10);
+  var numUserProps =  objectLength(userProperties.getProperties());
+  for (var i=1; i <= numUserProps; i++){
+    var data = userProperties.getProperty(`rule${i}`);
+    if (data!=null) {
+      ++numRules
+    }    
+  }
+  Logger.log (`Returnign numRules ${numRules}`)
+  return numRules
+}
 
 /**
  * Returns userProperties in the PropertyService 
