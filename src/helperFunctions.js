@@ -22,17 +22,16 @@ function GMailRetention() {
 function clearRules() {
   var numRules =  objectLength(userProperties.getProperties());
   for (var i=1; i < numRules + 1; i++){
-    var data = userProperties.deleteProperty(`rule${i}`);
+    userProperties.deleteProperty(`rule${i}`);
   };
-  gotoRootCard();  
+  Logger.log (`Deleted ${i - 1} rules.`);
 };
 
 
 function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
-    userProperties.deleteProperty('schedule')
-    removeTriggers('GmailRetention')
-    gotoRootCard();
+    userProperties.deleteProperty('schedule');
+    removeTriggers('GmailRetention');
   };
 
 
@@ -59,27 +58,25 @@ function clearSchedule(){
       .split(',');
       properties.push(propertyArray)
   }
+  Logger.log (`Returning userPropertiesArr ${properties}`)
   return properties;
 };
 
-function getRulesArr() {
+function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
   var rulesArr =[];
-  var numRules =  objectLength(userProperties.getProperties());
-    if (numRules==0) {
-      return null;
-    }
-  for (var i=1; i < numRules + 1; i++){
-
-    var data = userProperties.getProperty(`rule${i}`);
-    if (data===null) {
-      return rulesArr;
-    }
-    var rule = data
-    .replace(/[\[\]"]/g,'')
-    .split(',');
-    rulesArr.push(rule);
+  var numRules = countRules();
+  if (numRules === null ) {
+    rulesArr = `You do not currently have any rules set`;
   }
-
+  for (var i = 1; i <= numRules; i++){
+    var data = userProperties.getProperty(`rule${i}`);
+    var rule = data
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+    rulesArr.push(rule);
+    }
+    
+  Logger.log (`Returning rulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -91,7 +88,7 @@ function getScheduleArr() {
     var schedule = data
     .replace(/[\[\]"]/g,'')
     .split(',');
-
+    Logger.log (`Returning scheduleArr ${schedule}}`)
   return schedule;
 };
 
@@ -103,8 +100,22 @@ function objectLength( object ) {
           ++length;
       }
   }
+  Logger.log (`Returning objectLength ${length}`)
   return length;
 };
+
+function countRules() {
+  var numRules = parseInt(0,10);
+  var numUserProps =  objectLength(userProperties.getProperties());
+  for (var i=1; i <= numUserProps; i++){
+    var data = userProperties.getProperty(`rule${i}`);
+    if (data!=null) {
+      ++numRules
+    }    
+  }
+  Logger.log (`Returnign numRules ${numRules}`)
+  return numRules
+}
 
 /**
  * Returns userProperties in the PropertyService 
@@ -112,20 +123,37 @@ function objectLength( object ) {
  *  * @return {text} a text blob of current userProperties rules
  */
 
-  function reportRules () {
+  function reportRulesText () {
     var rules = getRulesArr();
-    var ruleTextArr = [];
-    if (rules === null) {
+    var text = "";
+    if (typeof rules === "string") {
+      text = rules
+      return text;
+    }
+    for (let i = 0; i < rules.length; i++) {
+        var action = rules[i][0];
+        var search = rules[i][1];
+        var days = rules[i][2];
+        text += ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
+  }
+    Logger.log (`Returning ruleset text: \n ${text}`)
+    return text
+  };
+
+  function reportRulesArr () {
+    var rules = getRulesArr();
+    var reportRulesArr = [];
+    if ((rules === null || rules.length === 0)) {
       return `You do not currently have any rules set`;
     }
     for (let i = 0; i < rules.length; i++) {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        ruleTextArr.push (`Rule ${i + 1}: \n   Action to take: ${action} \n   Search string: ${search} \n   Take action after\: ${days} days \n\n`)
+        reportRulesArr.push ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning ruleset: \n ${ruleTextArr}`)
-    return ruleTextArr
+    Logger.log (`Returning ruleset Arr: \n ${reportRulesArr}`)
+    return reportRulesArr
   };
 
   function reportSchedule () {
@@ -140,7 +168,7 @@ function objectLength( object ) {
         var militaryTime = schedule[1];
 
       text = `You are running the schedule: \n   Every: ${everyDays} day(s) \n   Hour: ${militaryTime}h \n\n`
-    Logger.log (`Returning Schedule: \n ${text}`)
+    Logger.log (`Returning Schedule Text: \n ${text}`)
     return text
   };
 
@@ -150,4 +178,5 @@ function sendLogEmail() {
   var subject = 'Gmail Retention Results';
   var body = Logger.getLog();
   MailApp.sendEmail(recipient, subject, body);
+  Logger.log (`Email sent to ${recipient}`);
 }

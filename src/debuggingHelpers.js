@@ -2,6 +2,22 @@
  * Debugging scripts to force a run any bypass InBoxCount and PropertiesService calls
  */
 
+ function testules () {
+  var rules = getRulesArr();
+  var ruleTextArr = [];
+  if (rules === null) {
+    return `You do not currently have any rules set`;
+  }
+  for (let i = 0; i < rules.length; i++) {
+      var action = rules[i][0];
+      var search = rules[i][1];
+      var days = rules[i][2];
+      var compound = "Rule ${i + 1}:" + "\n" + " " + action + "\n" + " " + search + "\n" + " " + days + "\n"
+      ruleTextArr.push (compound)
+}
+  Logger.log (ruleTextArr)
+}
+
 function runDebugNow() {
   removeTriggers('purgeMore');
   makeCache(15000);
@@ -61,7 +77,7 @@ function loadProperties() {
   var rule = [action, search, days];
   var keys = userProperties.getKeys();
   var ruleNumber = keys.length;
-  var newKey = ('rule ' + ruleNumber);
+  var newKey = ('rule' + ruleNumber);
   var jarray = JSON.stringify(rule);
 var userProperties = PropertiesService.getUserProperties();
 userProperties.setProperties({[newKey] : jarray});
