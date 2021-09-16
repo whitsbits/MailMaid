@@ -13,6 +13,7 @@
 
 function getInboxCount(inc) {
   Logger.log('Starting InBox Count');
+  const scriptStart = new Date();
   const cached = cache.get('inBoxCache');
   if (cached != null) {
     // check to see if the value has been cached

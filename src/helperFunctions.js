@@ -65,7 +65,7 @@ function clearSchedule(){
 function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
   var rulesArr =[];
   var numRules = countRules();
-  if (numRules === null ) {
+  if (numRules === 0 ) {
     rulesArr = `You do not currently have any rules set`;
   }
   for (var i = 1; i <= numRules; i++){
@@ -113,7 +113,7 @@ function countRules() {
       ++numRules
     }    
   }
-  Logger.log (`Returnign numRules ${numRules}`)
+  Logger.log (`Returning numRules ${numRules}`)
   return numRules
 }
 
