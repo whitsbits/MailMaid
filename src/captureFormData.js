@@ -18,23 +18,24 @@ function captureRuleFormData(e) {
         var action = "purge";
         var key = null;
       */
+        var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
-        var ruleNumber =  objectLength(userProperties.getProperties());
-        ruleNumber = ruleNumber + 1; 
-        Logger.log (key)
+
         if (key === null) {
-          key = ('rule' + ruleNumber);
+          key = ('rule' + ruleNum);
         }
         var jarray = JSON.stringify(rule);
-        Logger.log (key)
+        Logger.log (`Key set as ${key}`);
     try {
       var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({[key] : jarray});
     } 
     catch (e) {
-        return `Error: ${e.toString()}`;
+      Logger.log (`Error: ${e.toString()}`);  
+      return `Error: ${e.toString()}`;
       }
-    return notify(`Retention Settings Saved as ${key}`);
+      Logger.log (`Retention Settings Saved as ${key}`);
+      return notify(`Retention Settings Saved as ${key}`);
   }
 
 
@@ -74,23 +75,3 @@ return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${at
  * @param {Object} e - Event from add-on server
  * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
  */
-
-function captureRuleFormDataToo(e) {
-        var userProperties = PropertiesService.getUserProperties();
-        var search = e.formInput.search;
-        var days = e.formInput.days;
-        var action = e.formInput.action;
-        var rule = [action, search, days];
-        var ruleNumber = (getRulesArr().length + 1);
-        var newKey = ('rule' + ruleNumber);
-        var jarray = JSON.stringify(rule);
-
-    try {
-      var userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({[newKey] : jarray});
-    } 
-    catch (e) {
-        return `Error: ${e.toString()}`;
-      }
-    return notify(`Retention Settings Saved as ${newKey}`);
-  }

@@ -83,7 +83,7 @@ const cache = CacheService.getUserCache();
     return scheduleSection;
   };
 
-//-----------------RULES CARD---------------------------//
+//-----------------START RULES CARD---------------------------//
   /**
  * Callback for rendering the addRule card.
  * @param {Object} e - Event from add-on server
@@ -165,7 +165,7 @@ const cache = CacheService.getUserCache();
   function selectRulesArrWidget() {
     var rules = getRulesArr();
     if (typeof rules === "string") {
-        var selectRulesBody = CardService.newTextParagraph()
+        var selectRulesBodyWidget = CardService.newTextParagraph()
         .setText(rules);
     }else{    
     var selectRulesBodyWidget = CardService.newSelectionInput()
@@ -180,7 +180,7 @@ const cache = CacheService.getUserCache();
             var action = rules[i][0];
             var search = rules[i][1];
             var days = rules[i][2];
-            selectRulesBody.addItem(rulePres, ruleNum, false);
+            selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }   
     }    
     return selectRulesBodyWidget

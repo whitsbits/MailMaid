@@ -12,14 +12,19 @@ function callRetention() {
   const inc = 500; // InBox Iteration Increment
   var rules = getRulesArr();
   const scriptStart = new Date();
-
-for (let i = 0; i < rules.length; i++) {
+  let cached = cache.get('ruleLoopCache');
+  Logger.log (`The cached rule count i = ${cached}`);
+  if (cached === null) {
+    // check to see if the value has not been cached and use zero if it has
+    cached = 0;
+  }
+for (let i = cached; i < rules.length; i++) {
   let counter = 0;
   let countStart = getInboxCount(inc);
   var action = rules[i][0];
-    var searchString = rules[i][1];
-    var days = rules[i][2];
-    const actionDate = new Date();
+  var searchString = rules[i][1];
+  var days = rules[i][2];
+  const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
     Logger.log (`Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
@@ -31,8 +36,10 @@ for (let i = 0; i < rules.length; i++) {
         Logger.log(
           'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function in 2 minutes.'
         );
+        cache.put('ruleLoopCache', i, 1800); // cache for 30 minutes
         setPurgeMoreTrigger();
-        break;
+        i = rules.length; // Break the FOR loop
+        break;  // Break the DO loop
       }
   
       const threads = GmailApp.search(searchString, countStart, inc);
@@ -69,6 +76,7 @@ for (let i = 0; i < rules.length; i++) {
     Logger.log(`Finished processing from Inbox from index ${cached}`);
 
   }
+ 
   sendLogEmail();
   };
 

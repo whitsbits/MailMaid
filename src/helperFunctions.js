@@ -24,16 +24,14 @@ function clearRules() {
   for (var i=1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log (`Deleted ${i - 1} rules.`)
-  refreshCard(addRuleData());  
+  Logger.log (`Deleted ${i - 1} rules.`);
 };
 
 
 function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
-    userProperties.deleteProperty('schedule')
-    removeTriggers('GmailRetention')
-    gotoRootCard();
+    userProperties.deleteProperty('schedule');
+    removeTriggers('GmailRetention');
   };
 
 
@@ -64,23 +62,20 @@ function clearSchedule(){
   return properties;
 };
 
-function getRulesArr() {
+function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
   var rulesArr =[];
-  var numRules =  objectLength(userProperties.getProperties());
-    if (numRules===0) {
-      return `You do not currently have any rules set`;
-    }
-  for (var i=1; i < numRules + 1; i++){
-
-    var data = userProperties.getProperty(`rule${i}`);
-    if (data===null) {
-      return rulesArr;
-    }
-    var rule = data
-    .replace(/[\[\]"]/g,'')
-    .split(',');
-    rulesArr.push(rule);
+  var numRules = countRules();
+  if (numRules === 0 ) {
+    rulesArr = `You do not currently have any rules set`;
   }
+  for (var i = 1; i <= numRules; i++){
+    var data = userProperties.getProperty(`rule${i}`);
+    var rule = data
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+    rulesArr.push(rule);
+    }
+    
   Logger.log (`Returning rulesArr ${rulesArr}`)
   return rulesArr;
 };
@@ -108,6 +103,19 @@ function objectLength( object ) {
   Logger.log (`Returning objectLength ${length}`)
   return length;
 };
+
+function countRules() {
+  var numRules = parseInt(0,10);
+  var numUserProps =  objectLength(userProperties.getProperties());
+  for (var i=1; i <= numUserProps; i++){
+    var data = userProperties.getProperty(`rule${i}`);
+    if (data!=null) {
+      ++numRules
+    }    
+  }
+  Logger.log (`Returning numRules ${numRules}`)
+  return numRules
+}
 
 /**
  * Returns userProperties in the PropertyService 
