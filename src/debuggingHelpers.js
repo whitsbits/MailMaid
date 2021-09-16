@@ -2,21 +2,6 @@
  * Debugging scripts to force a run any bypass InBoxCount and PropertiesService calls
  */
 
- function testules () {
-  var rules = getRulesArr();
-  var ruleTextArr = [];
-  if (rules === null) {
-    return `You do not currently have any rules set`;
-  }
-  for (let i = 0; i < rules.length; i++) {
-      var action = rules[i][0];
-      var search = rules[i][1];
-      var days = rules[i][2];
-      var compound = "Rule ${i + 1}:" + "\n" + " " + action + "\n" + " " + search + "\n" + " " + days + "\n"
-      ruleTextArr.push (compound)
-}
-  Logger.log (ruleTextArr)
-}
 
 function runDebugNow() {
   removeTriggers('purgeMore');
@@ -36,12 +21,26 @@ function setCache() {
   makeCache(15000);
 }
 
+function listCache() {
+  Logger.log (cache.get('inBoxCache'));
+  Logger.log (cache.get('ruleLoopCache'));
+}
+
   /**
  * Clears the InBox count cache
  */
 
-   function clearCache() {
+   function clearAllCache() {
     cache.remove('inBoxCache');
+    cache.remove('ruleLoopCache');
+  }
+
+  function clearInBoxCache() {
+    cache.remove('inBoxCache');
+  }
+
+  function clearLoopCache() {
+    cache.remove('ruleLoopCache');
   }
 
 /**

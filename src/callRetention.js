@@ -12,7 +12,7 @@ function callRetention() {
   const inc = 500; // InBox Iteration Increment
   var rules = getRulesArr();
   const scriptStart = new Date();
-  const cached = cache.get('ruleLoopCache');
+  let cached = cache.get('ruleLoopCache');
   Logger.log (`The cached rule count i = ${cached}`);
   if (cached === null) {
     // check to see if the value has not been cached and use zero if it has
@@ -38,7 +38,8 @@ for (let i = cached; i < rules.length; i++) {
         );
         cache.put('ruleLoopCache', i, 1800); // cache for 30 minutes
         setPurgeMoreTrigger();
-        break;
+        i = rules.length; // Break the FOR loop
+        break;  // Break the DO loop
       }
   
       const threads = GmailApp.search(searchString, countStart, inc);
@@ -75,6 +76,7 @@ for (let i = cached; i < rules.length; i++) {
     Logger.log(`Finished processing from Inbox from index ${cached}`);
 
   }
+ 
   sendLogEmail();
   };
 
