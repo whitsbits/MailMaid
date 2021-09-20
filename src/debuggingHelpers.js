@@ -22,8 +22,9 @@ function setCache() {
 }
 
 function listCache() {
-  Logger.log (cache.get('inBoxCache'));
-  Logger.log (cache.get('ruleLoopCache'));
+  Logger.log ("inboxNum: " + cache.get('inBoxCache'));
+  Logger.log ("ruleNum: " + cache.get('ruleLoopCache'));
+  Logger.log ("threadNum: " + cache.get('threadLoopCache'));
 }
 
   /**
@@ -33,6 +34,7 @@ function listCache() {
    function clearAllCache() {
     cache.remove('inBoxCache');
     cache.remove('ruleLoopCache');
+    cache.remove('threadLoopCache');
   }
 
   function clearInBoxCache() {
