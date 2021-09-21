@@ -9,7 +9,12 @@ function runDebugNow() {
   callRetention();
 }
 
-function clearTriggers() {
+function clearMoreTriggers() {
+  removeTriggers('purgeMore');
+}
+
+
+function clearAllTriggers() {
   removeTriggers('GMailRetention');
   removeTriggers('purgeMore');
 }
