@@ -17,7 +17,7 @@ function getInboxCount(inc) {
   const cached = cache.get('inBoxCache');
   if (cached != null) {
     // check to see if the value has been cached
-    Logger.log ('Using cached Inbox count');
+    Logger.log (`Using cached Inbox count of: ${cached}`);
     return cached;
   }
   let total = 0;
@@ -43,6 +43,6 @@ function getInboxCount(inc) {
 
 } while (page.length > 0);
   Logger.log(`The total InBox is ${total}`);
-  cache.put('inBoxCache', total, 1800); // cache for 30 minutes
+  cache.put('inBoxCache', total, 3660); // cache for 61 minutes
   return total;
 }
