@@ -34,7 +34,19 @@ function clearSchedule(){
     removeTriggers('GmailRetention');
   };
 
+/**
+ * Put or remove data into cache
+ */
 
+ function makeCache (name, data) {
+  cache.put(name, data, 3660)
+  Logger.log (`Added ${name} cache with value: ${data}`)
+}
+
+function clearCache (name) {
+  cache.remove(name)
+  Logger.log (`Removed ${name} cache.`)
+}
 
 /**
  * Returns userProperties in the PropertyService

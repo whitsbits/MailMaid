@@ -14,6 +14,7 @@ function callRetention() {
   const scriptStart = new Date();
   let rulesCached = cache.get('ruleLoopCache');
   let threadsCached = cache.get('threadLoopCache');
+  let loopBreak = 0;
   Logger.log (`The cached rule count i = ${rulesCached}`);
   Logger.log (`The cached thread count countStart = ${threadsCached}`);
   if (rulesCached === null) {
@@ -22,10 +23,17 @@ function callRetention() {
   }
 for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
-  let countStart = getInboxCount(inc);
-    if (countStart > threadsCached && threadsCached > 0){
-      countStart = threadsCached;
-    }
+  let countStart = 0;
+  const inBoxCached = cache.get('inBoxCache');
+  if (inBoxCached === null) {
+    countStart = getInboxCount(inc);
+    // check to see if the value has been cached
+  }else if (threadsCached === null) {
+    countStart = inBoxCached;
+  }else{
+    countStart = threadsCached;
+  }
+
   var action = rules[i][0];
   var searchString = rules[i][1];
   var days = rules[i][2];
@@ -44,10 +52,14 @@ for (let i = rulesCached; i < rules.length; i++) {
         cache.put('ruleLoopCache', i, 3660); // cache the rule loop location for 61 minutes
         cache.put('threadLoopCache', countStart, 3660); // cache the thread loop location for 61 minutes
         setPurgeMoreTrigger();
-        i = rules.length; // Break the FOR loop
+        loopBreak = 1; // Break the FOR (i) loop
         break;  // Break the DO loop
       }
-  
+  /* Use for debugging
+      for (let j = 0; j < inc; j++) {
+      Utilities.sleep(10);
+      };
+  */
       const threads = GmailApp.search(searchString, countStart, inc);
     
       for (let j = 0; j < threads.length; j++) {
@@ -67,23 +79,30 @@ for (let i = rulesCached; i < rules.length; i++) {
           }
         }
       };
-  
+      Logger.log (`Finished batch of ${inc} from: ${countStart}`)
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
     } while (countStart > 0);
+    if (loopBreak === 1) {
+      break; //Break to For (i) loop if there was a TimeOut
+   };
 
-    if (action == 'archive'){
-      Logger.log(`${counter} total threads archived`);
-    };
-    if (action == 'purge'){
-      Logger.log(`${counter} total threads deleted`);
-    };
-  
-    Logger.log(`Finished processing from Inbox from index ${countStart}`);
 
-  }
-
+  if (action === 'archive'){
+    Logger.log(`${counter} total threads archived`);
   };
+  if (action === 'purge'){
+    Logger.log(`${counter} total threads deleted`);
+  };
+  Logger.log(`Finished processing from Inbox from index ${countStart}`);
+  threadsCached = null;
+  clearCache('threadLoopCache');
+}
+  if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
+    clearCache('ruleLoopCache');
+    Logger.log ("FIN")
+  }
+};
 
 
 
