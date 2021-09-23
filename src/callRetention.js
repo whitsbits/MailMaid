@@ -9,7 +9,7 @@
  */
 
 function callRetention() {
-  const inc = 500; // InBox Iteration Increment
+  
   var rules = getRulesArr();
   const scriptStart = new Date();
   let rulesCached = cache.get('ruleLoopCache');
