@@ -5,6 +5,7 @@
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
+const inc = 500; // InBox Iteration Increment
 
 //-----------------HOMEPAGE CARD---------------------------//
 /**
