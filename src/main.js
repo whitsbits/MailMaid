@@ -177,9 +177,6 @@ const cache = CacheService.getUserCache();
             var ruleItem = rules[i];
             var ruleNum = `rule${i}`;
             var rulePres = `Rule ${i + 1}: ${ruleItem}`
-            var action = rules[i][0];
-            var search = rules[i][1];
-            var days = rules[i][2];
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }   
     }    
@@ -187,7 +184,9 @@ const cache = CacheService.getUserCache();
   }
 
   function onModeChange(e) {
-    console.log(e.formInput.action)
+    console.log(e.formInput.action);
+    let ruleNum = (e.formInput.editRule);
+    
 }
 //-----------------END RULES CARD---------------------------//
 
@@ -206,15 +205,6 @@ const cache = CacheService.getUserCache();
     card.addSection(navButtonSet());
     card.setName('schedule')
     return card.build();
-  };
-
-  function rebuildScheduleCard(e) {
-    card.addSection(scheduleReportSection())
-    card.addSection(scheduleFieldsSection());
-    card.addSection(scheduleButtonsSection());
-    card.addSection(navButtonSet());
-    card.setName('schedule')
-    return CardService.newNavigation().updateCard(card.build())
   };
 
 /**
@@ -301,11 +291,13 @@ function scheduleButtonsSection() {
   /**
    *  Create a popup message
    * @param {message} - Message from calling funciton
-   *  @return {TextButton}
+   *  @return {newNavigation & newNotification}
    */
-  function notify(message) {
+   function notify(message, card) {
     const notification = CardService.newNotification().setText(message);
+    var nav= CardService.newNavigation().updateCard(card);
     return CardService.newActionResponseBuilder()
+        .setNavigation(nav)
         .setNotification(notification)
         .setStateChanged(true)
         .build();

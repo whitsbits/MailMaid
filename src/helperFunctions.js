@@ -24,6 +24,7 @@ function clearRules() {
   for (var i=1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
+  return notify(`Rules Cleared`, addRule());
   Logger.log (`Deleted ${i - 1} rules.`);
 };
 
@@ -32,9 +33,22 @@ function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteProperty('schedule');
     removeTriggers('GmailRetention');
+    return notify(`Schedule Cleared`, scheduleCard());
   };
 
+/**
+ * Put or remove data into cache
+ */
 
+ function makeCache (name, data) {
+  cache.put(name, data, 3660)
+  Logger.log (`Added ${name} cache with value: ${data}`)
+}
+
+function clearCache (name) {
+  cache.remove(name)
+  Logger.log (`Removed ${name} cache.`)
+}
 
 /**
  * Returns userProperties in the PropertyService
@@ -92,6 +106,20 @@ function getScheduleArr() {
   return schedule;
 };
 
+function getCountStart() {
+  const inBoxCached = cache.get('inBoxCache');
+  if (inBoxCached === null) {
+    countStart = getInboxCount(inc);
+    // check to see if the value has been cached
+  }else if (threadsCached === null) {
+    countStart = inBoxCached;
+    Logger.log (`Using cached Inbox of: ${inBoxCached}`)
+  }else{
+    countStart = threadsCached;
+    Logger.log (`Using cached threads of: ${threadsCached}`)
+  };
+  return countStart
+}
 
 function objectLength( object ) {
   var length = 0;

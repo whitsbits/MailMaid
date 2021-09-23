@@ -2,37 +2,50 @@
  * Debugging scripts to force a run any bypass InBoxCount and PropertiesService calls
  */
 
-
+  /**
+ * Run a debug with fresh values for triggers and caches
+ */
 function runDebugNow() {
   removeTriggers('purgeMore');
-  makeCache(15000);
+  clearAllCache();
+  makeCache('inBoxCache', 1500);
   callRetention();
 }
 
-function clearTriggers() {
+  /**
+ * Clean up on aisle purgeMore trigger
+ */
+function clearMoreTriggers() {
+  removeTriggers('purgeMore');
+}
+
+  /**
+ * Clean up on aisle All triggers
+ */
+
+function clearAllTriggers() {
   removeTriggers('GMailRetention');
   removeTriggers('purgeMore');
 }
 
-/**
- * Sets the cache as a syntetic value to skip the Inbox count
+  /**
+ * list the cache(s) values
  */
-function setCache() {
-  makeCache(15000);
-}
-
 function listCache() {
-  Logger.log (cache.get('inBoxCache'));
-  Logger.log (cache.get('ruleLoopCache'));
+  Logger.log ("inboxNum: " + cache.get('inBoxCache'));
+  Logger.log ("ruleNum: " + cache.get('ruleLoopCache'));
+  Logger.log ("threadNum: " + cache.get('threadLoopCache'));
 }
 
   /**
- * Clears the InBox count cache
+ * Clears the cache(s)
  */
 
    function clearAllCache() {
     cache.remove('inBoxCache');
     cache.remove('ruleLoopCache');
+    cache.remove('threadLoopCache');
+    Logger.log (`All Caches Cleared`)
   }
 
   function clearInBoxCache() {
@@ -42,14 +55,6 @@ function listCache() {
   function clearLoopCache() {
     cache.remove('ruleLoopCache');
   }
-
-/**
- * Make synthetic InBox count to put in cache
- */
-
- function makeCache (total) {
-  cache.put('inBoxCache', total, 1800)
-}
 
   /**
  * Clears the PropertyService of any stored userProperties
