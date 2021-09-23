@@ -12,28 +12,15 @@ function callRetention() {
   const inc = 500; // InBox Iteration Increment
   var rules = getRulesArr();
   const scriptStart = new Date();
-  let rulesCached = cache.get('ruleLoopCache');
-  let threadsCached = cache.get('threadLoopCache');
-  let loopBreak = 0;
-  Logger.log (`The cached rule count i = ${rulesCached}`);
-  Logger.log (`The cached thread count countStart = ${threadsCached}`);
-  if (rulesCached === null) {
+  let cached = cache.get('ruleLoopCache');
+  Logger.log (`The cached rule count i = ${cached}`);
+  if (cached === null) {
     // check to see if the value has not been cached and use zero if it has
-    rulesCached = 0;
+    cached = 0;
   }
-for (let i = rulesCached; i < rules.length; i++) {
+for (let i = cached; i < rules.length; i++) {
   let counter = 0;
-  let countStart = 0;
-  const inBoxCached = cache.get('inBoxCache');
-  if (inBoxCached === null) {
-    countStart = getInboxCount(inc);
-    // check to see if the value has been cached
-  }else if (threadsCached === null) {
-    countStart = inBoxCached;
-  }else{
-    countStart = threadsCached;
-  }
-
+  let countStart = getInboxCount(inc);
   var action = rules[i][0];
   var searchString = rules[i][1];
   var days = rules[i][2];
@@ -47,21 +34,16 @@ for (let i = rulesCached; i < rules.length; i++) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(
-          'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function.'
+          'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function in 2 minutes.'
         );
-        cache.put('ruleLoopCache', i, 3660); // cache the rule loop location for 61 minutes
-        cache.put('threadLoopCache', countStart, 3660); // cache the thread loop location for 61 minutes
+        cache.put('ruleLoopCache', i, 1800); // cache for 30 minutes
         setPurgeMoreTrigger();
-        loopBreak = 1; // Break the FOR (i) loop
+        i = rules.length; // Break the FOR loop
         break;  // Break the DO loop
       }
-  /* Use for debugging
-      for (let j = 0; j < inc; j++) {
-      Utilities.sleep(10);
-      };
-  */
+  
       const threads = GmailApp.search(searchString, countStart, inc);
-    
+            
       for (let j = 0; j < threads.length; j++) {
         const msgDate = threads[j].getLastMessageDate();
   
@@ -79,30 +61,24 @@ for (let i = rulesCached; i < rules.length; i++) {
           }
         }
       };
-      Logger.log (`Finished batch of ${inc} from: ${countStart}`)
+  
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
     } while (countStart > 0);
-    if (loopBreak === 1) {
-      break; //Break to For (i) loop if there was a TimeOut
-   };
 
+    if (action == 'archive'){
+      Logger.log(`${counter} total threads archived`);
+    };
+    if (action == 'purge'){
+      Logger.log(`${counter} total threads deleted`);
+    };
+    const cached = cache.get('inBoxCache');
+    Logger.log(`Finished processing from Inbox from index ${cached}`);
 
-  if (action === 'archive'){
-    Logger.log(`${counter} total threads archived`);
-  };
-  if (action === 'purge'){
-    Logger.log(`${counter} total threads deleted`);
-  };
-  Logger.log(`Finished processing from Inbox from index ${countStart}`);
-  threadsCached = null;
-  clearCache('threadLoopCache');
-}
-  if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
-    clearCache('ruleLoopCache');
-    Logger.log ("FIN")
   }
-};
+ 
+  sendLogEmail();
+  };
 
 
 
