@@ -8,7 +8,9 @@
 function runDebugNow() {
   removeTriggers('purgeMore');
   clearAllCache();
-  makeCache('inBoxCache', 1500);
+  makeCache('inBoxCache', 15000);
+  makeCache('ruleLoopCache', 2)
+  makeCache('threadLoopCache', 9000)
   callRetention();
 }
 

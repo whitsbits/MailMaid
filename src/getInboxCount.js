@@ -32,7 +32,7 @@ function getInboxCount(inc) {
       Logger.log(
         `Inbox count timeout. Passing partial count of ${total} to controller`
       );
-      cache.put('inBoxCache', total, 1800); // cache for 30 minutes
+      cache.put('inBoxCache', total, 82800); // cache for 23 hours
       setPurgeMoreTrigger(); //set triggr to restart script
       Logger.log('Setting Trigger to resume script')
       return total;
@@ -43,6 +43,6 @@ function getInboxCount(inc) {
 
 } while (page.length > 0);
   Logger.log(`The total InBox is ${total}`);
-  cache.put('inBoxCache', total, 3660); // cache for 61 minutes
+  cache.put('inBoxCache', total, 82800); // cache for 23 hours
   return total;
 }

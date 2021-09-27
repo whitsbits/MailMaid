@@ -13,10 +13,9 @@ function callRetention() {
   var rules = getRulesArr();
   const scriptStart = new Date();
   let rulesCached = cache.get('ruleLoopCache');
-  let threadsCached = cache.get('threadLoopCache');
+ 
   let loopBreak = 0;
-  Logger.log (`The cached rule count i = ${rulesCached}`);
-  Logger.log (`The cached thread count countStart = ${threadsCached}`);
+  
   if (rulesCached === null) {
     // check to see if the value has not been cached and use zero if it has
     rulesCached = 0;
@@ -24,7 +23,7 @@ function callRetention() {
 for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
   let countStart = getCountStart();
-  
+  listCache();
   var action = rules[i][0];
   var searchString = rules[i][1];
   var days = rules[i][2];
@@ -34,14 +33,20 @@ for (let i = rulesCached; i < rules.length; i++) {
     Logger.log (`Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
 
     do {
-      if (isTimeUp_(scriptStart, 240000)) {
+      if (isTimeUp_(scriptStart, 270000)) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(
           'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function.'
         );
-        cache.put('ruleLoopCache', i, 3660); // cache the rule loop location for 61 minutes
-        cache.put('threadLoopCache', countStart, 3660); // cache the thread loop location for 61 minutes
+        if (action === 'archive'){
+          Logger.log(`${counter} total threads archived`);
+        };
+        if (action === 'purge'){
+          Logger.log(`${counter} total threads deleted`);
+        };
+        makeCache('ruleLoopCache', i); // cache the rule loop location
+        makeCache('threadLoopCache', countStart); // cache the thread loop location
         setPurgeMoreTrigger();
         loopBreak = 1; // Break the FOR (i) loop
         break;  // Break the DO loop
@@ -74,6 +79,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
     } while (countStart > 0);
+    
     if (loopBreak === 1) {
       break; //Break to For (i) loop if there was a TimeOut
    };
