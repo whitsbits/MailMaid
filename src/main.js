@@ -187,7 +187,7 @@ const inc = 500; // InBox Iteration Increment
   function onModeChange(e) {
     console.log(e.formInput.action);
     let ruleNum = (e.formInput.editRule);
-    
+    console.log (ruleNum);    
 }
 //-----------------END RULES CARD---------------------------//
 
