@@ -71,8 +71,4 @@ catch (e) {
 return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
 }
 
-/**
- * Build InBox Processing rule into Array and save user inputs to PropertiesService.
- * @param {Object} e - Event from add-on server
- * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
- */
+

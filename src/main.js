@@ -5,6 +5,7 @@
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
+const inc = 500; // InBox Iteration Increment
 
 //-----------------HOMEPAGE CARD---------------------------//
 /**
@@ -172,6 +173,7 @@ const cache = CacheService.getUserCache();
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setTitle('Which rule do you want to edit?')
         .setFieldName('editRule')
+        .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
 
         for (let i = 0; i < rules.length; i++) {
             var ruleItem = rules[i];
@@ -184,9 +186,8 @@ const cache = CacheService.getUserCache();
   }
 
   function onModeChange(e) {
-    console.log(e.formInput.action);
     let ruleNum = (e.formInput.editRule);
-    
+    console.log (ruleNum);   
 }
 //-----------------END RULES CARD---------------------------//
 

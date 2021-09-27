@@ -24,8 +24,8 @@ function clearRules() {
   for (var i=1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
-  return notify(`Rules Cleared`, addRule());
   Logger.log (`Deleted ${i - 1} rules.`);
+  return notify(`Rules Cleared`, addRule());
 };
 
 
@@ -41,7 +41,7 @@ function clearSchedule(){
  */
 
  function makeCache (name, data) {
-  cache.put(name, data, 3660)
+  cache.put(name, data, 82800) //23 hour cache
   Logger.log (`Added ${name} cache with value: ${data}`)
 }
 
@@ -108,6 +108,7 @@ function getScheduleArr() {
 
 function getCountStart() {
   const inBoxCached = cache.get('inBoxCache');
+  let threadsCached = cache.get('threadLoopCache');
   if (inBoxCached === null) {
     countStart = getInboxCount(inc);
     // check to see if the value has been cached
@@ -118,6 +119,7 @@ function getCountStart() {
     countStart = threadsCached;
     Logger.log (`Using cached threads of: ${threadsCached}`)
   };
+  Logger.log (`Returning Starting count of ${countStart}`)
   return countStart
 }
 
