@@ -51,12 +51,14 @@ for (let i = rulesCached; i < rules.length; i++) {
         loopBreak = 1; // Break the FOR (i) loop
         break;  // Break the DO loop
       }
-      //Use for debugging
+      //Use for debugging when Google limits number of daily search calls
+      
       /*
       for (let j = 0; j < inc; j++) {
       Utilities.sleep(10);
       };
       */
+      
       const threads = GmailApp.search(searchString, countStart, inc);
     
       for (let j = 0; j < threads.length; j++) {
@@ -76,6 +78,7 @@ for (let i = rulesCached; i < rules.length; i++) {
           }
         }
       };
+    
       
       Logger.log (`Finished batch of ${inc} from: ${countStart}`)
       countStart -= inc; // work backwarads through the inbox in incremental chunks
