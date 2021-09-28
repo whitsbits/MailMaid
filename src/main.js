@@ -103,7 +103,7 @@ const inc = 500; // InBox Iteration Increment
         .setTitle('Which rule do you want to edit?')
         .setFieldName('editRule')
         .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
-        .addItem("Select a Rule to edit","rule0", true)
+        .addItem("Click to select a Rule to edit","rule0", true)
 
         for (let i = 0; i < rules.length; i++) {
             var ruleItem = rules[i];
@@ -155,12 +155,10 @@ rulesManagerSection
         .setFieldName('days')
         .setValue(days)
         .setHint('How many days before the retention manager processes the action.');
-      Logger.log (action);
       
       var item1 = null;
       var item2 = null;
-      Logger.log (item1)
-      Logger.log (item2);
+
         if (action === 'purge') {
             item1 = true
             item2 = false
@@ -168,9 +166,6 @@ rulesManagerSection
             item2 = true
             item1 = false
         };
-
-        Logger.log (item1)
-        Logger.log (item2);
   
     var _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
