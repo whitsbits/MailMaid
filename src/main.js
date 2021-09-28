@@ -124,28 +124,32 @@ const inc = 500; // InBox Iteration Increment
     return ruleButtonSet
     } 
 
-  function rulesInputSection(search, days, action) {
+  function rulesInputSection(action, search, days) {
+    Logger.log (action, search, days);
     const _search = CardService.newTextInput().setTitle('GMail Search String')
         .setFieldName('search')
-        .setValue("search")
+        .setValue('search')
         .setHint(`Use standard GMail Query Language`);
 
     const _days = CardService.newTextInput().setTitle('How many days until action')
         .setFieldName('days')
-        .setValue("days")
+        .setValue('days')
         .setHint('How many days before the retention manager processes the action.');
-/*
-    if (action = 'purge') {
+
+    /*if (action = 'purge') {
         var item1 = true
+        var item2 = false
     }else if (action = 'archive'){
         var item2 = true
-    }; */
+        var item1 = false
+    };
+    */
     const _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setTitle('Which action do you want the retention manager to take?')
         .setFieldName('action')
-        .addItem('Purge', 'purge', true)
-        .addItem('Archive', 'archive', false);
+        .addItem('Purge', 'purge', true) //item1
+        .addItem('Archive', 'archive', false); //item2
     
     const rulesInputSection = CardService.newCardSection()
         .addWidget(_search)
@@ -177,7 +181,7 @@ const inc = 500; // InBox Iteration Increment
 
         for (let i = 0; i < rules.length; i++) {
             var ruleItem = rules[i];
-            var ruleNum = `rule${i}`;
+            var ruleNum = `rule${i + 1}`;
             var rulePres = `Rule ${i + 1}: ${ruleItem}`
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }   
@@ -185,9 +189,22 @@ const inc = 500; // InBox Iteration Increment
     return selectRulesBodyWidget
   }
 
+  /**
+ * When a new rule is selected from selectRulesArrWidget()
+ *  * @param {Object} e - Event from add-on server
+ *  * @return {schedule} an array with [action][search][days] 
+ * to build the Rule Card UI with the current rule selected.
+ */
   function onModeChange(e) {
     let ruleNum = (e.formInput.editRule);
-    console.log (ruleNum);   
+    let ruleElementsArr = []
+    ruleElementsArr = reportRulesArrElements(ruleNum);
+    Logger.log (ruleElementsArr);
+    var action = ruleElementsArr[0];
+    var search = ruleElementsArr[1];
+    var days = ruleElementsArr[2];
+    Logger.log (`Returning ${action}, ${search}, ${days}`)
+    //return rulesInputSection(action, search, days);
 }
 //-----------------END RULES CARD---------------------------//
 
