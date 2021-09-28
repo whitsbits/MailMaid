@@ -228,7 +228,7 @@ function countRules() {
  */
   function reportRulesArrElements (ruleNum) {
     var ruleElements = userProperties.getProperty(ruleNum);
-    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
+    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${ruleElements}`)
     return ruleElements
   };
 
