@@ -25,6 +25,7 @@ function clearRules() {
     userProperties.deleteProperty(`rule${i}`);
   };
   Logger.log (`Deleted ${i - 1} rules.`);
+  return notify(`Rules Cleared`, addRule());
 };
 
 
@@ -32,9 +33,22 @@ function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteProperty('schedule');
     removeTriggers('GmailRetention');
+    return notify(`Schedule Cleared`, scheduleCard());
   };
 
+/**
+ * Put or remove data into cache
+ */
 
+ function makeCache (name, data) {
+  cache.put(name, data, 82800) //23 hour cache
+  Logger.log (`Added ${name} cache with value: ${data}`)
+}
+
+function clearCache (name) {
+  cache.remove(name)
+  Logger.log (`Removed ${name} cache.`)
+}
 
 /**
  * Returns userProperties in the PropertyService
@@ -51,7 +65,7 @@ function clearSchedule(){
       return result;
     },
     {});
-  var properties =[];
+  var properties =[{}];
   for (var property in dataSorted){
       var propertyArray = dataSorted[property]
       .replace(/[\[\]"]/g,'')
@@ -62,10 +76,10 @@ function clearSchedule(){
   return properties;
 };
 
-function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
+function getRulesArr() {
   var rulesArr =[];
   var numRules = countRules();
-  if (numRules === null ) {
+  if (numRules === 0 ) {
     rulesArr = `You do not currently have any rules set`;
   }
   for (var i = 1; i <= numRules; i++){
@@ -76,7 +90,7 @@ function getRulesArr() { //need to assure the order of the userProps for proper 
     rulesArr.push(rule);
     }
     
-  Logger.log (`Returning rulesArr ${rulesArr}`)
+  Logger.log (`Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -92,6 +106,22 @@ function getScheduleArr() {
   return schedule;
 };
 
+function getCountStart() {
+  const inBoxCached = cache.get('inBoxCache');
+  let threadsCached = cache.get('threadLoopCache');
+  if (inBoxCached === null) {
+    countStart = getInboxCount(inc);
+    // check to see if the value has been cached
+  }else if (threadsCached === null) {
+    countStart = inBoxCached;
+    Logger.log (`Using cached Inbox of: ${inBoxCached}`)
+  }else{
+    countStart = threadsCached;
+    Logger.log (`Using cached threads of: ${threadsCached}`)
+  };
+  Logger.log (`Returning Starting count of ${countStart}`)
+  return countStart
+}
 
 function objectLength( object ) {
   var length = 0;
@@ -113,7 +143,7 @@ function countRules() {
       ++numRules
     }    
   }
-  Logger.log (`Returnign numRules ${numRules}`)
+  Logger.log (`Returning numRules ${numRules}`)
   return numRules
 }
 
@@ -136,7 +166,7 @@ function countRules() {
         var days = rules[i][2];
         text += ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning ruleset text: \n ${text}`)
+    Logger.log (`Returning reportRulesText: \n ${text}`)
     return text
   };
 
@@ -152,8 +182,18 @@ function countRules() {
         var days = rules[i][2];
         reportRulesArr.push ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning ruleset Arr: \n ${reportRulesArr}`)
+    Logger.log (`Returning reportRulesArr: \n ${reportRulesArr}`)
     return reportRulesArr
+  };
+
+  function reportRulesArrElements (ruleNum) {
+    const rule = userProperties.getProperty(ruleNum);
+    let ruleElemArray = [];
+    ruleElemArray = rule
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
+    return ruleElemArray
   };
 
   function reportSchedule () {

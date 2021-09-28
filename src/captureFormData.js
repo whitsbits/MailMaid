@@ -35,7 +35,7 @@ function captureRuleFormData(e) {
       return `Error: ${e.toString()}`;
       }
       Logger.log (`Retention Settings Saved as ${key}`);
-      return notify(`Retention Settings Saved as ${key}`);
+      return notify(`Retention Settings Saved as ${key}`, addRule());
   }
 
 
@@ -46,6 +46,7 @@ function captureRuleFormData(e) {
  */
 
 function captureScheduleFormData(e) {
+  Logger.log (e);
   var everyDays = parseInt(e.formInput.everyDays,10);
   var atHour = parseInt(e.formInput.atHour,10);
   var schedule = [everyDays, atHour];
@@ -67,11 +68,7 @@ try {
 catch (e) {
   return `Error: ${e.toString()}`;
 }
-return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`);
+return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
 }
 
-/**
- * Build InBox Processing rule into Array and save user inputs to PropertiesService.
- * @param {Object} e - Event from add-on server
- * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
- */
+

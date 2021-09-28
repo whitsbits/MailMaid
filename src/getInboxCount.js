@@ -13,10 +13,11 @@
 
 function getInboxCount(inc) {
   Logger.log('Starting InBox Count');
+  const scriptStart = new Date();
   const cached = cache.get('inBoxCache');
   if (cached != null) {
     // check to see if the value has been cached
-    Logger.log ('Using cached Inbox count');
+    Logger.log (`Using cached Inbox count of: ${cached}`);
     return cached;
   }
   let total = 0;
@@ -31,7 +32,7 @@ function getInboxCount(inc) {
       Logger.log(
         `Inbox count timeout. Passing partial count of ${total} to controller`
       );
-      cache.put('inBoxCache', total, 1800); // cache for 30 minutes
+      makeCache('inBoxCache', total); // cache for 23 hours
       setPurgeMoreTrigger(); //set triggr to restart script
       Logger.log('Setting Trigger to resume script')
       return total;
@@ -42,6 +43,6 @@ function getInboxCount(inc) {
 
 } while (page.length > 0);
   Logger.log(`The total InBox is ${total}`);
-  cache.put('inBoxCache', total, 1800); // cache for 30 minutes
+  makeCache('inBoxCache', total); // cache for 23 hours
   return total;
 }
