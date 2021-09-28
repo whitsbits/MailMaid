@@ -116,8 +116,35 @@ const inc = 500; // InBox Iteration Increment
     rulesManagerSection.addWidget(selectRulesBodyWidget);
 
   ///------------------START 
+  if(action === undefined || search === undefined || days === undefined){
+  var _search = CardService.newTextInput().setTitle('GMail Search String')
+  .setFieldName('search')
+  .setValue("categories:promotions")
+  .setHint(`Use standard GMail Query Language`);
 
-  if (action != undefined || search != undefined || days != undefined){
+var _days = CardService.newTextInput().setTitle('How many days until action')
+  .setFieldName('days')
+  .setValue("30")
+  .setHint('How many days before the retention manager processes the action.');
+
+var _action = CardService.newSelectionInput()
+  .setType(CardService.SelectionInputType.RADIO_BUTTON)
+  .setTitle('Which action do you want the retention manager to take?')
+  .setFieldName('action')
+  .addItem('Purge', 'purge', true)
+  .addItem('Archive', 'archive', false);
+
+rulesManagerSection
+  .addWidget(_action)
+  .addWidget(_search)
+  .addWidget(_days)
+  .addWidget(ruleButtonsSet());
+
+  card.addSection(rulesManagerSection);
+  card.addSection(navButtonSet());
+  return card.build();
+
+  }else if (action != undefined || search != undefined || days != undefined){
     var _search = CardService.newTextInput().setTitle('GMail Search String')
         .setFieldName('search')
         .setValue(search)
