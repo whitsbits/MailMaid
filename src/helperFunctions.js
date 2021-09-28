@@ -18,7 +18,9 @@ function GMailRetention() {
   callRetention();
 }
 
-
+  /**
+ * Function to clear all rules data from the userProperties
+ */
 function clearRules() {
   var numRules =  objectLength(userProperties.getProperties());
   for (var i=1; i < numRules + 1; i++){
@@ -28,7 +30,10 @@ function clearRules() {
   return notify(`Rules Cleared`, addRule());
 };
 
-
+  /**
+ * Function to Clear the schedule data from the userProperties
+ * @returns Notification and rebuiild of schedule card
+ */
 function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteProperty('schedule');
@@ -52,8 +57,8 @@ function clearCache (name) {
 
 /**
  * Returns userProperties in the PropertyService
- * and converts the object to an array 
- *  * @return {rules} an 2D array with [ruleNum][rule atribute]
+ * sorts the objects and converts the object to an array 
+ *  * @return {userPropertties} an 2D array
  */
 
  function getUserPropsArr() {
@@ -76,7 +81,12 @@ function clearCache (name) {
   return properties;
 };
 
-function getRulesArr() { //need to assure the order of the userProps for proper sequencing.
+/**
+ * Returns userProperties in the PropertyService
+ * sorts the objects and converts the object to an array 
+ *  * @return {rules} an 2D array with [ruleNum][rule atribute]
+ */
+function getRulesArr() {
   var rulesArr =[];
   var numRules = countRules();
   if (numRules === 0 ) {
@@ -90,10 +100,15 @@ function getRulesArr() { //need to assure the order of the userProps for proper 
     rulesArr.push(rule);
     }
     
-  Logger.log (`Returning rulesArr ${rulesArr}`)
+  Logger.log (`Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
 
+/**
+ * Returns userProperties in the PropertyService
+ * sorts the objects and converts the object to an array 
+ *  * @return {schedule} an 2D array with [numDays][onHour]
+ */
 function getScheduleArr() {
     var data = userProperties.getProperty(`schedule`);
     if (data == null) {
@@ -102,10 +117,15 @@ function getScheduleArr() {
     var schedule = data
     .replace(/[\[\]"]/g,'')
     .split(',');
-    Logger.log (`Returning scheduleArr ${schedule}}`)
+    Logger.log (`Returning scheduleArr ${schedule}`)
   return schedule;
 };
 
+/**
+ * Determines where the prior run of scripts stopped and
+ * restarts script based on prior state of cached values
+ *  * @return {countStart} the index number for where to start the process
+ */
 function getCountStart() {
   const inBoxCached = cache.get('inBoxCache');
   let threadsCached = cache.get('threadLoopCache');
@@ -123,6 +143,11 @@ function getCountStart() {
   return countStart
 }
 
+/**
+ * Determines the length of an object
+ * sorts the objects and converts the object to an array 
+ *  * @return {length} an integer for the length of the object
+ */
 function objectLength( object ) {
   var length = 0;
   for( var key in object ) {
@@ -134,6 +159,11 @@ function objectLength( object ) {
   return length;
 };
 
+
+/**
+ * Counts the number of rules in the userProperty store=
+ *  * @return {numRules} an integer of the number of rules
+ */
 function countRules() {
   var numRules = parseInt(0,10);
   var numUserProps =  objectLength(userProperties.getProperties());
@@ -166,10 +196,15 @@ function countRules() {
         var days = rules[i][2];
         text += ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning ruleset text: \n ${text}`)
+    Logger.log (`Returning reportRulesText: \n ${text}`)
     return text
   };
 
+  /**
+ * Builds an array of all the rules in the userProperties
+ * for the purpose of building the selectRules UI 
+ *  * @return {reportRulesArr} an array of all rules in the userProperties
+ */
   function reportRulesArr () {
     var rules = getRulesArr();
     var reportRulesArr = [];
@@ -182,8 +217,19 @@ function countRules() {
         var days = rules[i][2];
         reportRulesArr.push ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning ruleset Arr: \n ${reportRulesArr}`)
+    Logger.log (`Returning reportRulesArr: \n ${reportRulesArr}`)
     return reportRulesArr
+  };
+
+  /**
+ * Returns the element attributes of the named rule
+ *  * @param {ruleNum} the string for the rule number (rule1)
+ *  * @return {ruleElements} an array with [action][search][days]
+ */
+  function reportRulesArrElements (ruleNum) {
+    var ruleElements = userProperties.getProperty(ruleNum);
+    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
+    return ruleElements
   };
 
   function reportSchedule () {
@@ -198,7 +244,7 @@ function countRules() {
         var militaryTime = schedule[1];
 
       text = `You are running the schedule: \n   Every: ${everyDays} day(s) \n   Hour: ${militaryTime}h \n\n`
-    Logger.log (`Returning Schedule Text: \n ${text}`)
+    Logger.log (`Returning reportSchedule Text: \n ${text}`)
     return text
   };
 
