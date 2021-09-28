@@ -99,10 +99,11 @@ const inc = 500; // InBox Iteration Increment
         .setText(rules);
     }else{    
     var selectRulesBodyWidget = CardService.newSelectionInput()
-        .setType(CardService.SelectionInputType.RADIO_BUTTON)
+        .setType(CardService.SelectionInputType.DROPDOWN)
         .setTitle('Which rule do you want to edit?')
         .setFieldName('editRule')
         .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
+        .addItem("Select a Rule to edit","rule0", true)
 
         for (let i = 0; i < rules.length; i++) {
             var ruleItem = rules[i];
@@ -115,7 +116,7 @@ const inc = 500; // InBox Iteration Increment
     var rulesManagerSection = CardService.newCardSection();
     rulesManagerSection.addWidget(selectRulesBodyWidget);
 
-  ///------------------START 
+  ///------------------START INPUT WIDGET--------------------------------
   if(action === undefined || search === undefined || days === undefined){
   var _search = CardService.newTextInput().setTitle('GMail Search String')
   .setFieldName('search')
@@ -154,14 +155,22 @@ rulesManagerSection
         .setFieldName('days')
         .setValue(days)
         .setHint('How many days before the retention manager processes the action.');
-
-        if (action = 'purge') {
-            var item1 = true
-            var item2 = false
-        }else if (action = 'archive'){
-            var item2 = true
-            var item1 = false
+      Logger.log (action);
+      
+      var item1 = null;
+      var item2 = null;
+      Logger.log (item1)
+      Logger.log (item2);
+        if (action === 'purge') {
+            item1 = true
+            item2 = false
+        }else if (action === 'archive'){
+            item2 = true
+            item1 = false
         };
+
+        Logger.log (item1)
+        Logger.log (item2);
   
     var _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
