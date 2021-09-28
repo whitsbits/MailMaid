@@ -10,5 +10,7 @@ Copyright 2021
 TODO LIST:
 
 Get Item Select vars to push to string fields
+    Persist selection in UI
+    Add Save and Clear selected rule buttons
 Get full presentation of rule structure to item selection list
 
