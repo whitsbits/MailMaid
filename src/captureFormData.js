@@ -10,7 +10,7 @@ function captureRuleFormData(e) {
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
-        var key = null//e.formInput.key; //TODO get this to accept the push from the seleciton
+        var key = e.parameters.ruleNum.toString();
 
         //Keep for dev debugging without needing UI 
        /* var search = "foo";
@@ -20,7 +20,9 @@ function captureRuleFormData(e) {
       */
         var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
-
+        if (key = 'rule0') {
+          return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
+        }
         if (key === null) {
           key = ('rule' + ruleNum);
         }
@@ -35,7 +37,7 @@ function captureRuleFormData(e) {
       return `Error: ${e.toString()}`;
       }
       Logger.log (`Retention Settings Saved as ${key}`);
-      return notify(`Retention Settings Saved as ${key}`, addRule());
+      return notify(`Retention Settings Saved as ${key}`, rulesManagerCard());
   }
 
 

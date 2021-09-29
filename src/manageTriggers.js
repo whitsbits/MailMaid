@@ -2,9 +2,21 @@
  * Get the current triggers for reporting to user
  */
 
-function getTriggers () {
+function getTriggersArr () {
   const triggers = ScriptApp.getProjectTriggers();
-  Logger.log (triggers);
+  let triggerArr = [];
+  for (var i=0; i<triggers.length; i++){
+    triggerArr.push (triggers[i].getHandlerFunction())
+  }
+  Logger.log (`getTriggerArr returning ${triggerArr}`)
+  return triggerArr
+}
+
+function triggerActive(triggerName) {
+  let triggerArr = getTriggersArr()
+  let triggerBool = triggerArr.includes(triggerName)
+  Logger.log (`triggerActive returning ${triggerName} as ${triggerBool}`)
+  return triggerBool
 }
 
 

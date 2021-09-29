@@ -21,13 +21,24 @@ function GMailRetention() {
   /**
  * Function to clear all rules data from the userProperties
  */
-function clearRules() {
+function clearAllRules() {
   var numRules =  objectLength(userProperties.getProperties());
   for (var i=1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
   Logger.log (`Deleted ${i - 1} rules.`);
-  return notify(`Rules Cleared`, addRule());
+  return notify(`Rules Cleared`, rulesManagerCard());
+};
+
+function clearSelectedRule(e) {
+  let ruleNum  = e.parameters.ruleNum.toString()
+  if (ruleNum === 'rule0') { 
+    return notify('Please select a rule from the list above', rulesManagerCard())
+  }else{
+    userProperties.deleteProperty(ruleNum);
+    Logger.log (`Deleted ${ruleNum}`);
+    return notify(`Rule ${ruleNum} cleared`, rulesManagerCard());
+  }
 };
 
   /**
@@ -58,7 +69,7 @@ function clearCache (name) {
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
- *  * @return {userPropertties} an 2D array
+ *  * @return {userProperties} an 2D array
  */
 
  function getUserPropsArr() {
@@ -227,10 +238,13 @@ function countRules() {
  *  * @return {ruleElements} an array with [action][search][days]
  */
   function reportRulesArrElements (ruleNum) {
-    var ruleElements = userProperties.getProperty(ruleNum);
-    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${ruleElements}`)
-    return ruleElements
-  };
+    const rule = userProperties.getProperty(ruleNum);
+    let ruleElemArray = [];
+    ruleElemArray = rule
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
+    return ruleElemArray  };
 
   function reportSchedule () {
     var schedule = getScheduleArr();

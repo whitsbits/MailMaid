@@ -37,7 +37,7 @@ for (let i = rulesCached; i < rules.length; i++) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(
-          'Inbox loop time limit exceeded. Setting a trigger to call the purgeMore function.'
+          'Inbox loop time limit exceeded.' 
         );
         if (action === 'archive'){
           Logger.log(`${counter} total threads archived`);
@@ -47,7 +47,13 @@ for (let i = rulesCached; i < rules.length; i++) {
         };
         makeCache('ruleLoopCache', i); // cache the rule loop location
         makeCache('threadLoopCache', countStart); // cache the thread loop location
-        setPurgeMoreTrigger();
+        if(triggerActive('purgeMore') === false){
+          Logger.log ('Setting a trigger to call the purgeMore function.')
+          setPurgeMoreTrigger();
+        }else{
+          Logger.log ('PurgeMore already Set')
+        }
+        
         loopBreak = 1; // Break the FOR (i) loop
         break;  // Break the DO loop
       }
@@ -102,6 +108,7 @@ for (let i = rulesCached; i < rules.length; i++) {
 }
   if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
     clearCache('ruleLoopCache');
+    removeTriggers('purgeMore')
     Logger.log ("FIN")
   }
 };
