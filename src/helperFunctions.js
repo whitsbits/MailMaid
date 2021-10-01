@@ -277,8 +277,8 @@ return ruleCount
   function reIndexRules() {
     var rules = getRulesArr();
     var keys = getRuleKeys();
-    i, len = keys.length;
     keys.sort();
+    Logger.log (keys);
     clearRules();
     for (i = 0; i < keys.length; i++) {
       var newKey = `rule${i + 1}`;
