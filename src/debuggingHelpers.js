@@ -37,6 +37,7 @@ function listCache() {
   Logger.log ("inboxNum: " + cache.get('inBoxCache'));
   Logger.log ("ruleNum: " + cache.get('ruleLoopCache'));
   Logger.log ("threadNum: " + cache.get('threadLoopCache'));
+  Logger.log ("editRuleNum: " + cache.get('editRuleNum'));
 }
 
   /**
@@ -67,12 +68,7 @@ function listCache() {
   }
 
   function clearRuleZero() {
-    userProperties.deleteProperty(`rule0`);
-  }
-
-  function listProperties() {
-    var userProperties = PropertiesService.getUserProperties();
-    Logger.log (userProperties.getProperties());
+    userProperties.deleteProperty(`rule2`);
   }
 
 /**
@@ -94,13 +90,13 @@ userProperties.setProperties({[newKey] : jarray});
 
 function loadRules() {
   clearAllRules();
-  var userProperties = PropertiesService.getUserProperties();
     userProperties.setProperties({rule1 : JSON.stringify(['purge','category:purchase','7'])});
     userProperties.setProperties({rule2 : JSON.stringify(['purge','category:social','7'])});
     userProperties.setProperties({rule3 : JSON.stringify(["archive","category:updates","30"])});
     userProperties.setProperties({rule4 : JSON.stringify(["purge","category:updates -category:purchases","180"])});
-    userProperties.setProperties({rule6 : JSON.stringify(["purge","from:\"google calendar\"","7"])});
+    userProperties.setProperties({rule6 : JSON.stringify(["purge","from:google calendar","7"])});
     userProperties.setProperties({rule5 : JSON.stringify(["purge","label:goodsync","7"])});
+    getRulesArr();
 }
 
 /**

@@ -117,7 +117,7 @@ const inc = 500; // InBox Iteration Increment
     rulesManagerSection.addWidget(selectRulesBodyWidget);
 
   ///------------------START INPUT WIDGET--------------------------------//
-  if(action === undefined || search === undefined || days === undefined){
+  if(e === null || action === undefined || search === undefined || days === undefined){
     var _search = CardService.newTextInput().setTitle('GMail Search String')
       .setFieldName('search')
       .setValue("categories:promotions")

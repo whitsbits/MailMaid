@@ -15,6 +15,7 @@ function GMailRetention() {
  * Wrapper for the purge function called by timeOut trigger
  */
  function purgeMore() {
+  removeTriggers('purgeMore');
   callRetention();
 }
 
@@ -23,11 +24,19 @@ function GMailRetention() {
  */
 function clearAllRules() {
   var numRules =  objectLength(userProperties.getProperties());
-  for (var i=1; i < numRules + 1; i++){
+  for (var i = 1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
   Logger.log (`Deleted ${i - 1} rules.`);
   return notify(`Rules Cleared`, rulesManagerCard());
+};
+
+function clearRules() {
+  var numRules =  objectLength(userProperties.getProperties());
+  for (var i = 1; i < numRules + 1; i++){
+    userProperties.deleteProperty(`rule${i}`);
+  };
+  Logger.log (`Deleted ${i - 1} rules.`);
 };
 
 function clearSelectedRule(e) {
@@ -36,6 +45,7 @@ function clearSelectedRule(e) {
     return notify('Please select a rule from the list above', rulesManagerCard())
   }else{
     userProperties.deleteProperty(ruleNum);
+    reIndexRules();
     Logger.log (`Deleted ${ruleNum}`);
     return notify(`Rule ${ruleNum} cleared`, rulesManagerCard());
   }
@@ -66,6 +76,7 @@ function clearCache (name) {
   Logger.log (`Removed ${name} cache.`)
 }
 
+
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
@@ -74,19 +85,17 @@ function clearCache (name) {
 
  function getUserPropsArr() {
   var data = userProperties.getProperties();
-  var dataSorted = Object.keys(data)
-    .sort()
-    .reduce(function (result, key){
-      result[key] = data[key];
-      return result;
-    },
-    {});
+  keys = Object.keys(data),
+  i, len = keys.length;
+  keys.sort();
+
   var properties =[];
-  for (var property in dataSorted){
-      var propertyArray = dataSorted[property]
-      .replace(/[\[\]"]/g,'')
+  for (var i = 0; i < len; i++) {
+    k = keys[i];
+      var propertyValue = data[k]
+      //.replace(/[\[\]"]/g,'')
       .split(',');
-      properties.push(propertyArray)
+      properties.push(propertyValue)
   }
   Logger.log (`Returning userPropertiesArr ${properties}`)
   return properties;
@@ -98,19 +107,21 @@ function clearCache (name) {
  *  * @return {rules} an 2D array with [ruleNum][rule atribute]
  */
 function getRulesArr() {
+  var keys = getRuleKeys();
   var rulesArr =[];
-  var numRules = countRules();
-  if (numRules === 0 ) {
+  if (keys.length === 0 ) {
     rulesArr = `You do not currently have any rules set`;
   }
-  for (var i = 1; i <= numRules; i++){
-    var data = userProperties.getProperty(`rule${i}`);
-    var rule = data
+  i, len = keys.length;
+  keys.sort();
+
+  for (var i = 0; i < len; i++) {
+      k = keys[i];
+      ruleValue = userProperties.getProperty(k)
       .replace(/[\[\]"]/g,'')
       .split(',');
-    rulesArr.push(rule);
-    }
-    
+      rulesArr.push(ruleValue)
+  }
   Logger.log (`Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
@@ -122,7 +133,7 @@ function getRulesArr() {
  */
 function getScheduleArr() {
     var data = userProperties.getProperty(`schedule`);
-    if (data == null) {
+    if (data === null) {
       return data;
     }
     var schedule = data
@@ -175,17 +186,18 @@ function objectLength( object ) {
  * Counts the number of rules in the userProperty store=
  *  * @return {numRules} an integer of the number of rules
  */
-function countRules() {
-  var numRules = parseInt(0,10);
-  var numUserProps =  objectLength(userProperties.getProperties());
-  for (var i=1; i <= numUserProps; i++){
-    var data = userProperties.getProperty(`rule${i}`);
-    if (data!=null) {
-      ++numRules
-    }    
-  }
-  Logger.log (`Returning numRules ${numRules}`)
-  return numRules
+function getRuleKeys() {
+    var keys = userProperties.getKeys();
+    var ruleKeys = keys.filter(function(item) {
+    return item !== 'schedule'
+});
+return ruleKeys;
+}
+
+function countRules(){
+  ruleCount = getRuleKeys().length
+Logger.log (`countRules returned ${ruleCount}`)
+return ruleCount
 }
 
 /**
@@ -261,6 +273,22 @@ function countRules() {
     Logger.log (`Returning reportSchedule Text: \n ${text}`)
     return text
   };
+
+  function reIndexRules() {
+    var rules = getRulesArr();
+    var keys = getRuleKeys();
+    i, len = keys.length;
+    keys.sort();
+    clearRules();
+    for (i = 0; i < keys.length; i++) {
+      var newKey = `rule${i + 1}`;
+      userProperties.setProperty(newKey,JSON.stringify(rules[i]));
+      Logger.log(`Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+    }
+    Logger.log (`Rules property store reindexed`)
+  }
+
+
 
     // Generate a log, then email it to the person who ran the script.
 function sendLogEmail() {

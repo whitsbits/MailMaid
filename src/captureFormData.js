@@ -6,21 +6,27 @@
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
-    
+       
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
-        var key = e.parameters.ruleNum.toString();
 
+        if (e.parameters.ruleNum === undefined){
+          var key =  null;
+        }else{
+          var key = e.parameters.ruleNum.toString();
+        }
+      /*
         //Keep for dev debugging without needing UI 
-       /* var search = "foo";
+       var search = "foo";
         var days = 7;
         var action = "purge";
-        var key = null;
+        var key = '{}';
       */
+      
         var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
-        if (key = 'rule0') {
+        if (key === 'rule0') {
           return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
         }
         if (key === null) {
