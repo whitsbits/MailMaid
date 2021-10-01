@@ -6,6 +6,12 @@ const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
 const inc = 500; // InBox Iteration Increment
+const whiteSpace = CardService.newTextParagraph()
+          .setText('\n');
+const borderStyle = CardService.newBorderStyle()
+      .setType(CardService.BorderType.STROKE)
+      .setCornerRadius(8)
+      .setStrokeColor("#00FF00FF");
 
 
 //-----------------HOMEPAGE CARD---------------------------//
@@ -29,7 +35,7 @@ const inc = 500; // InBox Iteration Increment
   * @return {CardService.Section} Return the section to build the card.
  */
   function homepageIntroSection() {
-    var introText = "GMail retention automatically manages your email by setting rules that find messages based on GMail search criteria and can archive or purge them according to the number of days since the message was received."
+    var introText = "GMail retention automatically manages your email by setting rules that find messages based on <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> and can archive or purge them according to the number of days since the message was received."
     const introBodyText = CardService.newTextParagraph()
         .setText(
             introText
@@ -103,7 +109,7 @@ const inc = 500; // InBox Iteration Increment
         .setTitle('Which rule do you want to edit?')
         .setFieldName('editRule')
         .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
-        .addItem("Click here to select a Rule to edit","rule0", true)
+        .addItem("Click here to select an existing Rule to edit","rule0", true)
 
         for (let i = 0; i < rules.length; i++) {
             var ruleItem = rules[i];
@@ -118,12 +124,17 @@ const inc = 500; // InBox Iteration Increment
 
   ///------------------START INPUT WIDGET--------------------------------//
   if(e === null || action === undefined || search === undefined || days === undefined){
-    var _search = CardService.newTextInput().setTitle('GMail Search String')
+    const _searchText = CardService.newTextParagraph()
+    .setText('Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed')
+    
+    var _search = CardService.newTextInput()
       .setFieldName('search')
-      .setValue("categories:promotions")
+      .setValue("category:promotions")
       .setHint(`Use standard GMail Query Language`);
 
-    var _days = CardService.newTextInput().setTitle('How many days until action')
+    const _daysText = CardService.newTextParagraph()
+        .setText('How many days until action')
+    var _days = CardService.newTextInput()
       .setFieldName('days')
       .setValue("30")
       .setHint('How many days before the retention manager processes the action.');
@@ -137,12 +148,16 @@ const inc = 500; // InBox Iteration Increment
 
     rulesManagerSection
       .addWidget(_action)
+      .addWidget(_searchText)
       .addWidget(_search)
+      .addWidget(whiteSpace)
+      .addWidget(_daysText)
       .addWidget(_days)
+      .addWidget(whiteSpace)
       .addWidget(ruleButtonsSet());
 
       card.addSection(rulesManagerSection);
-      card.addSection(navButtonSet());
+      card.setFixedFooter(navFooter());
       return card.build();
 
   }else if (action != undefined || search != undefined || days != undefined){
@@ -151,12 +166,18 @@ const inc = 500; // InBox Iteration Increment
     var editRuleNumWidget = CardService.newTextParagraph()
       .setText(editRuleNumText)    
     
-    var _search = CardService.newTextInput().setTitle('GMail Search String')
+    const _searchText = CardService.newTextParagraph()
+    .setText('Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed')
+    
+    var _search = CardService.newTextInput()
         .setFieldName('search')
         .setValue(search)
         .setHint(`Use standard GMail Query Language`);
 
-    var _days = CardService.newTextInput().setTitle('How many days until action')
+    const _daysText = CardService.newTextParagraph()
+        .setText('How many days until action')
+
+    var _days = CardService.newTextInput()
         .setFieldName('days')
         .setValue(days)
         .setHint('How many days before the retention manager processes the action.');
@@ -179,14 +200,18 @@ const inc = 500; // InBox Iteration Increment
     rulesManagerSection
         .addWidget(editRuleNumWidget)
         .addWidget(_action)
+        .addWidget(_searchText)
         .addWidget(_search)
+        .addWidget(whiteSpace)
+        .addWidget(_daysText)
         .addWidget(_days)
+        .addWidget(whiteSpace)
         .addWidget(ruleButtonsSet());
     }
 
     //-----------------END RULE INPUT WIDGET----------------------------//
     card.addSection(rulesManagerSection);
-    card.addSection(navButtonSet());
+    card.setFixedFooter(navFooter());
     return card.build();
     }
 
@@ -210,7 +235,7 @@ const inc = 500; // InBox Iteration Increment
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
         const saveButton = CardService.newTextButton()
             .setText('Save as New Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
             .setOnClickAction(saveAction);
 
         const replaceAction = CardService.newAction()
@@ -219,7 +244,7 @@ const inc = 500; // InBox Iteration Increment
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
         const replaceButton = CardService.newTextButton()
             .setText('Replace Selected Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
             .setOnClickAction(replaceAction);
             
         const clearSelectedAction = CardService.newAction()
@@ -227,16 +252,16 @@ const inc = 500; // InBox Iteration Increment
             .setParameters({ruleNum: ruleNum})
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
         const clearSelectedButton = CardService.newTextButton()
-            .setText('Clear Selected Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setText('Delete Selected Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
             .setOnClickAction(clearSelectedAction);
             
         const clearAllAction = CardService.newAction()
             .setFunctionName('clearAllRules')
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
         const clearAllButton = CardService.newTextButton()
-            .setText('Clear All Rules')
-            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setText('Delete All Rules')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
             .setOnClickAction(clearAllAction);
 
         const ruleButtonSet = CardService.newButtonSet()
@@ -262,7 +287,7 @@ const inc = 500; // InBox Iteration Increment
     card.addSection(scheduleReportSection())
     card.addSection(scheduleFieldsSection());
     card.addSection(scheduleButtonsSection());
-    card.addSection(navButtonSet());
+    card.setFixedFooter(navFooter());
     card.setName('schedule')
     return card.build();
   };
@@ -283,7 +308,7 @@ function scheduleReportSection() {
  */
   
 function scheduleReportWidget() {
-    const scheduleText = `Your current schedule is: \n\n ${reportSchedule()}`;
+    const scheduleText = `${reportSchedule()}`;
     const scheduleReportWidget = CardService.newTextParagraph()
         .setText(
             scheduleText
@@ -297,21 +322,50 @@ function scheduleReportWidget() {
  * @return {CardService.Section} The card to show to the user.
  */
 function scheduleFieldsSection() {
-    const everyDays = CardService.newTextInput().setTitle('Run every')
+
+    const everyDaysText = CardService.newTextParagraph()
+      .setText ('Run every days(s)');
+    
+    const everyDays = CardService.newTextInput()
         .setFieldName('everyDays')
         .setValue('1')
-        .setHint(`Set how frequently you want the schedule to run`);
+        .setHint(`Set the frequency, in number of days (1-30), you want the schedule to run`);
 
-    const atHour = CardService.newTextInput().setTitle('What time of day?')
+    /*var atHour = CardService.newTimePicker()
+    .setTitle('What time of day do you want the process to run?')
+    .setFieldName('atHour')
+    //.setHint('Set the hour of the day (use whole number 24h time, like 2 for 2AM) for the schedule to run')
+    // Set default value as 02:00.
+    .setHours(2); */
+
+    const atHourText = CardService.newTextParagraph()
+        .setText ('What time of day do you want the process to run?');
+
+    const atHour = CardService.newTextInput()
         .setFieldName('atHour')
         .setValue('2')
-        .setHint('Set the hour of the day (use 24h time) for the schedule to run');
+        .setHint('Set the hour of the day for the schedule to run (use whole number 24h time, like 2 for 2AM or 23 for 11PM)');
 
     const scheduleFieldsSection = CardService.newCardSection()
+        .addWidget(everyDaysText)
         .addWidget(everyDays)
+        .addWidget(whiteSpace)
+        .addWidget(atHourText)
         .addWidget(atHour);
 
     return scheduleFieldsSection
+}
+
+function suggestionCallback(e) {
+  Logger.log(e)
+  var suggestions = CardService.newSuggestions();
+  var numSuggestions = parseInt(e.parameter['numSuggestions']);
+  for(var i = 1; i <= numSuggestions; i++) {
+    suggestions.addSuggestion(i);
+  }
+  return CardService.newSuggestionsResponseBuilder()
+      .setSuggestions(suggestions)
+      .build();
 }
 
 /**
@@ -326,7 +380,7 @@ function scheduleButtonsSection() {
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const saveMoreButton = CardService.newTextButton()
         .setText('Save Schedule')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
         .setOnClickAction(saveMoreAction);
         //.setOnClickAction(CardService.newAction().setFunctionName("rebuildScheduleCard"));
         
@@ -335,7 +389,7 @@ function scheduleButtonsSection() {
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const clearButton = CardService.newTextButton()
         .setText('Clear the schedule')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
         .setOnClickAction(clearAction);
         //.setOnClickAction(CardService.newAction().setFunctionName("rebuildScheduleCard"));
 
@@ -396,22 +450,23 @@ function scheduleButtonsSection() {
    *  last card and another that returns to the original (root) card.
    *  @return {ButtonSet}
    */
-     function navButtonSet() {
+     function navFooter() {
+       
         /*var previousButton = CardService.newTextButton()
-            .setText('Back')
+            .setText('BACK')
             .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
             .setOnClickAction(CardService.newAction()
-                .setFunctionName('gotoPreviousCard'));
-         */   
+            .setFunctionName('gotoPreviousCard'));
+*/
         var toRootButton = CardService.newTextButton()
             .setText('HOME')
             .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
             .setOnClickAction(CardService.newAction()
-                .setFunctionName('gotoRootCard'));
-        var navButtonSet = CardService.newButtonSet()
-            //.addButton(previousButton)
-            .addButton(toRootButton);
-        // Return a new ButtonSet containing these two buttons.
-        var navButtonSection = CardService.newCardSection().addWidget(navButtonSet);
-        return navButtonSection;
+            .setFunctionName('gotoRootCard'));
+
+        // Return a new fixedFooter containing these two buttons.
+        var fixedFooter = CardService.newFixedFooter()
+          .setPrimaryButton(toRootButton)
+          //.setSecondaryButton(previousButton);
+        return fixedFooter;
       };

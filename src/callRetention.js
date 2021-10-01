@@ -33,7 +33,7 @@ for (let i = rulesCached; i < rules.length; i++) {
     Logger.log (`Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
 
     do {
-      if (isTimeUp_(scriptStart, 270000)) {
+      if (isTimeUp_(scriptStart, 250000)) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(
@@ -86,7 +86,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       };
     
       
-      Logger.log (`Finished batch of ${inc} from: ${countStart}`)
+      //Logger.log (`Finished batch of ${inc} from: ${countStart}`)
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
     } while (countStart > 0);
