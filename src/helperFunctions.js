@@ -15,19 +15,51 @@ function GMailRetention() {
  * Wrapper for the purge function called by timeOut trigger
  */
  function purgeMore() {
+  removeTriggers('purgeMore');
   callRetention();
 }
 
   /**
  * Function to clear all rules data from the userProperties
+ * @return {notify with Card to be built}
  */
-function clearRules() {
+function clearAllRules() {
   var numRules =  objectLength(userProperties.getProperties());
-  for (var i=1; i < numRules + 1; i++){
+  for (var i = 1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
   Logger.log (`Deleted ${i - 1} rules.`);
-  return notify(`Rules Cleared`, addRule());
+  return notify(`Rules Cleared`, rulesManagerCard());
+};
+
+  /**
+ * Utility function to clear all rules data from the userProperties
+ * without offering a return
+ */
+
+function clearRules() {
+  var numRules =  objectLength(userProperties.getProperties());
+  for (var i = 1; i < numRules + 1; i++){
+    userProperties.deleteProperty(`rule${i}`);
+  };
+  Logger.log (`Deleted ${i - 1} rules.`);
+};
+
+  /**
+ * Function to clear a user selected rules data from the userProperties
+ * @param {Object} e - Event from add-on server
+ * @return {notify with Card to be built}
+ */
+function clearSelectedRule(e) {
+  let ruleNum  = e.parameters.ruleNum.toString()
+  if (ruleNum === 'rule0') { 
+    return notify('Please select a rule from the list above', rulesManagerCard())
+  }else{
+    userProperties.deleteProperty(ruleNum);
+    reIndexRules();
+    Logger.log (`Deleted ${ruleNum}`);
+    return notify(`Rule ${ruleNum} cleared`, rulesManagerCard());
+  }
 };
 
   /**
@@ -55,51 +87,28 @@ function clearCache (name) {
   Logger.log (`Removed ${name} cache.`)
 }
 
-/**
- * Returns userProperties in the PropertyService
- * sorts the objects and converts the object to an array 
- *  * @return {userPropertties} an 2D array
- */
-
- function getUserPropsArr() {
-  var data = userProperties.getProperties();
-  var dataSorted = Object.keys(data)
-    .sort()
-    .reduce(function (result, key){
-      result[key] = data[key];
-      return result;
-    },
-    {});
-  var properties =[];
-  for (var property in dataSorted){
-      var propertyArray = dataSorted[property]
-      .replace(/[\[\]"]/g,'')
-      .split(',');
-      properties.push(propertyArray)
-  }
-  Logger.log (`Returning userPropertiesArr ${properties}`)
-  return properties;
-};
 
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
- *  * @return {rules} an 2D array with [ruleNum][rule atribute]
+ *  * @return {rules} an array with [rule atributes]
  */
 function getRulesArr() {
+  var keys = getRuleKeys();
   var rulesArr =[];
-  var numRules = countRules();
-  if (numRules === 0 ) {
+  if (keys.length === 0 ) {
     rulesArr = `You do not currently have any rules set`;
   }
-  for (var i = 1; i <= numRules; i++){
-    var data = userProperties.getProperty(`rule${i}`);
-    var rule = data
+  i, len = keys.length;
+  keys.sort();
+
+  for (var i = 0; i < len; i++) {
+      k = keys[i];
+      ruleValue = userProperties.getProperty(k)
       .replace(/[\[\]"]/g,'')
       .split(',');
-    rulesArr.push(rule);
-    }
-    
+      rulesArr.push(ruleValue)
+  }
   Logger.log (`Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
@@ -107,11 +116,11 @@ function getRulesArr() {
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
- *  * @return {schedule} an 2D array with [numDays][onHour]
+ *  * @return {schedule} an array with [numDays, onHour]
  */
 function getScheduleArr() {
     var data = userProperties.getProperty(`schedule`);
-    if (data == null) {
+    if (data === null) {
       return data;
     }
     var schedule = data
@@ -161,20 +170,25 @@ function objectLength( object ) {
 
 
 /**
+ * Gets the Keys from rules in the userProperty store
+ *  * @return {ruleKeys} an array of key names
+ */
+function getRuleKeys() {
+    var keys = userProperties.getKeys();
+    var ruleKeys = keys.filter(function(item) {
+    return item !== 'schedule'
+});
+return ruleKeys;
+}
+
+/**
  * Counts the number of rules in the userProperty store=
  *  * @return {numRules} an integer of the number of rules
  */
-function countRules() {
-  var numRules = parseInt(0,10);
-  var numUserProps =  objectLength(userProperties.getProperties());
-  for (var i=1; i <= numUserProps; i++){
-    var data = userProperties.getProperty(`rule${i}`);
-    if (data!=null) {
-      ++numRules
-    }    
-  }
-  Logger.log (`Returning numRules ${numRules}`)
-  return numRules
+function countRules(){
+  ruleCount = getRuleKeys().length
+Logger.log (`countRules returned ${ruleCount}`)
+return ruleCount
 }
 
 /**
@@ -194,7 +208,7 @@ function countRules() {
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        text += ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
+        text += ("Rule " + (i + 1) + ":\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
     Logger.log (`Returning reportRulesText: \n ${text}`)
     return text
@@ -227,11 +241,18 @@ function countRules() {
  *  * @return {ruleElements} an array with [action][search][days]
  */
   function reportRulesArrElements (ruleNum) {
-    var ruleElements = userProperties.getProperty(ruleNum);
-    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${ruleElements}`)
-    return ruleElements
-  };
+    const rule = userProperties.getProperty(ruleNum);
+    let ruleElemArray = [];
+    ruleElemArray = rule
+      .replace(/[\[\]"]/g,'')
+      .split(',');
+    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
+    return ruleElemArray  };
 
+  /**
+ * Returns the element attributes of the schedule
+ *  * @return {scheduleText} an text block for presenting schedule in UI
+ */
   function reportSchedule () {
     var schedule = getScheduleArr();
       var text = ''
@@ -243,12 +264,39 @@ function countRules() {
         var everyDays = schedule[0];
         var militaryTime = schedule[1];
 
-      text = `You are running the schedule: \n   Every: ${everyDays} day(s) \n   Hour: ${militaryTime}h \n\n`
+      text = `You are currently running the schedule: \n   Every: ${everyDays} day(s) \n   At Hour: ${militaryTime}:00h \n\n`
     Logger.log (`Returning reportSchedule Text: \n ${text}`)
     return text
   };
 
-    // Generate a log, then email it to the person who ran the script.
+
+  /**
+ * Takes the array of rules and renumbers them in sequential order
+ * for after a rule is deleted
+ * saves new index to userProperties.setProperty
+ */
+  function reIndexRules() {
+    var rules = getRulesArr();
+    var keys = getRuleKeys();
+    keys.sort();
+    Logger.log (keys);
+    clearRules();
+    for (i = 0; i < keys.length; i++) {
+      var newKey = `rule${i + 1}`;
+      userProperties.setProperty(newKey,JSON.stringify(rules[i]));
+      Logger.log(`Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+    }
+    Logger.log (`Rules property store reindexed`)
+  }
+
+
+
+    /**
+     *  Generate a log, then email it to the person who ran the script.
+     * Not currently used
+     * TODO figure out a way to do this in a more user friendly manner.
+    */
+
 function sendLogEmail() {
   var recipient = Session.getActiveUser().getEmail();
   var subject = 'Gmail Retention Results';

@@ -1,26 +1,35 @@
 /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
+ * {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
  * @param {Object} e - Event from add-on server
- * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
+ * @return {notify with Card to be built}
  */
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
-    
+       
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
-        var key = null//e.formInput.key; //TODO get this to accept the push from the seleciton
 
+        if (e.parameters.ruleNum === undefined){
+          var key =  null;
+        }else{
+          var key = e.parameters.ruleNum.toString();
+        }
+      /*
         //Keep for dev debugging without needing UI 
-       /* var search = "foo";
+       var search = "foo";
         var days = 7;
-        var action = "purge";
-        var key = null;
+        var action = "Purge";
+        var key = '{}';
       */
+      
         var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
-
+        if (key === 'rule0') {
+          return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
+        }
         if (key === null) {
           key = ('rule' + ruleNum);
         }
@@ -35,14 +44,15 @@ function captureRuleFormData(e) {
       return `Error: ${e.toString()}`;
       }
       Logger.log (`Retention Settings Saved as ${key}`);
-      return notify(`Retention Settings Saved as ${key}`, addRule());
+      return notify(`Retention Settings Saved as ${key}`, rulesManagerCard());
   }
 
 
   /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
+ * Retention shchedule set to Triggers
  * @param {Object} e - Event from add-on server
- * @return {Notify} Retention shchedule set to Triggers
+@return {notify with Card to be built}
  */
 
 function captureScheduleFormData(e) {

@@ -9,6 +9,11 @@ Copyright 2021
 
 TODO LIST:
 
-Get Item Select vars to push to string fields
+Fix presentation of escape characters in UI
 Get full presentation of rule structure to item selection list
+Warn before Delete All
+Compress dupe Rule input code
+Investigate moving onHour from integer to time
+Investigate Suggestion Picker
+
 
