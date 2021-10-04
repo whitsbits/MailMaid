@@ -216,7 +216,6 @@ const borderStyle = CardService.newBorderStyle()
     }
 
     //-----------------END RULE INPUT WIDGET----------------------------//
-
     card.addSection(rulesManagerSection);
     card.setFixedFooter(navFooter());
     return card.build();
