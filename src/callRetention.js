@@ -1,11 +1,11 @@
 /**
  * Get each of the rules and attributes from getUserPropsArr()
  * Find messages pertaining to the search
- * step through each thread batch set by 'inc' (default 500)
+ * step through each thread batch set by 'inc' (default Global var set to 500)
  * process them according to the action 
  * based on number of days between message date and action date based on num 'days' from today
  * Check that timer hasnt reach near 5 min Google time limit
- * 
+ * If time-out save the sate of the loop to the cache and set a trigger to restart in 60 min
  */
 
 function callRetention() {
@@ -39,10 +39,10 @@ for (let i = rulesCached; i < rules.length; i++) {
         Logger.log(
           'Inbox loop time limit exceeded.' 
         );
-        if (action === 'archive'){
+        if (action === 'Archive'){
           Logger.log(`${counter} total threads archived`);
         };
-        if (action === 'purge'){
+        if (action === 'Purge'){
           Logger.log(`${counter} total threads deleted`);
         };
         makeCache('ruleLoopCache', i); // cache the rule loop location
@@ -70,14 +70,14 @@ for (let i = rulesCached; i < rules.length; i++) {
       for (let j = 0; j < threads.length; j++) {
         const msgDate = threads[j].getLastMessageDate();
   
-        if (action === 'archive') {
+        if (action === 'Archive') {
                     
           if (msgDate < actionDate) {
             threads[j].moveToArchive();
             ++counter;
           }
         }
-          if (action === 'purge') {
+          if (action === 'Purge') {
           if (msgDate < actionDate) {
             threads[j].moveToTrash();
             ++counter;
@@ -89,17 +89,17 @@ for (let i = rulesCached; i < rules.length; i++) {
       //Logger.log (`Finished batch of ${inc} from: ${countStart}`)
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
-    } while (countStart > 0);
+    } while (countStart > -1);
     
     if (loopBreak === 1) {
       break; //Break to For (i) loop if there was a TimeOut
    };
 
 
-  if (action === 'archive'){
+  if (action === 'Archive'){
     Logger.log(`${counter} total threads archived`);
   };
-  if (action === 'purge'){
+  if (action === 'Purge'){
     Logger.log(`${counter} total threads deleted`);
   };
   Logger.log(`Finished processing from Inbox from index ${countStart}`);

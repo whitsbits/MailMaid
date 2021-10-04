@@ -12,6 +12,11 @@ function getTriggersArr () {
   return triggerArr
 }
 
+/**
+ * Checks is a named trigger is active
+ * @param {triggerName}
+ * @return {boolean}
+ */
 function triggerActive(triggerName) {
   let triggerArr = getTriggersArr()
   let triggerBool = triggerArr.includes(triggerName)

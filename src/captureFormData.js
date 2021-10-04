@@ -1,7 +1,8 @@
 /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
+ * {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
  * @param {Object} e - Event from add-on server
- * @return {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
+ * @return {notify with Card to be built}
  */
 
 function captureRuleFormData(e) {
@@ -20,7 +21,7 @@ function captureRuleFormData(e) {
         //Keep for dev debugging without needing UI 
        var search = "foo";
         var days = 7;
-        var action = "purge";
+        var action = "Purge";
         var key = '{}';
       */
       
@@ -49,8 +50,9 @@ function captureRuleFormData(e) {
 
   /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
+ * Retention shchedule set to Triggers
  * @param {Object} e - Event from add-on server
- * @return {Notify} Retention shchedule set to Triggers
+@return {notify with Card to be built}
  */
 
 function captureScheduleFormData(e) {

@@ -21,6 +21,7 @@ function GMailRetention() {
 
   /**
  * Function to clear all rules data from the userProperties
+ * @return {notify with Card to be built}
  */
 function clearAllRules() {
   var numRules =  objectLength(userProperties.getProperties());
@@ -31,6 +32,11 @@ function clearAllRules() {
   return notify(`Rules Cleared`, rulesManagerCard());
 };
 
+  /**
+ * Utility function to clear all rules data from the userProperties
+ * without offering a return
+ */
+
 function clearRules() {
   var numRules =  objectLength(userProperties.getProperties());
   for (var i = 1; i < numRules + 1; i++){
@@ -39,6 +45,11 @@ function clearRules() {
   Logger.log (`Deleted ${i - 1} rules.`);
 };
 
+  /**
+ * Function to clear a user selected rules data from the userProperties
+ * @param {Object} e - Event from add-on server
+ * @return {notify with Card to be built}
+ */
 function clearSelectedRule(e) {
   let ruleNum  = e.parameters.ruleNum.toString()
   if (ruleNum === 'rule0') { 
@@ -80,31 +91,7 @@ function clearCache (name) {
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
- *  * @return {userProperties} an 2D array
- */
-
- function getUserPropsArr() {
-  var data = userProperties.getProperties();
-  keys = Object.keys(data),
-  i, len = keys.length;
-  keys.sort();
-
-  var properties =[];
-  for (var i = 0; i < len; i++) {
-    k = keys[i];
-      var propertyValue = data[k]
-      //.replace(/[\[\]"]/g,'')
-      .split(',');
-      properties.push(propertyValue)
-  }
-  Logger.log (`Returning userPropertiesArr ${properties}`)
-  return properties;
-};
-
-/**
- * Returns userProperties in the PropertyService
- * sorts the objects and converts the object to an array 
- *  * @return {rules} an 2D array with [ruleNum][rule atribute]
+ *  * @return {rules} an array with [rule atributes]
  */
 function getRulesArr() {
   var keys = getRuleKeys();
@@ -129,7 +116,7 @@ function getRulesArr() {
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
- *  * @return {schedule} an 2D array with [numDays][onHour]
+ *  * @return {schedule} an array with [numDays, onHour]
  */
 function getScheduleArr() {
     var data = userProperties.getProperty(`schedule`);
@@ -183,8 +170,8 @@ function objectLength( object ) {
 
 
 /**
- * Counts the number of rules in the userProperty store=
- *  * @return {numRules} an integer of the number of rules
+ * Gets the Keys from rules in the userProperty store
+ *  * @return {ruleKeys} an array of key names
  */
 function getRuleKeys() {
     var keys = userProperties.getKeys();
@@ -194,6 +181,10 @@ function getRuleKeys() {
 return ruleKeys;
 }
 
+/**
+ * Counts the number of rules in the userProperty store=
+ *  * @return {numRules} an integer of the number of rules
+ */
 function countRules(){
   ruleCount = getRuleKeys().length
 Logger.log (`countRules returned ${ruleCount}`)
@@ -258,6 +249,10 @@ return ruleCount
     Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
     return ruleElemArray  };
 
+  /**
+ * Returns the element attributes of the schedule
+ *  * @return {scheduleText} an text block for presenting schedule in UI
+ */
   function reportSchedule () {
     var schedule = getScheduleArr();
       var text = ''
@@ -274,6 +269,12 @@ return ruleCount
     return text
   };
 
+
+  /**
+ * Takes the array of rules and renumbers them in sequential order
+ * for after a rule is deleted
+ * saves new index to userProperties.setProperty
+ */
   function reIndexRules() {
     var rules = getRulesArr();
     var keys = getRuleKeys();
@@ -290,7 +291,12 @@ return ruleCount
 
 
 
-    // Generate a log, then email it to the person who ran the script.
+    /**
+     *  Generate a log, then email it to the person who ran the script.
+     * Not currently used
+     * TODO figure out a way to do this in a more user friendly manner.
+    */
+
 function sendLogEmail() {
   var recipient = Session.getActiveUser().getEmail();
   var subject = 'Gmail Retention Results';

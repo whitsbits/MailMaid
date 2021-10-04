@@ -59,6 +59,30 @@ function listCache() {
     cache.remove('ruleLoopCache');
   }
 
+/**
+ * Returns userProperties in the PropertyService
+ * sorts the objects and converts the object to an array 
+ *  * @return {userProperties} an 2D array
+ */
+
+ function getUserPropsArr() {
+  var data = userProperties.getProperties();
+  keys = Object.keys(data),
+  i, len = keys.length;
+  keys.sort();
+
+  var properties =[];
+  for (var i = 0; i < len; i++) {
+    k = keys[i];
+      var propertyValue = data[k]
+      //.replace(/[\[\]"]/g,'')
+      .split(',');
+      properties.push(propertyValue)
+  }
+  Logger.log (`Returning userPropertiesArr ${properties}`)
+  return properties;
+};
+
   /**
  * Clears the PropertyService of any stored userProperties
  */
@@ -83,7 +107,7 @@ function mockFormCapture() {
   var userProperties = PropertiesService.getUserProperties();
   var search = 'foo';
   var days = 31;
-  var action = 'purge';
+  var action = 'Purge';
   var rule = [action, search, days];
   var keys = userProperties.getKeys();
   var ruleNumber = keys.length;
@@ -95,12 +119,13 @@ userProperties.setProperties({[newKey] : jarray});
 
 function loadRules() {
   clearAllRules();
-    userProperties.setProperties({rule1 : JSON.stringify(['purge','category:purchase','7'])});
-    userProperties.setProperties({rule2 : JSON.stringify(['purge','category:social','7'])});
-    userProperties.setProperties({rule3 : JSON.stringify(["archive","category:updates","30"])});
-    userProperties.setProperties({rule4 : JSON.stringify(["purge","category:updates -category:purchases","180"])});
-    userProperties.setProperties({rule6 : JSON.stringify(["purge","from:\"google calendar\"","7"])});
-    userProperties.setProperties({rule5 : JSON.stringify(["purge","label:goodsync","7"])});
+    userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:purchase','7'])});
+    userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
+    userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});
+    userProperties.setProperties({rule4 : JSON.stringify(["Purge","category:updates -category:purchases","180"])});
+    userProperties.setProperties({rule6 : JSON.stringify(["Purge","from:calendar-notification@google.com","7"])});
+    userProperties.setProperties({rule5 : JSON.stringify(["Purge","label:goodsync","7"])});
+    userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
     getRulesArr();
 }
 

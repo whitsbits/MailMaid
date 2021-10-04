@@ -96,6 +96,7 @@ const borderStyle = CardService.newBorderStyle()
  * Callback for rendering the rulesManagerCard.
  * @param {Object} e - Event from add-on server
  * @return {CardService.Card} The card to show to the user.
+ * Right now requires two virtually duplicate input widgets TODO refactor dupe code
  */
 
   function rulesManagerCard(e, action, search, days) {
@@ -123,28 +124,29 @@ const borderStyle = CardService.newBorderStyle()
     rulesManagerSection.addWidget(selectRulesBodyWidget);
 
   ///------------------START INPUT WIDGET--------------------------------//
+  //----------------------Base state widget------------------------------//
   if(e === null || action === undefined || search === undefined || days === undefined){
     const _searchText = CardService.newTextParagraph()
     .setText('Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed')
     
     var _search = CardService.newTextInput()
       .setFieldName('search')
-      .setValue("category:promotions")
+      .setValue("enter search text here e.g. category-promotions")
       .setHint(`Use standard GMail Query Language`);
 
     const _daysText = CardService.newTextParagraph()
         .setText('How many days until action')
     var _days = CardService.newTextInput()
       .setFieldName('days')
-      .setValue("30")
+      .setValue("Enter number of day before you process the rule")
       .setHint('How many days before the retention manager processes the action.');
 
     var _action = CardService.newSelectionInput()
       .setType(CardService.SelectionInputType.RADIO_BUTTON)
       .setTitle('Which action do you want the retention manager to take?')
       .setFieldName('action')
-      .addItem('Purge', 'purge', true)
-      .addItem('Archive', 'archive', false);
+      .addItem('Purge', 'Purge', true)
+      .addItem('Archive', 'Archive', false);
 
     rulesManagerSection
       .addWidget(_action)
@@ -160,9 +162,13 @@ const borderStyle = CardService.newBorderStyle()
       card.setFixedFooter(navFooter());
       return card.build();
 
+//-----------------------edit rule selected widget--------------------------//
   }else if (action != undefined || search != undefined || days != undefined){
     let ruleNum = cache.get('editRuleNum')
-    var editRuleNumText = `You are currently editing ${ruleNum}`
+    let editRuleNumData = userProperties.getProperty(ruleNum)
+        .replace(/[\[\]"]/g,'');
+        //.split(',');
+    var editRuleNumText = `You are currently editing ${ruleNum} \n ${editRuleNumData}`
     var editRuleNumWidget = CardService.newTextParagraph()
       .setText(editRuleNumText)    
     
@@ -182,10 +188,10 @@ const borderStyle = CardService.newBorderStyle()
         .setValue(days)
         .setHint('How many days before the retention manager processes the action.');
 
-        if (action === 'purge') {
+        if (action === 'Purge') {
             var item1 = true
             var item2 = false
-        }else if (action === 'archive'){
+        }else if (action === 'Archive'){
             var item2 = true
             var item1 = false
         };
@@ -194,8 +200,8 @@ const borderStyle = CardService.newBorderStyle()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setTitle('Which action do you want the retention manager to take?')
         .setFieldName('action')
-        .addItem('Purge', 'purge', item1)
-        .addItem('Archive', 'archive', item2);
+        .addItem('Purge', 'Purge', item1)
+        .addItem('Archive', 'Archive', item2);
 
     rulesManagerSection
         .addWidget(editRuleNumWidget)
@@ -210,11 +216,19 @@ const borderStyle = CardService.newBorderStyle()
     }
 
     //-----------------END RULE INPUT WIDGET----------------------------//
+
     card.addSection(rulesManagerSection);
     card.setFixedFooter(navFooter());
     return card.build();
     }
 
+  /**
+ * Callback for rendering the taking user input and returning it
+ *  to rebuild the target card with the captured input data.
+ * @param {Object} e - Event from add-on server
+ * @return {CardService.Card} The card to show to the user.
+ * TODO add @param to change the return function
+ */
   function onModeChange(e) {
     let ruleNum = (e.formInput.editRule);
     makeCache('editRuleNum', ruleNum);
@@ -356,6 +370,12 @@ function scheduleFieldsSection() {
     return scheduleFieldsSection
 }
 
+  /**
+ * Callback for rendering a pick list of suggested inputs
+ * @param {Object} e - Event from add-on server
+ * @return {CardService.newSuggestionsResponseBuilder()} The suggestion list to show to the user.
+ * Experimental feature This was not working at last attempt.
+ */
 function suggestionCallback(e) {
   Logger.log(e)
   var suggestions = CardService.newSuggestions();
