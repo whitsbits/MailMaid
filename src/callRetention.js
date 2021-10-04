@@ -89,7 +89,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       //Logger.log (`Finished batch of ${inc} from: ${countStart}`)
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
-    } while (countStart > 0);
+    } while (countStart > -1);
     
     if (loopBreak === 1) {
       break; //Break to For (i) loop if there was a TimeOut

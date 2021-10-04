@@ -21,10 +21,7 @@ function GMailRetention() {
 
   /**
  * Function to clear all rules data from the userProperties
-<<<<<<< HEAD
  * @return {notify with Card to be built}
-=======
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
  */
 function clearAllRules() {
   var numRules =  objectLength(userProperties.getProperties());
@@ -34,14 +31,11 @@ function clearAllRules() {
   Logger.log (`Deleted ${i - 1} rules.`);
   return notify(`Rules Cleared`, rulesManagerCard());
 };
-<<<<<<< HEAD
 
   /**
  * Utility function to clear all rules data from the userProperties
  * without offering a return
  */
-=======
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
 
 function clearRules() {
   var numRules =  objectLength(userProperties.getProperties());
@@ -51,14 +45,11 @@ function clearRules() {
   Logger.log (`Deleted ${i - 1} rules.`);
 };
 
-<<<<<<< HEAD
   /**
  * Function to clear a user selected rules data from the userProperties
  * @param {Object} e - Event from add-on server
  * @return {notify with Card to be built}
  */
-=======
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
 function clearSelectedRule(e) {
   let ruleNum  = e.parameters.ruleNum.toString()
   if (ruleNum === 'rule0') { 
@@ -100,35 +91,7 @@ function clearCache (name) {
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
-<<<<<<< HEAD
  *  * @return {rules} an array with [rule atributes]
-=======
- *  * @return {userProperties} an 2D array
- */
-
- function getUserPropsArr() {
-  var data = userProperties.getProperties();
-  keys = Object.keys(data),
-  i, len = keys.length;
-  keys.sort();
-
-  var properties =[];
-  for (var i = 0; i < len; i++) {
-    k = keys[i];
-      var propertyValue = data[k]
-      //.replace(/[\[\]"]/g,'')
-      .split(',');
-      properties.push(propertyValue)
-  }
-  Logger.log (`Returning userPropertiesArr ${properties}`)
-  return properties;
-};
-
-/**
- * Returns userProperties in the PropertyService
- * sorts the objects and converts the object to an array 
- *  * @return {rules} an 2D array with [ruleNum][rule atribute]
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
  */
 function getRulesArr() {
   var keys = getRuleKeys();
@@ -153,11 +116,7 @@ function getRulesArr() {
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
-<<<<<<< HEAD
  *  * @return {schedule} an array with [numDays, onHour]
-=======
- *  * @return {schedule} an 2D array with [numDays][onHour]
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
  */
 function getScheduleArr() {
     var data = userProperties.getProperty(`schedule`);
@@ -211,13 +170,8 @@ function objectLength( object ) {
 
 
 /**
-<<<<<<< HEAD
  * Gets the Keys from rules in the userProperty store
  *  * @return {ruleKeys} an array of key names
-=======
- * Counts the number of rules in the userProperty store=
- *  * @return {numRules} an integer of the number of rules
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
  */
 function getRuleKeys() {
     var keys = userProperties.getKeys();
@@ -227,13 +181,10 @@ function getRuleKeys() {
 return ruleKeys;
 }
 
-<<<<<<< HEAD
 /**
  * Counts the number of rules in the userProperty store=
  *  * @return {numRules} an integer of the number of rules
  */
-=======
->>>>>>> 321503c769d5aeb4637aa0d66957f839bf506118
 function countRules(){
   ruleCount = getRuleKeys().length
 Logger.log (`countRules returned ${ruleCount}`)
