@@ -8,6 +8,7 @@ const cache = CacheService.getUserCache();
 const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');
+const cardSectionDivider = CardService.newDivider();
 const borderStyle = CardService.newBorderStyle()
       .setType(CardService.BorderType.STROKE)
       .setCornerRadius(8)
@@ -104,10 +105,12 @@ const borderStyle = CardService.newBorderStyle()
     if (typeof rules === "string") {
         var selectRulesBodyWidget = CardService.newTextParagraph()
         .setText(rules);
-    }else{    
+    }else{
+
+
+
     var selectRulesBodyWidget = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.DROPDOWN)
-        .setTitle('Which rule do you want to edit?')
         .setFieldName('editRule')
         .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
         .addItem("Click here to select an existing Rule to edit","rule0", true)
@@ -119,43 +122,52 @@ const borderStyle = CardService.newBorderStyle()
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }   
     }
+    const selectRulesBodyText = CardService.newTextParagraph()
+          .setText('<b>Which rule do you want to edit?</b>');
 
-    var rulesManagerSection = CardService.newCardSection();
-    rulesManagerSection.addWidget(selectRulesBodyWidget);
+    var rulesManagerSection = CardService.newCardSection()
+        .addWidget(selectRulesBodyText)
+        .addWidget(selectRulesBodyWidget)
+        .addWidget(cardSectionDivider);
 
   ///------------------START INPUT WIDGET--------------------------------//
   //----------------------Base state widget------------------------------//
   if(e === null || action === undefined || search === undefined || days === undefined){
     const _searchText = CardService.newTextParagraph()
-    .setText('Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed')
+    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed:</b>')
     
     var _search = CardService.newTextInput()
       .setFieldName('search')
-      .setValue("enter search text here e.g. category-promotions")
+      .setValue("")
       .setHint(`Use standard GMail Query Language`);
 
     const _daysText = CardService.newTextParagraph()
-        .setText('How many days until action')
+        .setText('<b>How many days until action?</b>')
+
     var _days = CardService.newTextInput()
       .setFieldName('days')
-      .setValue("Enter number of day before you process the rule")
-      .setHint('How many days before the retention manager processes the action.');
+      .setValue("")
+      .setHint('Number of days before the retention manager processes the action.');
 
+    const _actionText = CardService.newTextParagraph()
+        .setText('<b>Which action do you want the retention manager to take?</b>')
+        
     var _action = CardService.newSelectionInput()
       .setType(CardService.SelectionInputType.RADIO_BUTTON)
-      .setTitle('Which action do you want the retention manager to take?')
       .setFieldName('action')
-      .addItem('Purge', 'Purge', true)
-      .addItem('Archive', 'Archive', false);
+      .addItem('Purge - moves to trash', 'Purge', true)
+      .addItem('Archive - removes from inbox', 'Archive', false);
 
     rulesManagerSection
+      .addWidget(_actionText)
       .addWidget(_action)
+      .addWidget(cardSectionDivider)
       .addWidget(_searchText)
       .addWidget(_search)
-      .addWidget(whiteSpace)
+      .addWidget(cardSectionDivider)
       .addWidget(_daysText)
       .addWidget(_days)
-      .addWidget(whiteSpace)
+      .addWidget(cardSectionDivider)
       .addWidget(ruleButtonsSet());
 
       card.addSection(rulesManagerSection);
@@ -173,7 +185,7 @@ const borderStyle = CardService.newBorderStyle()
       .setText(editRuleNumText)    
     
     const _searchText = CardService.newTextParagraph()
-    .setText('Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed')
+    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed:</b>')
     
     var _search = CardService.newTextInput()
         .setFieldName('search')
@@ -181,12 +193,12 @@ const borderStyle = CardService.newBorderStyle()
         .setHint(`Use standard GMail Query Language`);
 
     const _daysText = CardService.newTextParagraph()
-        .setText('How many days until action')
+        .setText('<b>How many days until action?</b>')
 
     var _days = CardService.newTextInput()
         .setFieldName('days')
         .setValue(days)
-        .setHint('How many days before the retention manager processes the action.');
+        .setHint('Number of days before the retention manager processes the action.');
 
         if (action === 'Purge') {
             var item1 = true
@@ -196,23 +208,29 @@ const borderStyle = CardService.newBorderStyle()
             var item1 = false
         };
   
+    const _actionText = CardService.newTextParagraph()
+        .setText('<b>Which action do you want the retention manager to take?</b>')
+
     var _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
-        .setTitle('Which action do you want the retention manager to take?')
         .setFieldName('action')
-        .addItem('Purge', 'Purge', item1)
-        .addItem('Archive', 'Archive', item2);
+        .addItem('Purge - moves to trash', 'Purge', item1)
+        .addItem('Archive - removes from inbox', 'Archive', item2);
+
+    const _actionHint = CardService.newTextParagraph()
+        .setText('<font color=\"#bcbcbc\">Purge moves to Trash \nArchive removes from Inbox</font>')
 
     rulesManagerSection
-        .addWidget(editRuleNumWidget)
-        .addWidget(_action)
-        .addWidget(_searchText)
-        .addWidget(_search)
-        .addWidget(whiteSpace)
-        .addWidget(_daysText)
-        .addWidget(_days)
-        .addWidget(whiteSpace)
-        .addWidget(ruleButtonsSet());
+      .addWidget(_actionText)
+      .addWidget(_action)
+      .addWidget(cardSectionDivider)
+      .addWidget(_searchText)
+      .addWidget(_search)
+      .addWidget(cardSectionDivider)
+      .addWidget(_daysText)
+      .addWidget(_days)
+      .addWidget(cardSectionDivider)
+      .addWidget(ruleButtonsSet());
     }
 
     //-----------------END RULE INPUT WIDGET----------------------------//
@@ -338,7 +356,7 @@ function scheduleReportWidget() {
 function scheduleFieldsSection() {
 
     const everyDaysText = CardService.newTextParagraph()
-      .setText ('Run every days(s)');
+      .setText ('<b>How often to you want to process messages?</b>');
     
     const everyDays = CardService.newTextInput()
         .setFieldName('everyDays')
@@ -353,7 +371,7 @@ function scheduleFieldsSection() {
     .setHours(2); */
 
     const atHourText = CardService.newTextParagraph()
-        .setText ('What time of day do you want the process to run?');
+        .setText ('<b>What time of day do you want the process to run?</b>');
 
     const atHour = CardService.newTextInput()
         .setFieldName('atHour')

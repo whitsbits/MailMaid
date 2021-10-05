@@ -208,7 +208,7 @@ return ruleCount
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        text += ("Rule " + (i + 1) + ":\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
+        text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
     Logger.log (`Returning reportRulesText: \n ${text}`)
     return text
@@ -229,7 +229,7 @@ return ruleCount
         var action = rules[i][0];
         var search = rules[i][1];
         var days = rules[i][2];
-        reportRulesArr.push ("Rule " + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
+        reportRulesArr.push ("<b>Rule </b>" + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
     Logger.log (`Returning reportRulesArr: \n ${reportRulesArr}`)
     return reportRulesArr
@@ -264,7 +264,7 @@ return ruleCount
         var everyDays = schedule[0];
         var militaryTime = schedule[1];
 
-      text = `You are currently running the schedule: \n   Every: ${everyDays} day(s) \n   At Hour: ${militaryTime}:00h \n\n`
+      text = `You are currently running the schedule: \n   <b>Every:</b> ${everyDays} day(s) \n   <b>At Hour:</b> ${militaryTime}:00h \n\n`
     Logger.log (`Returning reportSchedule Text: \n ${text}`)
     return text
   };
