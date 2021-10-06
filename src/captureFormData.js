@@ -1,6 +1,6 @@
 /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
- * {{[newKey] : jarray}} Retention Rule Array saved to PropertiesService
+ * {{[newKey] : jarray}} Cleaner Rule Array saved to PropertiesService
  * @param {Object} e - Event from add-on server
  * @return {notify with Card to be built}
  */
@@ -43,14 +43,14 @@ function captureRuleFormData(e) {
       Logger.log (`Error: ${e.toString()}`);  
       return `Error: ${e.toString()}`;
       }
-      Logger.log (`Retention Settings Saved as ${key}`);
-      return notify(`Retention Settings Saved as ${key}`, rulesManagerCard());
+      Logger.log (`Cleaner Settings Saved as ${key}`);
+      return notify(`Cleaner Settings Saved as ${key}`, rulesManagerCard());
   }
 
 
   /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
- * Retention shchedule set to Triggers
+ * Cleaner shchedule set to Triggers
  * @param {Object} e - Event from add-on server
 @return {notify with Card to be built}
  */
@@ -67,13 +67,13 @@ try {
   var data = userProperties.getProperty('schedule');
   if (data == null){
     userProperties.setProperties({'schedule' : jarray});
-    removeTriggers('GMailRetention');
-    setTrigger('GMailRetention', atHour, everyDays);  
+    removeTriggers('MailMaid');
+    setTrigger('MailMaid', atHour, everyDays);  
   }
   userProperties.deleteProperty('schedule')
   userProperties.setProperties({'schedule' : jarray});
-  removeTriggers('GMailRetention');
-  setTrigger('GMailRetention', atHour, everyDays);
+  removeTriggers('MailMaid');
+  setTrigger('MailMaid', atHour, everyDays);
 } 
 catch (e) {
   return `Error: ${e.toString()}`;

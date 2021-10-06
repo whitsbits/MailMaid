@@ -36,7 +36,7 @@ const borderStyle = CardService.newBorderStyle()
   * @return {CardService.Section} Return the section to build the card.
  */
   function homepageIntroSection() {
-    var introText = "GMail retention automatically manages your email by setting rules that find messages based on <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> and can archive or purge them according to the number of days since the message was received."
+    var introText = "MailMaid automatically cleans your email by setting rules that find messages based on <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> and can archive or purge them for you, according to the number of days since the message was received."
     const introBodyText = CardService.newTextParagraph()
         .setText(
             introText
@@ -147,10 +147,10 @@ const borderStyle = CardService.newBorderStyle()
     var _days = CardService.newTextInput()
       .setFieldName('days')
       .setValue("")
-      .setHint('Number of days before the retention manager processes the action.');
+      .setHint('Number of days before MailMaid processes the action.');
 
     const _actionText = CardService.newTextParagraph()
-        .setText('<b>Which action do you want the retention manager to take?</b>')
+        .setText('<b>Which action do you want the MailMaid to take?</b>')
         
     var _action = CardService.newSelectionInput()
       .setType(CardService.SelectionInputType.RADIO_BUTTON)
@@ -198,7 +198,7 @@ const borderStyle = CardService.newBorderStyle()
     var _days = CardService.newTextInput()
         .setFieldName('days')
         .setValue(days)
-        .setHint('Number of days before the retention manager processes the action.');
+        .setHint('Number of days before the MailMaid processes the action.');
 
         if (action === 'Purge') {
             var item1 = true
@@ -209,7 +209,7 @@ const borderStyle = CardService.newBorderStyle()
         };
   
     const _actionText = CardService.newTextParagraph()
-        .setText('<b>Which action do you want the retention manager to take?</b>')
+        .setText('<b>Which action do you want the MailMaid to take?</b>')
 
     var _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)

@@ -6,17 +6,17 @@
  * Sets the environmental variable to baseline before running the main process
  */
 
-function GMailRetention() {
-    removeTriggers('purgeMore');
-    callRetention();
+function MailMaid() {
+    removeTriggers('cleanMore');
+    cleanMail();
   }
 
   /**
  * Wrapper for the purge function called by timeOut trigger
  */
- function purgeMore() {
-  removeTriggers('purgeMore');
-  callRetention();
+ function cleanMore() {
+  removeTriggers('cleanMore');
+  cleanMail();
 }
 
   /**
@@ -69,7 +69,7 @@ function clearSelectedRule(e) {
 function clearSchedule(){
     var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteProperty('schedule');
-    removeTriggers('GmailRetention');
+    removeTriggers('MailMaid');
     return notify(`Schedule Cleared`, scheduleCard());
   };
 
@@ -291,16 +291,4 @@ return ruleCount
 
 
 
-    /**
-     *  Generate a log, then email it to the person who ran the script.
-     * Not currently used
-     * TODO figure out a way to do this in a more user friendly manner.
-    */
 
-function sendLogEmail() {
-  var recipient = Session.getActiveUser().getEmail();
-  var subject = 'Gmail Retention Results';
-  var body = Logger.getLog();
-  MailApp.sendEmail(recipient, subject, body);
-  Logger.log (`Email sent to ${recipient}`);
-}

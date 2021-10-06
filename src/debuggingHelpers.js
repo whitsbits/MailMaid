@@ -6,19 +6,19 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
-  removeTriggers('purgeMore');
+  removeTriggers('cleanMore');
   clearAllCache();
   makeCache('inBoxCache', 15000);
   makeCache('ruleLoopCache', 2)
   makeCache('threadLoopCache', 9000)
-  callRetention();
+  cleanMail();
 }
 
   /**
- * Clean up on aisle purgeMore trigger
+ * Clean up on aisle cleanMore trigger
  */
 function clearMoreTriggers() {
-  removeTriggers('purgeMore');
+  removeTriggers('cleanMore');
 }
 
   /**
@@ -26,8 +26,8 @@ function clearMoreTriggers() {
  */
 
 function clearAllTriggers() {
-  removeTriggers('GMailRetention');
-  removeTriggers('purgeMore');
+  removeTriggers('MailMaid');
+  removeTriggers('cleanMore');
 }
 
   /**
@@ -128,6 +128,21 @@ function loadRules() {
     userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
     getRulesArr();
 }
+
+    /**
+     *  Generate a log, then email it to the person who ran the script.
+     * Not currently used
+     * TODO figure out a way to do this in a more user friendly manner.
+    */
+
+function sendLogEmail() {
+  var recipient = Session.getActiveUser().getEmail();
+  var subject = 'MailMaid Results';
+  var body = Logger.getLog();
+  MailApp.sendEmail(recipient, subject, body);
+  Logger.log (`Email sent to ${recipient}`);
+}
+
 
 /**
  * Not currently used
