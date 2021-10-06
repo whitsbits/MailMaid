@@ -11,18 +11,17 @@
     },
     "gmail": {
       "homepageTrigger": {
-          "enabled": true,
-          "runFunction":"onHomepage"
-        },
-      "contextualTriggers":[
+        "enabled": true,
+        "runFunction": "onHomepage"
+      },
+      "contextualTriggers": [
         {
-          "unconditional":{},
+          "unconditional": {},
           "onTriggerFunction": "onHomepage"
         }
-      ]  
-      }
-    },
-
+      ]
+    }
+  },
   "exceptionLogging": "STACKDRIVER",
   "oauthScopes": [
     "https://www.googleapis.com/auth/gmail.addons.execute",

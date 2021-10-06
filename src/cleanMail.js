@@ -49,7 +49,7 @@ for (let i = rulesCached; i < rules.length; i++) {
         makeCache('threadLoopCache', countStart); // cache the thread loop location
         if(triggerActive('cleanMore') === false){
           Logger.log ('Setting a trigger to call the cleanMore function.')
-          setcleanMoreTrigger();
+          setCleanMoreTrigger();
         }else{
           Logger.log ('cleanMore already Set')
         }

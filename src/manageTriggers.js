@@ -41,10 +41,10 @@ function triggerActive(triggerName) {
 
 
 /**
- * Create a trigger that executes the purgeMore function two minutes from now
+ * Create a trigger that executes the cleanMore function two minutes from now
  */
- function setPurgeMoreTrigger() {
-    ScriptApp.newTrigger('purgeMore')
+ function setCleanMoreTrigger() {
+    ScriptApp.newTrigger('cleanMore')
       .timeBased()
       .at(new Date(new Date().getTime() + 1000 * 60 * 60))
       .create();
