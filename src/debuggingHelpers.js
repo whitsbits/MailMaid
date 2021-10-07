@@ -30,26 +30,7 @@ function clearAllTriggers() {
   removeTriggers('cleanMore');
 }
 
-  /**
- * list the cache(s) values
- */
-function listCache() {
-  Logger.log ("inboxNum: " + cache.get('inBoxCache'));
-  Logger.log ("ruleNum: " + cache.get('ruleLoopCache'));
-  Logger.log ("threadNum: " + cache.get('threadLoopCache'));
-  Logger.log ("editRuleNum: " + cache.get('editRuleNum'));
-}
 
-  /**
- * Clears the cache(s)
- */
-
-   function clearAllCache() {
-    cache.remove('inBoxCache');
-    cache.remove('ruleLoopCache');
-    cache.remove('threadLoopCache');
-    Logger.log (`All Caches Cleared`)
-  }
 
   function clearInBoxCache() {
     cache.remove('inBoxCache');

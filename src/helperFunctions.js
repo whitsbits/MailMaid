@@ -87,7 +87,25 @@ function clearCache (name) {
   Logger.log (`${user} - Removed ${name} cache.`)
 }
 
+  /**
+ * Clears the cache(s)
+ */
 
+   function clearAllCache() {
+    cache.remove('inBoxCache');
+    cache.remove('ruleLoopCache');
+    cache.remove('threadLoopCache');
+    Logger.log (`${user} - All Caches Cleared`)
+  }
+  /**
+ * list the cache(s) values
+ */
+   function listCache() {
+    Logger.log (user + " - Current cached values are: \n" + 
+                "inboxNum: " + cache.get('inBoxCache') + "\n" +
+                "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
+                "threadNum: " + cache.get('threadLoopCache'));
+  }
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
@@ -296,7 +314,7 @@ return ruleCount
      function sendLogEmail() {
       var recipient = user.getEmail();
       var subject = 'MailMaid Results';
-      var body = reportArr;
+      var body = `<b>MailMaid sucessfully processed the following results:</b> \n\n ${reportArr}`;
       MailApp.sendEmail(recipient, subject, body);
       Logger.log (`${user} - Email sent to ${recipient}`);
     }
