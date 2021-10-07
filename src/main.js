@@ -396,7 +396,6 @@ function scheduleFieldsSection() {
  * Experimental feature This was not working at last attempt.
  */
 function suggestionCallback(e) {
-  Logger.log(${user} - e)
   var suggestions = CardService.newSuggestions();
   var numSuggestions = parseInt(e.parameter['numSuggestions']);
   for(var i = 1; i <= numSuggestions; i++) {
