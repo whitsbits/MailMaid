@@ -34,16 +34,16 @@ function captureRuleFormData(e) {
           key = ('rule' + ruleNum);
         }
         var jarray = JSON.stringify(rule);
-        Logger.log (`Key set as ${key}`);
+        Logger.log (`${user} - Key set as ${key}`);
     try {
       var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({[key] : jarray});
     } 
     catch (e) {
-      Logger.log (`Error: ${e.toString()}`);  
+      Logger.log (`${user} - Error: ${e.toString()}`);  
       return `Error: ${e.toString()}`;
       }
-      Logger.log (`Cleaner Settings Saved as ${key}`);
+      Logger.log (`${user} - Cleaner Settings Saved as ${key}`);
       return notify(`Cleaner Settings Saved as ${key}`, rulesManagerCard());
   }
 
@@ -56,7 +56,6 @@ function captureRuleFormData(e) {
  */
 
 function captureScheduleFormData(e) {
-  Logger.log (e);
   var everyDays = parseInt(e.formInput.everyDays,10);
   var atHour = parseInt(e.formInput.atHour,10);
   var schedule = [everyDays, atHour];
@@ -76,8 +75,10 @@ try {
   setTrigger('MailMaid', atHour, everyDays);
 } 
 catch (e) {
+  Logger.log (`${user} - Error: ${e.toString()}`);
   return `Error: ${e.toString()}`;
 }
+Logger.log (`${user} - Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`;
 return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
 }
 

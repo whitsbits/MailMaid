@@ -8,9 +8,9 @@
 function runDebugNow() {
   removeTriggers('cleanMore');
   clearAllCache();
-  makeCache('inBoxCache', 15000);
-  makeCache('ruleLoopCache', 2)
-  makeCache('threadLoopCache', 9000)
+  makeCache('inBoxCache', 1500);
+  makeCache('ruleLoopCache', 4)
+  makeCache('threadLoopCache', 1000)
   cleanMail();
 }
 
@@ -129,19 +129,6 @@ function loadRules() {
     getRulesArr();
 }
 
-    /**
-     *  Generate a log, then email it to the person who ran the script.
-     * Not currently used
-     * TODO figure out a way to do this in a more user friendly manner.
-    */
-
-function sendLogEmail() {
-  var recipient = Session.getActiveUser().getEmail();
-  var subject = 'MailMaid Results';
-  var body = Logger.getLog();
-  MailApp.sendEmail(recipient, subject, body);
-  Logger.log (`Email sent to ${recipient}`);
-}
 
 
 /**

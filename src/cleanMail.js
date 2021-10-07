@@ -30,28 +30,26 @@ for (let i = rulesCached; i < rules.length; i++) {
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
-    Logger.log (`Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
+    Logger.log (`${user} -Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
 
     do {
       if (isTimeUp_(scriptStart, 250000)) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
-        Logger.log(
-          'Inbox loop time limit exceeded.' 
-        );
+        Logger.log(`${user} - Inbox loop time limit exceeded.`);
         if (action === 'Archive'){
-          Logger.log(`${counter} total threads archived`);
+          Logger.log(`${user} - ${counter} total threads archived`);
         };
         if (action === 'Purge'){
-          Logger.log(`${counter} total threads deleted`);
+          Logger.log(`${user} - ${counter} total threads deleted`);
         };
         makeCache('ruleLoopCache', i); // cache the rule loop location
         makeCache('threadLoopCache', countStart); // cache the thread loop location
-        if(triggerActive('cleanMore') === false){
-          Logger.log ('Setting a trigger to call the cleanMore function.')
-          setCleanMoreTrigger();
+        if(triggerActive('purgeMore') === false){
+          Logger.log (`${user} - Setting a trigger to call the purgeMore function.`)
+          setPurgeMoreTrigger();
         }else{
-          Logger.log ('cleanMore already Set')
+          Logger.log (`${user} - PurgeMore already Set`)
         }
         
         loopBreak = 1; // Break the FOR (i) loop
@@ -97,19 +95,27 @@ for (let i = rulesCached; i < rules.length; i++) {
 
 
   if (action === 'Archive'){
-    Logger.log(`${counter} total threads archived`);
+    var archiveReport = `\n${counter} total threads archived from rule set: ${action}, ${searchString}, ${days}`
+    Logger.log(`${user} - ${counter} total threads archived`);
+    reportArr.push(archiveReport);
   };
   if (action === 'Purge'){
-    Logger.log(`${counter} total threads deleted`);
+    var purgeReport = `\n${counter} total threads purged from rule set: ${action}, ${searchString}, ${days}`
+    Logger.log(`${user} - ${counter} total threads deleted`);
+    reportArr.push(purgeReport);
   };
-  Logger.log(`Finished processing from Inbox from index ${countStart}`);
+  if (countStart < 0){
+    countStart = 0;
+  }
+  Logger.log(`${user} - Finished processing Inbox from index ${countStart}`);
   threadsCached = null;
   clearCache('threadLoopCache');
 }
   if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
     clearCache('ruleLoopCache');
-    removeTriggers('cleanMore')
-    Logger.log ("FIN")
+    removeTriggers('purgeMore')
+    Logger.log(`${user} - Final tally: \n ${reportArr}`);
+    sendLogEmail();
   }
 };
 

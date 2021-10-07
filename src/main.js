@@ -1,7 +1,8 @@
 /**
  * Global Variables
  */
-
+let reportArr = [];
+const user = Session.getActiveUser();
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
@@ -251,11 +252,11 @@ const borderStyle = CardService.newBorderStyle()
     let ruleNum = (e.formInput.editRule);
     makeCache('editRuleNum', ruleNum);
     let ruleElementsArr = reportRulesArrElements(ruleNum);
-    Logger.log (`The element array is: ${ruleElementsArr}`);
+    Logger.log (`${user} - The element array is: ${ruleElementsArr}`);
     var action = ruleElementsArr[0];
     var search = ruleElementsArr[1];
     var days = ruleElementsArr[2];
-    Logger.log (`Returning onModeChange array of:${action}, ${search}, ${days}`)
+    Logger.log (`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
     return rulesManagerCard(e, action, search, days);
 }
 
@@ -395,7 +396,7 @@ function scheduleFieldsSection() {
  * Experimental feature This was not working at last attempt.
  */
 function suggestionCallback(e) {
-  Logger.log(e)
+  Logger.log(${user} - e)
   var suggestions = CardService.newSuggestions();
   var numSuggestions = parseInt(e.parameter['numSuggestions']);
   for(var i = 1; i <= numSuggestions; i++) {
