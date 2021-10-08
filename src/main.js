@@ -1,7 +1,8 @@
 /**
  * Global Variables
  */
-
+let reportArr = [];
+const user = Session.getActiveUser();
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
@@ -26,6 +27,7 @@ const borderStyle = CardService.newBorderStyle()
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
+    card.addSection(disclosuresSection());
     card.setName('homepage')
 
     return card.build();
@@ -92,6 +94,17 @@ const borderStyle = CardService.newBorderStyle()
     return scheduleSection;
   };
 
+function disclosuresSection() {
+  const disclosureText = `MailMaid's use and transfer to any other app of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.`
+
+  const disclosureTextParagraph = CardService.newTextParagraph()
+        .setText(disclosureText);
+
+  const disclosuresSection = CardService.newCardSection()
+        .addWidget(disclosureTextParagraph);
+
+  return disclosuresSection;
+}
 //-----------------START RULES CARD---------------------------//
   /**
  * Callback for rendering the rulesManagerCard.
@@ -251,11 +264,11 @@ const borderStyle = CardService.newBorderStyle()
     let ruleNum = (e.formInput.editRule);
     makeCache('editRuleNum', ruleNum);
     let ruleElementsArr = reportRulesArrElements(ruleNum);
-    Logger.log (`The element array is: ${ruleElementsArr}`);
+    Logger.log (`${user} - The element array is: ${ruleElementsArr}`);
     var action = ruleElementsArr[0];
     var search = ruleElementsArr[1];
     var days = ruleElementsArr[2];
-    Logger.log (`Returning onModeChange array of:${action}, ${search}, ${days}`)
+    Logger.log (`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
     return rulesManagerCard(e, action, search, days);
 }
 
@@ -395,7 +408,6 @@ function scheduleFieldsSection() {
  * Experimental feature This was not working at last attempt.
  */
 function suggestionCallback(e) {
-  Logger.log(e)
   var suggestions = CardService.newSuggestions();
   var numSuggestions = parseInt(e.parameter['numSuggestions']);
   for(var i = 1; i <= numSuggestions; i++) {

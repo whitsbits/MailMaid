@@ -8,9 +8,9 @@
 function runDebugNow() {
   removeTriggers('cleanMore');
   clearAllCache();
-  makeCache('inBoxCache', 15000);
-  makeCache('ruleLoopCache', 2)
-  makeCache('threadLoopCache', 9000)
+  makeCache('inBoxCache', 1500);
+  makeCache('ruleLoopCache', 4)
+  makeCache('threadLoopCache', 1000)
   cleanMail();
 }
 
@@ -30,26 +30,7 @@ function clearAllTriggers() {
   removeTriggers('cleanMore');
 }
 
-  /**
- * list the cache(s) values
- */
-function listCache() {
-  Logger.log ("inboxNum: " + cache.get('inBoxCache'));
-  Logger.log ("ruleNum: " + cache.get('ruleLoopCache'));
-  Logger.log ("threadNum: " + cache.get('threadLoopCache'));
-  Logger.log ("editRuleNum: " + cache.get('editRuleNum'));
-}
 
-  /**
- * Clears the cache(s)
- */
-
-   function clearAllCache() {
-    cache.remove('inBoxCache');
-    cache.remove('ruleLoopCache');
-    cache.remove('threadLoopCache');
-    Logger.log (`All Caches Cleared`)
-  }
 
   function clearInBoxCache() {
     cache.remove('inBoxCache');
@@ -129,19 +110,6 @@ function loadRules() {
     getRulesArr();
 }
 
-    /**
-     *  Generate a log, then email it to the person who ran the script.
-     * Not currently used
-     * TODO figure out a way to do this in a more user friendly manner.
-    */
-
-function sendLogEmail() {
-  var recipient = Session.getActiveUser().getEmail();
-  var subject = 'MailMaid Results';
-  var body = Logger.getLog();
-  MailApp.sendEmail(recipient, subject, body);
-  Logger.log (`Email sent to ${recipient}`);
-}
 
 
 /**

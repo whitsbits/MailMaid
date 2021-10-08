@@ -8,7 +8,7 @@ function getTriggersArr () {
   for (var i=0; i<triggers.length; i++){
     triggerArr.push (triggers[i].getHandlerFunction())
   }
-  Logger.log (`getTriggerArr returning ${triggerArr}`)
+  Logger.log (`${user} - getTriggerArr returning ${triggerArr}`)
   return triggerArr
 }
 
@@ -20,7 +20,7 @@ function getTriggersArr () {
 function triggerActive(triggerName) {
   let triggerArr = getTriggersArr()
   let triggerBool = triggerArr.includes(triggerName)
-  Logger.log (`triggerActive returning ${triggerName} as ${triggerBool}`)
+  Logger.log (`${user} - triggerActive returning ${triggerName} as ${triggerBool}`)
   return triggerBool
 }
 
@@ -30,7 +30,7 @@ function triggerActive(triggerName) {
  */
  function setTrigger(triggerName, atHour, everyDays) {
   var userTimeZone = Session.getScriptTimeZone();
-  Logger.log (userTimeZone)
+  Logger.log (`${user} - Local Timezone is ${userTimeZone}`)
   ScriptApp.newTrigger(triggerName)
     .timeBased()
     .atHour(atHour)
@@ -62,6 +62,6 @@ function triggerActive(triggerName) {
       ScriptApp.deleteTrigger(trigger);
     }
   }
-  Logger.log(`Trigger ${triggerName} removed`);
+  Logger.log(`${user} - Trigger ${triggerName} removed`);
 }
 

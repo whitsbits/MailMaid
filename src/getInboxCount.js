@@ -12,12 +12,12 @@
  */
 
 function getInboxCount(inc) {
-  Logger.log('Starting InBox Count');
+  Logger.log(`${user} - Starting InBox Count`);
   const scriptStart = new Date();
   const cached = cache.get('inBoxCache');
   if (cached != null) {
     // check to see if the value has been cached
-    Logger.log (`Using cached Inbox count of: ${cached}`);
+    Logger.log (`${user} - Using cached Inbox count of: ${cached}`);
     return cached;
   }
   let total = 0;
@@ -29,12 +29,10 @@ function getInboxCount(inc) {
     if (isTimeUp_(scriptStart, 270000)) {
       /** * When script runs close to the 5 min timeout limit take the count, 
        * cache it and set a trigger to researt after 2 mins */
-      Logger.log(
-        `Inbox count timeout. Passing partial count of ${total} to controller`
-      );
+      Logger.log(`${user} - Inbox count timeout. Passing partial count of ${total}`);
       makeCache('inBoxCache', total); // cache for 23 hours
-      setPurgeMoreTrigger(); //set triggr to restart script
-      Logger.log('Setting Trigger to resume script')
+      setCleanMoreTrigger(); //set triggr to restart script
+      Logger.log(`${user} - Setting Trigger to resume script`)
       return total;
       } 
     
@@ -42,7 +40,7 @@ function getInboxCount(inc) {
     //Logger.log (`${total} threads counted so far`)
 
 } while (page.length > 0);
-  Logger.log(`The total InBox is ${total}`);
+  Logger.log(`${user} - The total InBox is ${total}`);
   makeCache('inBoxCache', total); // cache for 23 hours
   return total;
 }

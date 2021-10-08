@@ -28,7 +28,7 @@ function clearAllRules() {
   for (var i = 1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log (`Deleted ${i - 1} rules.`);
+  Logger.log (`${user} - Deleted ${i - 1} rules.`);
   return notify(`Rules Cleared`, rulesManagerCard());
 };
 
@@ -42,7 +42,7 @@ function clearRules() {
   for (var i = 1; i < numRules + 1; i++){
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log (`Deleted ${i - 1} rules.`);
+  Logger.log (`${user} - Deleted ${i - 1} rules.`);
 };
 
   /**
@@ -57,7 +57,7 @@ function clearSelectedRule(e) {
   }else{
     userProperties.deleteProperty(ruleNum);
     reIndexRules();
-    Logger.log (`Deleted ${ruleNum}`);
+    Logger.log (`${user} - Deleted ${ruleNum}`);
     return notify(`Rule ${ruleNum} cleared`, rulesManagerCard());
   }
 };
@@ -79,15 +79,33 @@ function clearSchedule(){
 
  function makeCache (name, data) {
   cache.put(name, data, 82800) //23 hour cache
-  Logger.log (`Added ${name} cache with value: ${data}`)
+  Logger.log (`${user} - Added ${name} cache with value: ${data}`)
 }
 
 function clearCache (name) {
   cache.remove(name)
-  Logger.log (`Removed ${name} cache.`)
+  Logger.log (`${user} - Removed ${name} cache.`)
 }
 
+  /**
+ * Clears the cache(s)
+ */
 
+   function clearAllCache() {
+    cache.remove('inBoxCache');
+    cache.remove('ruleLoopCache');
+    cache.remove('threadLoopCache');
+    Logger.log (`${user} - All Caches Cleared`)
+  }
+  /**
+ * list the cache(s) values
+ */
+   function listCache() {
+    Logger.log (user + " - Current cached values are: \n" + 
+                "inboxNum: " + cache.get('inBoxCache') + "\n" +
+                "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
+                "threadNum: " + cache.get('threadLoopCache'));
+  }
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
@@ -109,7 +127,7 @@ function getRulesArr() {
       .split(',');
       rulesArr.push(ruleValue)
   }
-  Logger.log (`Returning getRulesArr ${rulesArr}`)
+  Logger.log (`${user} - Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -126,7 +144,7 @@ function getScheduleArr() {
     var schedule = data
     .replace(/[\[\]"]/g,'')
     .split(',');
-    Logger.log (`Returning scheduleArr ${schedule}`)
+    Logger.log (`${user} - Returning scheduleArr ${schedule}`)
   return schedule;
 };
 
@@ -143,12 +161,12 @@ function getCountStart() {
     // check to see if the value has been cached
   }else if (threadsCached === null) {
     countStart = inBoxCached;
-    Logger.log (`Using cached Inbox of: ${inBoxCached}`)
+    Logger.log (`${user} - Using cached Inbox of: ${inBoxCached}`)
   }else{
     countStart = threadsCached;
-    Logger.log (`Using cached threads of: ${threadsCached}`)
+    Logger.log (`${user} - Using cached threads of: ${threadsCached}`)
   };
-  Logger.log (`Returning Starting count of ${countStart}`)
+  Logger.log (`${user} - Returning Starting count of ${countStart}`)
   return countStart
 }
 
@@ -164,7 +182,7 @@ function objectLength( object ) {
           ++length;
       }
   }
-  Logger.log (`Returning objectLength ${length}`)
+  Logger.log (`${user} - Returning objectLength ${length}`)
   return length;
 };
 
@@ -187,7 +205,7 @@ return ruleKeys;
  */
 function countRules(){
   ruleCount = getRuleKeys().length
-Logger.log (`countRules returned ${ruleCount}`)
+Logger.log (`${user} - countRules returned ${ruleCount}`)
 return ruleCount
 }
 
@@ -210,7 +228,7 @@ return ruleCount
         var days = rules[i][2];
         text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
-    Logger.log (`Returning reportRulesText: \n ${text}`)
+    Logger.log (`${user} - Returning reportRulesText: \n ${text}`)
     return text
   };
 
@@ -231,7 +249,7 @@ return ruleCount
         var days = rules[i][2];
         reportRulesArr.push ("<b>Rule </b>" + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
-    Logger.log (`Returning reportRulesArr: \n ${reportRulesArr}`)
+    Logger.log (`${user} - Returning reportRulesArr: \n ${reportRulesArr}`)
     return reportRulesArr
   };
 
@@ -246,7 +264,7 @@ return ruleCount
     ruleElemArray = rule
       .replace(/[\[\]"]/g,'')
       .split(',');
-    Logger.log (`Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
+    Logger.log (`${user} - Returning reportRulesArrElements for ${ruleNum}: \n ${rule}`)
     return ruleElemArray  };
 
   /**
@@ -256,7 +274,6 @@ return ruleCount
   function reportSchedule () {
     var schedule = getScheduleArr();
       var text = ''
-    Logger.log (schedule);
     if (schedule == null) {
       text = `You do not currently have any schedule set`;
       return text
@@ -265,7 +282,7 @@ return ruleCount
         var militaryTime = schedule[1];
 
       text = `You are currently running the schedule: \n   <b>Every:</b> ${everyDays} day(s) \n   <b>At Hour:</b> ${militaryTime}:00h \n\n`
-    Logger.log (`Returning reportSchedule Text: \n ${text}`)
+    Logger.log (`${user} - Returning reportSchedule Text: \n ${text}`)
     return text
   };
 
@@ -279,16 +296,28 @@ return ruleCount
     var rules = getRulesArr();
     var keys = getRuleKeys();
     keys.sort();
-    Logger.log (keys);
     clearRules();
     for (i = 0; i < keys.length; i++) {
       var newKey = `rule${i + 1}`;
       userProperties.setProperty(newKey,JSON.stringify(rules[i]));
-      Logger.log(`Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+      Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
     }
-    Logger.log (`Rules property store reindexed`)
+    Logger.log (`${user} - Rules property store reindexed`)
   }
 
+    /**
+     *  Generate a log, then email it to the person who ran the script.
+     * Not currently used
+     * TODO figure out a way to do this in a more user friendly manner.
+    */
 
+     function sendLogEmail() {
+      var recipient = user.getEmail();
+      var subject = 'MailMaid Results';
+      var body = `<b>MailMaid sucessfully processed the following results:</b> \n\n ${reportArr}`;
+      MailApp.sendEmail(recipient, subject, body);
+      Logger.log (`${user} - Email sent to ${recipient}`);
+    }
+    
 
 
