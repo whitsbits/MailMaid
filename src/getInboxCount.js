@@ -31,7 +31,7 @@ function getInboxCount(inc) {
        * cache it and set a trigger to researt after 2 mins */
       Logger.log(`${user} - Inbox count timeout. Passing partial count of ${total}`);
       makeCache('inBoxCache', total); // cache for 23 hours
-      setPurgeMoreTrigger(); //set triggr to restart script
+      setCleanMoreTrigger(); //set triggr to restart script
       Logger.log(`${user} - Setting Trigger to resume script`)
       return total;
       } 
