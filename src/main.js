@@ -27,6 +27,7 @@ const borderStyle = CardService.newBorderStyle()
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
+    card.addSection(disclosuresSection());
     card.setName('homepage')
 
     return card.build();
@@ -93,6 +94,17 @@ const borderStyle = CardService.newBorderStyle()
     return scheduleSection;
   };
 
+function disclosuresSection() {
+  const disclosureText = `MailMaid's use and transfer to any other app of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.`
+
+  const disclosureTextParagraph = CardService.newTextParagraph()
+        .setText(disclosureText);
+
+  const disclosuresSection = CardService.newCardSection()
+        .addWidget(disclosureTextParagraph);
+
+  return disclosuresSection;
+}
 //-----------------START RULES CARD---------------------------//
   /**
  * Callback for rendering the rulesManagerCard.
