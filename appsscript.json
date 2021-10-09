@@ -1,0 +1,34 @@
+{
+  "timeZone": "America/New_York",
+  "runtimeVersion": "V8",
+  "addOns": {
+    "common": {
+      "name": "MailMaid",
+      "logoUrl": "https://lh3.googleusercontent.com/CDB2kzM39giepwsRXKYDkudNDmjP1_vT6zN8PfY5ai6sy_44JBwrFo5HPupWkX_KihZDNCBpF2EDwCoIYQdfh_6pNHr5tp17aO62cwCYwNJUULqd6219giEKCYcGIRrsmeMdps9DQ1o=w2400",
+      "layoutProperties": {
+        "primaryColor": "#2772ed"
+      }
+    },
+    "gmail": {
+      "homepageTrigger": {
+        "enabled": true,
+        "runFunction": "onHomepage"
+      },
+      "contextualTriggers": [
+        {
+          "unconditional": {},
+          "onTriggerFunction": "onHomepage"
+        }
+      ]
+    }
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/gmail.addons.execute",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/script.send_mail",
+    "https://www.googleapis.com/auth/script.locale",
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/gmail.modify"
+  ]
+}

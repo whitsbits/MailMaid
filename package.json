@@ -1,0 +1,28 @@
+{
+  "name": "gmailretention",
+  "version": "1.0.0",
+  "description": "Allow scheduled management of GMail retention",
+  "author": "Stewart Whitman <stewart.l.whitman@gmail.com>",
+  "homepage": "http://whitman.app",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint -c .eslintrc.json src/*.js",
+    "lint:fix": "eslint -c .eslintrc.json --fix src/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slwhitman/GMail-Retention"
+  },
+  "keywords": [
+    "google-apps-script",
+    "google-workspace"
+  ],
+  "devDependencies": {
+    "@google/clasp": "^2.3.0",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "bugs": {
+    "url": "https://github.com/slwhitman/GMail-Maintenance/issues"
+  }
+}
