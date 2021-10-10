@@ -78,8 +78,8 @@ catch (e) {
   Logger.log (`${user} - Error: ${e.toString()}`);
   return `Error: ${e.toString()}`;
 }
-Logger.log (`${user} - Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`);
-return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
+Logger.log (`${user} - MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`);
+return notify(`MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
 }
 
 
