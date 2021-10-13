@@ -14,6 +14,11 @@ function runDebugNow() {
   cleanMail();
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
 function getHash() {
   const user = "stewart.l.whitman@gmail.com"
   const userString = String(user)
@@ -21,6 +26,10 @@ function getHash() {
   Logger.log (userhash)
 }
 
+<<<<<<< HEAD
+=======
+>>>>>>> master
+>>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
   /**
  * Clean up on aisle cleanMore trigger
  */
@@ -88,12 +97,21 @@ function clearAllTriggers() {
     userProperties.deleteProperty(`rule2`);
   }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
   function makeSchedule() {
     var schedule = JSON.stringify([1,1])
       userProperties.deleteProperty('schedule')
       userProperties.setProperties({'schedule' : schedule});
   }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> master
+>>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
 /**
  * Debugging to synthetically load the PropertiesService
  */
@@ -112,6 +130,7 @@ userProperties.setProperties({[newKey] : jarray});
 }
 
 function loadRules() {
+<<<<<<< HEAD
   clearRules();
     userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:purchase','7'])});
     //userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
@@ -121,6 +140,24 @@ function loadRules() {
     //userProperties.setProperties({rule5 : JSON.stringify(["Purge","label:goodsync","7"])});
     //userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
     userProperties.setProperties({license : JSON.stringify(["0"])}); //765c2952061f99499e78497162970cdb 
+=======
+<<<<<<< HEAD
+  clearRules();
+=======
+  clearAllRules();
+>>>>>>> master
+    userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:purchase','7'])});
+    userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
+    userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});
+    userProperties.setProperties({rule4 : JSON.stringify(["Purge","category:updates -category:purchases","180"])});
+    userProperties.setProperties({rule6 : JSON.stringify(["Purge","from:calendar-notification@google.com","7"])});
+    userProperties.setProperties({rule5 : JSON.stringify(["Purge","label:goodsync","7"])});
+    userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
+<<<<<<< HEAD
+    userProperties.setProperties({license : JSON.stringify(["765c2952061f99499e78497162970cdb"])}); //765c2952061f99499e78497162970cdb 
+=======
+>>>>>>> master
+>>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
     getRulesArr();
 }
 

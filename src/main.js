@@ -2,6 +2,13 @@
  * Global Variables
  */
 let reportArr = [];
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const user = Session.getActiveUser();
+=======
+>>>>>>> master
+>>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const cache = CacheService.getUserCache();
