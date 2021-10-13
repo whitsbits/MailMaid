@@ -14,6 +14,13 @@ function runDebugNow() {
   cleanMail();
 }
 
+function getHash() {
+  const user = "stewart.l.whitman@gmail.com"
+  const userString = String(user)
+  const userhash = MD5( userString, false );
+  Logger.log (userhash)
+}
+
   /**
  * Clean up on aisle cleanMore trigger
  */
@@ -82,7 +89,9 @@ function clearAllTriggers() {
   }
 
   function makeSchedule() {
-    userProperties.setProperties({'schedule' : ["1","1"]})
+    var schedule = JSON.stringify([1,1])
+      userProperties.deleteProperty('schedule')
+      userProperties.setProperties({'schedule' : schedule});
   }
 
 /**
@@ -105,13 +114,13 @@ userProperties.setProperties({[newKey] : jarray});
 function loadRules() {
   clearRules();
     userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:purchase','7'])});
-    userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
-    userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});
-    userProperties.setProperties({rule4 : JSON.stringify(["Purge","category:updates -category:purchases","180"])});
-    userProperties.setProperties({rule6 : JSON.stringify(["Purge","from:calendar-notification@google.com","7"])});
-    userProperties.setProperties({rule5 : JSON.stringify(["Purge","label:goodsync","7"])});
-    userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
-    userProperties.setProperties({license : JSON.stringify(["765c2952061f99499e78497162970cdb"])}); //765c2952061f99499e78497162970cdb 
+    //userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
+    //userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});
+    //userProperties.setProperties({rule4 : JSON.stringify(["Purge","category:updates -category:purchases","180"])});
+    //userProperties.setProperties({rule6 : JSON.stringify(["Purge","from:calendar-notification@google.com","7"])});
+    //userProperties.setProperties({rule5 : JSON.stringify(["Purge","label:goodsync","7"])});
+    //userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
+    userProperties.setProperties({license : JSON.stringify(["0"])}); //765c2952061f99499e78497162970cdb 
     getRulesArr();
 }
 

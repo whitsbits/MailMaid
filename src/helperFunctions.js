@@ -194,8 +194,9 @@ function objectLength( object ) {
 function getRuleKeys() {
     var keys = userProperties.getKeys();
     var ruleKeys = keys.filter(function(item) {
-    return item !== 'schedule'
+    return (item.includes("rule"))
 });
+Logger.log (`${user} - getRuleKeys returned ${ruleKeys}`)
 return ruleKeys;
 }
 
@@ -312,7 +313,7 @@ return ruleCount
     */
 
      function sendLogEmail() {
-      var recipient = user.getEmail();
+      var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
       var body = `MailMaid sucessfully processed the following results:\n\n ${reportArr}`;
       MailApp.sendEmail(recipient, subject, body);

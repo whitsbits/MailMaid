@@ -49,7 +49,7 @@ for (let i = rulesCached; i < rules.length; i++) {
           Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
           setCleanMoreTrigger();
         }else{
-          Logger.log (`${user} - CleanMore already Set`)
+          Logger.log (`${user} - cleanMore already Set`)
         }
         
         loopBreak = 1; // Break the FOR (i) loop
