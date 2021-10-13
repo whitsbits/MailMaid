@@ -25,7 +25,7 @@ function captureRuleFormData(e) {
         var key = '{}';
       */
       
-      if (licenseRead() = false && countRules() < 1 ){
+      if (licenseRead() === false && countRules() === 1 ){
         return notify (`Unlicensed product are limited to only one Rule`)
       }  
 
