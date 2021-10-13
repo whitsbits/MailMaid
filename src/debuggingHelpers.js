@@ -14,6 +14,16 @@ function runDebugNow() {
   cleanMail();
 }
 
+<<<<<<< HEAD
+=======
+function getHash() {
+  const user = "stewart.l.whitman@gmail.com"
+  const userString = String(user)
+  const userhash = MD5( userString, false );
+  Logger.log (userhash)
+}
+
+>>>>>>> master
   /**
  * Clean up on aisle cleanMore trigger
  */
@@ -81,10 +91,13 @@ function clearAllTriggers() {
     userProperties.deleteProperty(`rule2`);
   }
 
+<<<<<<< HEAD
   function makeSchedule() {
     userProperties.setProperties({'schedule' : ["1","1"]})
   }
 
+=======
+>>>>>>> master
 /**
  * Debugging to synthetically load the PropertiesService
  */
@@ -103,7 +116,11 @@ userProperties.setProperties({[newKey] : jarray});
 }
 
 function loadRules() {
+<<<<<<< HEAD
   clearRules();
+=======
+  clearAllRules();
+>>>>>>> master
     userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:purchase','7'])});
     userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
     userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});
@@ -111,7 +128,10 @@ function loadRules() {
     userProperties.setProperties({rule6 : JSON.stringify(["Purge","from:calendar-notification@google.com","7"])});
     userProperties.setProperties({rule5 : JSON.stringify(["Purge","label:goodsync","7"])});
     userProperties.setProperties({rule7 : JSON.stringify(["Purge","from:Notification@leagueathletics.com","14"])});
+<<<<<<< HEAD
     userProperties.setProperties({license : JSON.stringify(["765c2952061f99499e78497162970cdb"])}); //765c2952061f99499e78497162970cdb 
+=======
+>>>>>>> master
     getRulesArr();
 }
 

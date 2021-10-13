@@ -7,7 +7,11 @@
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
+<<<<<<< HEAD
        /*
+=======
+       
+>>>>>>> master
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
@@ -17,18 +21,27 @@ function captureRuleFormData(e) {
         }else{
           var key = e.parameters.ruleNum.toString();
         }
+<<<<<<< HEAD
       */
+=======
+      /*
+>>>>>>> master
         //Keep for dev debugging without needing UI 
        var search = "foo";
         var days = 7;
         var action = "Purge";
         var key = '{}';
+<<<<<<< HEAD
       
       
       if (licenseRead() === false && countRules() === 1 ){
         return notify (`Unlicensed product are limited to only one Rule`)
       }  
 
+=======
+      */
+      
+>>>>>>> master
         var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
         if (key === 'rule0') {
@@ -82,8 +95,13 @@ catch (e) {
   Logger.log (`${user} - Error: ${e.toString()}`);
   return `Error: ${e.toString()}`;
 }
+<<<<<<< HEAD
 Logger.log (`${user} - MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`);
 return notify(`MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
+=======
+Logger.log (`${user} - Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`);
+return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
+>>>>>>> master
 }
 
 
