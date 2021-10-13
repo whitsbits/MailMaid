@@ -17,8 +17,6 @@ function licenseRead() {
     var licenseNum = userProperties.getProperty("license")
     .replace(/[\[\]"]/g,'');
     var userHash = MD5( String(Session.getActiveUser()), false );
-    Logger.log(licenseNum)
-    Logger.log (userHash)
     if(licenseNum === userHash){
         licenseCheck = true
     };
