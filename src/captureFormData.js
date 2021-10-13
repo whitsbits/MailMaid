@@ -7,15 +7,7 @@
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
-<<<<<<< HEAD
-       /*
-=======
-<<<<<<< HEAD
-       /*
-=======
-       
->>>>>>> master
->>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
+/*
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
@@ -25,37 +17,20 @@ function captureRuleFormData(e) {
         }else{
           var key = e.parameters.ruleNum.toString();
         }
-<<<<<<< HEAD
-      */
-=======
-<<<<<<< HEAD
-      */
-=======
-      /*
->>>>>>> master
->>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
+*/
         //Keep for dev debugging without needing UI 
        var search = "foo";
         var days = 7;
         var action = "Purge";
         var key = '{}';
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
+
       
       
       if (licenseRead() === false && countRules() === 1 ){
         return notify (`Unlicensed product are limited to only one Rule`)
       }  
-
-<<<<<<< HEAD
-=======
-=======
-      */
       
->>>>>>> master
->>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
+
         var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
         if (key === 'rule0') {
@@ -109,18 +84,9 @@ catch (e) {
   Logger.log (`${user} - Error: ${e.toString()}`);
   return `Error: ${e.toString()}`;
 }
-<<<<<<< HEAD
 Logger.log (`${user} - MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`);
 return notify(`MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
-=======
-<<<<<<< HEAD
-Logger.log (`${user} - MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`);
-return notify(`MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
-=======
-Logger.log (`${user} - Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`);
-return notify(`Retention schedule saved to run every ${everyDays} day(s) at ${atHour}`, scheduleCard());
->>>>>>> master
->>>>>>> aa1902083d84e53b3070518c369596c6532f9eb1
+
 }
 
 
