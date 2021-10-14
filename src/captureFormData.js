@@ -7,7 +7,7 @@
 
 function captureRuleFormData(e) {
         var userProperties = PropertiesService.getUserProperties();
-/*
+
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
@@ -17,19 +17,13 @@ function captureRuleFormData(e) {
         }else{
           var key = e.parameters.ruleNum.toString();
         }
-*/
+
         //Keep for dev debugging without needing UI 
-       var search = "foo";
+       /*var search = "foo";
         var days = 7;
         var action = "Purge";
         var key = '{}';
-
-      
-      
-      if (licenseRead() === false && countRules() === 1 ){
-        return notify (`Unlicensed product are limited to only one Rule`)
-      }  
-      
+      */
 
         var ruleNum = (countRules() + 1);
         var rule = [action, search, days];
