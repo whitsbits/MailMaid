@@ -131,6 +131,10 @@ function getRulesArr() {
   i, len = keys.length;
   keys.sort();
 
+  if (licenseRead() === false){
+    i,len = 1
+  }  
+
   for (var i = 0; i < len; i++) {
       k = keys[i];
       ruleValue = userProperties.getProperty(k)
@@ -240,6 +244,10 @@ return ruleCount
         var days = rules[i][2];
         text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
+  if (licenseRead() === false){
+    text += (`\nTo enable more than one rule, please purchase a licesne at ...`)
+  }
+
     Logger.log (`${user} - Returning reportRulesText: \n ${text}`)
     return text
   };
