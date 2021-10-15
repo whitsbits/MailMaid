@@ -19,6 +19,17 @@ function MailMaid() {
   cleanMail();
 }
 
+
+  /**
+ * Initilize the License Key Property Store
+ */
+
+   function initializeLicense() {
+    if (userProperties.getProperty("license") === null){
+      userProperties.setProperties({"license" : "0"})
+    }
+  }
+
   /**
  * Function to clear all rules data from the userProperties
  * @return {notify with Card to be built}

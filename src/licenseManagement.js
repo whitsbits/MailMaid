@@ -8,7 +8,7 @@ function licenseWrite(e) {
     userProperties.setProperties({"license" : license});
 }
 
-/* Check the stored license key against the getAvtiveUser MD5 Hash
+/* Check the stored license key against the getActiveUser MD5 Hash
 */
 
 function licenseRead() {

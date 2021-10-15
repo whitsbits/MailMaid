@@ -24,6 +24,7 @@ const borderStyle = CardService.newBorderStyle()
  */
  function onHomepage(e) {
     makeCache('editRuleNum', 'rule0');
+    initializeLicense()
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
