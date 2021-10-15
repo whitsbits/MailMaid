@@ -45,11 +45,11 @@ for (let i = rulesCached; i < rules.length; i++) {
         };
         makeCache('ruleLoopCache', i); // cache the rule loop location
         makeCache('threadLoopCache', countStart); // cache the thread loop location
-        if(triggerActive('purgeMore') === false){
-          Logger.log (`${user} - Setting a trigger to call the purgeMore function.`)
-          setPurgeMoreTrigger();
+        if(triggerActive('cleanMore') === false){
+          Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
+          setCleanMoreTrigger();
         }else{
-          Logger.log (`${user} - PurgeMore already Set`)
+          Logger.log (`${user} - cleanMore already Set`)
         }
         
         loopBreak = 1; // Break the FOR (i) loop
@@ -113,7 +113,7 @@ for (let i = rulesCached; i < rules.length; i++) {
 }
   if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
     clearCache('ruleLoopCache');
-    removeTriggers('purgeMore')
+    removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
     sendLogEmail();
   }

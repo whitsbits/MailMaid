@@ -312,7 +312,7 @@ return ruleCount
     */
 
      function sendLogEmail() {
-      var recipient = user.getEmail();
+      var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
       var body = `MailMaid sucessfully processed the following results:\n\n ${reportArr}`;
       MailApp.sendEmail(recipient, subject, body);
