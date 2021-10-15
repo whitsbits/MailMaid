@@ -23,3 +23,23 @@ function licenseRead() {
     Logger.log (`licenseRead returning ${licenseCheck}`)
     return licenseCheck
 }
+
+  /**
+ * Initilize the License Key Property Store for unlicense product
+ */
+
+function initializeLicense() {
+    if (userProperties.getProperty("license") === null){
+      userProperties.setProperties({"license" : ""})
+    }
+  }
+
+  /**
+ * Store the License Key Property Store
+ */
+function setLicense(e) {
+      Logger.log (e)
+      const number = e.formInput.number
+      userProperties.setProperties({"license" : number});
+      return notify (`License key saved as ${number}`, onHomepage());
+    }
