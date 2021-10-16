@@ -33,7 +33,21 @@ for (let i = rulesCached; i < rules.length; i++) {
     Logger.log (`${user} -Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
 
     do {
-      if (isTimeUp_(scriptStart, 250000)) {
+   
+      //Use for debugging when Google limits number of daily search calls
+      
+      /*
+      for (let j = 0; j < inc; j++) {
+      Utilities.sleep(10);
+      };
+      */
+      
+      const threads = GmailApp.search(searchString, countStart, inc);  // find a block of messages
+    
+      for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
+
+
+           if (isTimeUp_(scriptStart, 250000)) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(`${user} - Inbox loop time limit exceeded.`);
@@ -55,18 +69,9 @@ for (let i = rulesCached; i < rules.length; i++) {
         loopBreak = 1; // Break the FOR (i) loop
         break;  // Break the DO loop
       }
-      //Use for debugging when Google limits number of daily search calls
       
-      /*
-      for (let j = 0; j < inc; j++) {
-      Utilities.sleep(10);
-      };
-      */
       
-      const threads = GmailApp.search(searchString, countStart, inc);
-    
-      for (let j = 0; j < threads.length; j++) {
-        const msgDate = threads[j].getLastMessageDate();
+      const msgDate = threads[j].getLastMessageDate();
   
         if (action === 'Archive') {
                     
@@ -82,15 +87,12 @@ for (let i = rulesCached; i < rules.length; i++) {
           }
         }
       };
-    
-      
-      //Logger.log (`Finished batch of ${inc} from: ${countStart}`)
       countStart -= inc; // work backwarads through the inbox in incremental chunks
       
     } while (countStart > -1);
     
-    if (loopBreak === 1) {
-      break; //Break to For (i) loop if there was a TimeOut
+      if (loopBreak === 1) {
+        break; //Break to For (i) loop if there was a TimeOut
    };
 
 
