@@ -72,6 +72,9 @@ function clearSchedule(){
     return notify(`Schedule Cleared`, scheduleCard());
   };
 
+  /**
+ * Function to force input the schedule data to the userProperties
+ */
 function makeSchedule() {
   var atHour = 1
   var everyDays = 1
