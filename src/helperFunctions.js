@@ -67,11 +67,20 @@ function clearSelectedRule(e) {
  * @returns Notification and rebuiild of schedule card
  */
 function clearSchedule(){
-    var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteProperty('schedule');
     removeTriggers('MailMaid');
     return notify(`Schedule Cleared`, scheduleCard());
   };
+
+function makeSchedule() {
+  var atHour = 1
+  var everyDays = 1
+  if (userProperties.getProperty('schedule')===null){
+    userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
+    removeTriggers('MailMaid');
+    setTrigger('MailMaid', atHour, everyDays)
+  }
+}
 
 /**
  * Put or remove data into cache
@@ -104,7 +113,8 @@ function clearCache (name) {
     Logger.log (user + " - Current cached values are: \n" + 
                 "inboxNum: " + cache.get('inBoxCache') + "\n" +
                 "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
-                "threadNum: " + cache.get('threadLoopCache'));
+                "threadNum: " + cache.get('threadLoopCache') + "\n" +
+                "editRuleNum: " + cache.get('editRuleNum'));
   }
 /**
  * Returns userProperties in the PropertyService
