@@ -72,18 +72,7 @@ function clearSchedule(){
     return notify(`Schedule Cleared`, scheduleCard());
   };
 
-  /**
- * Function to force input the schedule data to the userProperties
- */
-function makeSchedule() {
-  var atHour = 1
-  var everyDays = 1
-  if (userProperties.getProperty('schedule')===null){
-    userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
-    removeTriggers('MailMaid');
-    setTrigger('MailMaid', atHour, everyDays)
-  }
-}
+
 
 /**
  * Put or remove data into cache
