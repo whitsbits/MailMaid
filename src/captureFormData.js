@@ -1,6 +1,6 @@
 /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
- * {{[newKey] : jarray}} Cleaner Rule Array saved to PropertiesService
+ * {{[newKey] : jarray}} Rule Array saved to PropertiesService
  * @param {Object} e - Event from add-on server
  * @return {notify with Card to be built}
  */

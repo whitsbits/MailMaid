@@ -74,6 +74,32 @@ function clearSchedule(){
     return notify(`Schedule Cleared`, scheduleCard());
   };
 
+  /**
+ * Function to initialize the schedule data to the userProperties
+ */
+function initSchedule() {
+  var atHour = 1
+  var everyDays = 1
+  if (userProperties.getProperty('schedule')===null){
+    userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
+    removeTriggers('MailMaid');
+    setTrigger('MailMaid', atHour, everyDays)
+  }
+}
+
+  /**
+ * Function to check initialization status of the app
+ */
+function checkInitStatus() {
+    if (userProperties.getProperty('initialized')===null || 
+    userProperties.getProperty('initialized')=== false){
+        return true;
+      }else{
+        return false;
+      }
+}
+
+
 /**
  * Put or remove data into cache
  */

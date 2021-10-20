@@ -9,10 +9,20 @@ const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');
 const cardSectionDivider = CardService.newDivider();
-const borderStyle = CardService.newBorderStyle()
-      .setType(CardService.BorderType.STROKE)
-      .setCornerRadius(8)
-      .setStrokeColor("#00FF00FF");
+
+
+function initApp() {
+    let init = checkInitStatus();
+    if (init === false){
+      initSchedule();
+      initLicense();
+      userProperties.setProperties('initialized', true);
+      Logger.log (`${user} - App Initialized` );
+    }else{
+      Logger.log (`${user} - App already initialized`);
+    }
+    return true;
+}
 
 
 //-----------------HOMEPAGE CARD---------------------------//
@@ -22,8 +32,8 @@ const borderStyle = CardService.newBorderStyle()
  * @return {CardService.Card} The card to show to the user.
  */
  function onHomepage(e) {
+    initApp();
     makeCache('editRuleNum', 'rule0');
-    initializeLicense()
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
