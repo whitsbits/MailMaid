@@ -9,10 +9,6 @@ const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');
 const cardSectionDivider = CardService.newDivider();
-const borderStyle = CardService.newBorderStyle()
-      .setType(CardService.BorderType.STROKE)
-      .setCornerRadius(8)
-      .setStrokeColor("#00FF00FF");
 
 
 //-----------------HOMEPAGE CARD---------------------------//
