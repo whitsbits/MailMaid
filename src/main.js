@@ -112,7 +112,7 @@ function initApp() {
       const licenseInput = CardService.newTextInput()
             .setFieldName('number')
             .setValue("")
-            .setHint('Paste license key set to you here');
+            .setHint('Paste license key sent to you here');
 
       const addLicenseDataAction = CardService.newAction()
             .setFunctionName('setLicense')

@@ -21,6 +21,10 @@ function getHash() {
   Logger.log (userhash)
 }
 
+function zeroLicense() {
+  userProperties.setProperties({"license" : ""})
+}
+
   /**
  * Clean up on aisle cleanMore trigger
  */
