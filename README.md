@@ -9,11 +9,11 @@ Copyright 2021
 
 TODO LIST:
 
+Investigate moving onHour from integer to time
 Fix presentation of escape characters in UI
 Get full presentation of rule structure to item selection list
 Warn before Delete All
 Compress dupe Rule input code
-Investigate moving onHour from integer to time
 Investigate Suggestion Picker
 
 

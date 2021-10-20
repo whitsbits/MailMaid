@@ -6,8 +6,7 @@
  */
 
 function captureRuleFormData(e) {
-        var userProperties = PropertiesService.getUserProperties();
-
+       
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
@@ -62,7 +61,6 @@ function captureScheduleFormData(e) {
   var jarray = JSON.stringify(schedule);
 
 try {
-  var userProperties = PropertiesService.getUserProperties();
   var data = userProperties.getProperty('schedule');
   if (data == null){
     userProperties.setProperties({'schedule' : jarray});

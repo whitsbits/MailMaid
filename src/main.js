@@ -320,7 +320,7 @@ function disclosuresSection() {
 
     function ruleButtonsSet() {
         let ruleNum = cache.get('editRuleNum')
-
+        if (ruleNum === null){ruleNum='rule0'}
         const saveAction = CardService.newAction()
             .setFunctionName('captureRuleFormData')
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
