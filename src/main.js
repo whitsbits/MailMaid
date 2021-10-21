@@ -16,7 +16,7 @@ function initApp() {
     if (init === false){
       initSchedule();
       initLicense();
-      userProperties.setProperties('initialized', true);
+      userProperties.setProperties({'initialized':true});
       Logger.log (`${user} - App Initialized` );
     }else{
       Logger.log (`${user} - App already initialized`);
