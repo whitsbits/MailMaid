@@ -28,7 +28,7 @@ function licenseRead() {
  * Initilize the License Key Property Store for unlicense product
  */
 
-function initializeLicense() {
+function initLicense() {
     if (userProperties.getProperty("license") === null){
       userProperties.setProperties({"license" : ""})
     }
