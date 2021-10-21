@@ -68,11 +68,36 @@ function clearSelectedRule(e) {
  * @returns Notification and rebuiild of schedule card
  */
 function clearSchedule(){
-    var userProperties = PropertiesService.getUserProperties();
     userProperties.deleteProperty('schedule');
     removeTriggers('MailMaid');
     return notify(`Schedule Cleared`, scheduleCard());
   };
+
+  /**
+ * Function to initialize the schedule data to the userProperties
+ */
+function initSchedule() {
+  var atHour = 1
+  var everyDays = 1
+  if (userProperties.getProperty('schedule')===null){
+    userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
+    removeTriggers('MailMaid');
+    setTrigger('MailMaid', atHour, everyDays)
+  }
+}
+
+  /**
+ * Function to check initialization status of the app
+ */
+function checkInitStatus() {
+    if (userProperties.getProperty('initialized') === null || 
+    userProperties.getProperty('initialized') === false){
+        return false;
+      }else{
+        return true;
+      }
+}
+
 
 /**
  * Put or remove data into cache
@@ -105,7 +130,8 @@ function clearCache (name) {
     Logger.log (user + " - Current cached values are: \n" + 
                 "inboxNum: " + cache.get('inBoxCache') + "\n" +
                 "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
-                "threadNum: " + cache.get('threadLoopCache'));
+                "threadNum: " + cache.get('threadLoopCache') + "\n" +
+                "editRuleNum: " + cache.get('editRuleNum'));
   }
 /**
  * Returns userProperties in the PropertyService
@@ -235,7 +261,7 @@ return ruleCount
         text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
   if (licenseRead() === false){
-    text += (`\nTo enable more than one rule, please purchase a licesne at ...`)
+    text += (`\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
   }
 
     Logger.log (`${user} - Returning reportRulesText: \n ${text}`)

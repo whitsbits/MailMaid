@@ -1,13 +1,12 @@
 /**
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
- * {{[newKey] : jarray}} Cleaner Rule Array saved to PropertiesService
+ * {{[newKey] : jarray}} Rule Array saved to PropertiesService
  * @param {Object} e - Event from add-on server
  * @return {notify with Card to be built}
  */
 
 function captureRuleFormData(e) {
-        var userProperties = PropertiesService.getUserProperties();
-
+       
         var search = e.formInput.search;
         var days = e.formInput.days;
         var action = e.formInput.action;
@@ -62,7 +61,6 @@ function captureScheduleFormData(e) {
   var jarray = JSON.stringify(schedule);
 
 try {
-  var userProperties = PropertiesService.getUserProperties();
   var data = userProperties.getProperty('schedule');
   if (data == null){
     userProperties.setProperties({'schedule' : jarray});
