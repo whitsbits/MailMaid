@@ -47,7 +47,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
 
 
-           if (isTimeUp_(scriptStart, 250000)) {
+        if (isTimeUp_(scriptStart, 299000)) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(`${user} - Inbox loop time limit exceeded.`);
@@ -66,7 +66,7 @@ for (let i = rulesCached; i < rules.length; i++) {
           Logger.log (`${user} - cleanMore already Set`)
         }
         
-        loopBreak = 1; // Break the FOR (i) loop
+        loopBreak = 1; // Break the FOR (i & j) loop(s)
         break;  // Break the DO loop
       }
       
@@ -85,6 +85,9 @@ for (let i = rulesCached; i < rules.length; i++) {
             threads[j].moveToTrash();
             ++counter;
           }
+        }
+        if (loopBreak === 1) {
+        break; //Break to For (j) loop if there was a TimeOut
         }
       };
       countStart -= inc; // work backwarads through the inbox in incremental chunks
