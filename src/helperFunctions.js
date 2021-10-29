@@ -84,6 +84,11 @@ function initSchedule() {
     removeTriggers('MailMaid');
     setTrigger('MailMaid', atHour, everyDays)
   }
+  Logger.log ('Schedule Initialized')
+}
+
+function initRules() {
+  makeCache('editRuleNum', 'rule0');
 }
 
   /**
@@ -117,21 +122,21 @@ function clearCache (name) {
  * Clears the cache(s)
  */
 
-   function clearAllCache() {
-    cache.remove('inBoxCache');
-    cache.remove('ruleLoopCache');
-    cache.remove('threadLoopCache');
-    Logger.log (`${user} - All Caches Cleared`)
-  }
+function clearAllCache() {
+  cache.remove('inBoxCache');
+  cache.remove('ruleLoopCache');
+  cache.remove('threadLoopCache');
+  Logger.log (`${user} - All Caches Cleared`)
+    }
   /**
  * list the cache(s) values
  */
-   function listCache() {
-    Logger.log (user + " - Current cached values are: \n" + 
-                "inboxNum: " + cache.get('inBoxCache') + "\n" +
-                "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
-                "threadNum: " + cache.get('threadLoopCache') + "\n" +
-                "editRuleNum: " + cache.get('editRuleNum'));
+function listCache() {
+  Logger.log (user + " - Current cached values are: \n" + 
+            "inboxNum: " + cache.get('inBoxCache') + "\n" +
+            "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
+            "threadNum: " + cache.get('threadLoopCache') + "\n" +
+            "editRuleNum: " + cache.get('editRuleNum'));
   }
 /**
  * Returns userProperties in the PropertyService
@@ -143,6 +148,8 @@ function getRulesArr() {
   var rulesArr =[];
   if (keys.length === 0 ) {
     rulesArr = `You do not currently have any rules set`;
+    Logger.log (`${user} - Returning getRulesArr ${rulesArr}`)
+    return rulesArr
   }
   i, len = keys.length;
   keys.sort();

@@ -15,6 +15,7 @@ function initApp() {
     let init = checkInitStatus();
     if (init === false){
       initSchedule();
+      initRules();
       initLicense();
       userProperties.setProperties({'initialized':true});
       Logger.log (`${user} - App Initialized` );
@@ -33,7 +34,6 @@ function initApp() {
  */
  function onHomepage(e) {
     initApp();
-    makeCache('editRuleNum', 'rule0');
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
