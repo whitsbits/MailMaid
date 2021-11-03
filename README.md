@@ -7,6 +7,8 @@ https://support.google.com/mail/answer/7190?hl=en
 Created by Stewart L Whitman
 Copyright 2021
 
+https://workspace.google.com/marketplace/app/mailmaid/767612186965
+
 TODO LIST:
 
 Investigate moving onHour from integer to time
