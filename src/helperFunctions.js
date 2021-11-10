@@ -84,7 +84,7 @@ function initSchedule() {
     removeTriggers('MailMaid');
     setTrigger('MailMaid', atHour, everyDays)
   }
-  Logger.log ('Schedule Initialized')
+  Logger.log (`${user} - Schedule Initialized`)
 }
 
 function initRules() {
