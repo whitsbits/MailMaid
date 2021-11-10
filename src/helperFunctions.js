@@ -354,10 +354,14 @@ return ruleCount
      * TODO figure out a way to do this in a more user friendly manner.
     */
 
-     function sendLogEmail() {
+     function sendLogEmail(bool) {
       var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
-      var body = `MailMaid sucessfully processed the following results:\n\n ${reportArr}`;
+      if (bool === true){
+        var body = `MailMaid sucessfully processed the following results:\n\n ${reportArr}`;
+      }else{
+        var body = `MailMaid had no rules to process your Inbox. \n\n Please set your rules in the app`;
+      }  
       MailApp.sendEmail(recipient, subject, body);
       Logger.log (`${user} - Email sent to ${recipient}`);
     }

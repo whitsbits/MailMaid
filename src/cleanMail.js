@@ -24,13 +24,19 @@ for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
   let countStart = getCountStart();
   listCache();
-  var action = rules[i][0];
-  var searchString = rules[i][1];
-  var days = rules[i][2];
+  if (typeof rules === Array) {
+      var action = rules[i][0];
+      var searchString = rules[i][1];
+      var days = rules[i][2];
+  }else{
+    Logger.log (`${user} - No rules set for processing`)
+    sendLogEmail(false);
+    loopBreak = 1;
+  }
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
-    Logger.log (`${user} -Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
+    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
 
     do {
    
@@ -120,7 +126,7 @@ for (let i = rulesCached; i < rules.length; i++) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
-    sendLogEmail();
+    sendLogEmail(true);
   }
 };
 
