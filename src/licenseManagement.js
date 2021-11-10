@@ -20,7 +20,7 @@ function licenseRead() {
     if(licenseNum === userHash){
         licenseCheck = true
     };
-    Logger.log (`licenseRead returning ${licenseCheck}`)
+    Logger.log (`${user} - licenseRead returning ${licenseCheck}`)
     return licenseCheck
 }
 

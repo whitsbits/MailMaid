@@ -125,6 +125,7 @@ function loadRules() {
     userProperties.setProperties({rule6 : JSON.stringify(["Purge","from:calendar-notification@google.com","7"])});
     userProperties.setProperties({rule5 : JSON.stringify(["Purge","subject:MailMaid Results","3"])});
     userProperties.setProperties({rule7 : JSON.stringify(["Purge","category:forums","14"])});
+    userProperties.setProperties({rule8 : JSON.stringify(["Purge","label:GoodSync","5"])});
     getRulesArr();
 }
 
