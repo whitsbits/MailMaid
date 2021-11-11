@@ -24,7 +24,7 @@ for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
   let countStart = getCountStart();
   listCache();
-  if (typeof rules === Array) {
+  if (Array.isArray(rules)) {
       var action = rules[i][0];
       var searchString = rules[i][1];
       var days = rules[i][2];
