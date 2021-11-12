@@ -13,34 +13,38 @@
 
 function getInboxCount(inc) {
   Logger.log(`${user} - Starting InBox Count`);
-  const scriptStart = new Date();
-  const cached = cache.get('inBoxCache');
-  if (cached != null) {
-    // check to see if the value has been cached
-    Logger.log (`${user} - Using cached Inbox count of: ${cached}`);
-    return cached;
-  }
   let total = 0;
+  const scriptStart = new Date();
+  const inBoxCache = cache.get('inBoxCache');
+  const inBoxCounted = cache.get('inBoxCount');
+
+  if (inBoxCounted){
+    Logger.log (`${user} - Using cached Inbox count of: ${inBoxCache}`);
+    return inBoxCache;
+  }else if (inBoxCache != null){
+      total = inBoxCache;
+  }
   
   do {
     var page = GmailApp.search('', total, inc); /** * GAS wont accept 'let' here, need to use 'var'. 
     * Must use null 'GmailApp.search' vs 'GmailApp.getInboxThreads' to return any archived messages. */ 
    
-    if (isTimeUp_(scriptStart, 270000)) {
+    if (isTimeUp_(scriptStart, timeOutLimit)) {
       /** * When script runs close to the 5 min timeout limit take the count, 
        * cache it and set a trigger to researt after 2 mins */
-      Logger.log(`${user} - Inbox count timeout. Passing partial count of ${total}`);
+      Logger.log(`${user} - Setting Trigger to resume counting InBox at ${total}`)
       makeCache('inBoxCache', total); // cache for 23 hours
-      setCleanMoreTrigger(); //set triggr to restart script
-      Logger.log(`${user} - Setting Trigger to resume script`)
+      makeCache('inBoxCounted', false); // cache for 23 hours
+      setMoreTrigger('countMore'); //set trigger to restart script
       return total;
       } 
     
     total += page.length;
-    //Logger.log (`${total} threads counted so far`)
 
 } while (page.length > 0);
-  Logger.log(`${user} - The total InBox is ${total}`);
+
+  Logger.log(`${user} - The total Inbox is ${total}`);
   makeCache('inBoxCache', total); // cache for 23 hours
+  makeCache('inBoxCounted', true); // cache for 23 hours
   return total;
 }

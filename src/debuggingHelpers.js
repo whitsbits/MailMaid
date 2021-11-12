@@ -6,13 +6,16 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
-  removeTriggers('cleanMore');
   clearAllCache();
-  makeCache('inBoxCache', 1500);
+  removeTriggers('cleanMore');
+  makeCache('inBoxCounted', false);
+  removeTriggers('countMore');
+  //makeCache('inBoxCache', 1500);
   //makeCache('ruleLoopCache', 4)
   //makeCache('threadLoopCache', 1000)
   cleanMail();
 }
+
 
 function getHash() {
   const user = "kplachhwani@gmail.com"
@@ -26,10 +29,11 @@ function zeroLicense() {
 }
 
   /**
- * Clean up on aisle cleanMore trigger
+ * Clean up on aisle More trigger
  */
 function clearMoreTriggers() {
   removeTriggers('cleanMore');
+  removeTriggers('countMore');
 }
 
   /**
@@ -39,6 +43,7 @@ function clearMoreTriggers() {
 function clearAllTriggers() {
   removeTriggers('MailMaid');
   removeTriggers('cleanMore');
+  removeTriggers('countMore');
 }
 
 

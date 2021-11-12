@@ -8,6 +8,8 @@
 
 function MailMaid() {
     removeTriggers('cleanMore');
+    makeCache('inBoxCounted', false);
+    removeTriggers('countMore');
     cleanMail();
   }
 
@@ -17,6 +19,14 @@ function MailMaid() {
  function cleanMore() {
   removeTriggers('cleanMore');
   cleanMail();
+}
+
+  /**
+ * Wrapper for the inbox count function called by timeOut trigger
+ */
+ function countMore() {
+  removeTriggers('countMore');
+  getInboxCount();
 }
 
 
@@ -124,6 +134,7 @@ function clearCache (name) {
 
 function clearAllCache() {
   cache.remove('inBoxCache');
+  cache.remove('inBoxCounted');
   cache.remove('ruleLoopCache');
   cache.remove('threadLoopCache');
   Logger.log (`${user} - All Caches Cleared`)
@@ -134,6 +145,7 @@ function clearAllCache() {
 function listCache() {
   Logger.log (user + " - Current cached values are: \n" + 
             "inboxNum: " + cache.get('inBoxCache') + "\n" +
+            "inBoxCounted: " + cache.get('inBoxCounted') + "\n" +
             "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
             "threadNum: " + cache.get('threadLoopCache') + "\n" +
             "editRuleNum: " + cache.get('editRuleNum'));
@@ -192,11 +204,13 @@ function getScheduleArr() {
  *  * @return {countStart} the index number for where to start the process
  */
 function getCountStart() {
-  const inBoxCached = cache.get('inBoxCache');
+  let inBoxCounted = JSON.parse(cache.get('inBoxCounted').toLowerCase());
+  let inBoxCached = cache.get('inBoxCached');
   let threadsCached = cache.get('threadLoopCache');
-  if (inBoxCached === null) {
+  if (!inBoxCounted) {
+    Logger.log (`${user} - Continuing Inbox count from: ${inBoxCached}`)
     countStart = getInboxCount(inc);
-    // check to see if the value has been cached
+    // check to see if inBox count is complete
   }else if (threadsCached === null) {
     countStart = inBoxCached;
     Logger.log (`${user} - Using cached Inbox of: ${inBoxCached}`)

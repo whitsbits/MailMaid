@@ -41,10 +41,12 @@ function triggerActive(triggerName) {
 
 
 /**
- * Create a trigger that executes the cleanMore function two minutes from now
+ * Create a time based trigger that executes a function one hour from now
+ * used for managing API timeouts
+ * @param {triggerName}
  */
- function setCleanMoreTrigger() {
-    ScriptApp.newTrigger('cleanMore')
+ function setMoreTrigger(triggerName) {
+    ScriptApp.newTrigger(triggerName)
       .timeBased()
       .at(new Date(new Date().getTime() + 1000 * 60 * 60))
       .create();

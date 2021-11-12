@@ -53,10 +53,10 @@ for (let i = rulesCached; i < rules.length; i++) {
       for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
 
 
-        if (isTimeUp_(scriptStart, 299000)) {
+        if (isTimeUp_(scriptStart, timeOutLimit)) {
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
-        Logger.log(`${user} - Inbox loop time limit exceeded.`);
+        Logger.log(`${user} - Inbox rules loop time limit exceeded.`);
         if (action === 'Archive'){
           Logger.log(`${user} - ${counter} total threads archived`);
         };
