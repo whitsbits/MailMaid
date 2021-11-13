@@ -8,9 +8,9 @@
 function runDebugNow() {
   clearAllCache();
   removeTriggers('cleanMore');
-  makeCache('inBoxCounted', false);
+  makeCache('inBoxCounted', true);
   removeTriggers('countMore');
-  //makeCache('inBoxCache', 1500);
+  makeCache('inBoxCache', 28000);
   //makeCache('ruleLoopCache', 4)
   //makeCache('threadLoopCache', 1000)
   cleanMail();

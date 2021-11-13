@@ -12,17 +12,25 @@
  */
 
 function getInboxCount(inc) {
-  Logger.log(`${user} - Starting InBox Count`);
+  
   let total = 0;
   const scriptStart = new Date();
-  const inBoxCache = cache.get('inBoxCache');
-  const inBoxCounted = cache.get('inBoxCount');
+
+  let inBoxCache = cache.get('inBoxCache');
+  if (inBoxCache === null){
+    inBoxCache = 0
+    Logger.log (`${user} - Starting Inbox count from 0`);
+  }else{
+    inBoxCache = parseInt(inBoxCache);
+  }
+  const inBoxCounted = JSON.parse(cache.get('inBoxCounted').toLowerCase());
 
   if (inBoxCounted){
     Logger.log (`${user} - Using cached Inbox count of: ${inBoxCache}`);
     return inBoxCache;
   }else if (inBoxCache != null){
-      total = inBoxCache;
+    Logger.log(`${user} - Resuming Inbox count from ${inBoxCache}`);
+      total += inBoxCache;
   }
   
   do {
@@ -36,8 +44,8 @@ function getInboxCount(inc) {
       makeCache('inBoxCache', total); // cache for 23 hours
       makeCache('inBoxCounted', false); // cache for 23 hours
       setMoreTrigger('countMore'); //set trigger to restart script
-      return total;
-      } 
+      return false
+    } 
     
     total += page.length;
 

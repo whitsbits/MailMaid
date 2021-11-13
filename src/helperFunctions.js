@@ -26,7 +26,8 @@ function MailMaid() {
  */
  function countMore() {
   removeTriggers('countMore');
-  getInboxCount();
+  makeCache('inBoxCounted', false);
+  cleanMail();
 }
 
 
@@ -205,15 +206,21 @@ function getScheduleArr() {
  */
 function getCountStart() {
   let inBoxCounted = JSON.parse(cache.get('inBoxCounted').toLowerCase());
-  let inBoxCached = cache.get('inBoxCached');
+  let inBoxCache = cache.get('inBoxCache');
+        if (inBoxCache === null){
+          inBoxCache = 0
+        }else{
+          inBoxCache = parseInt(inBoxCache);
+        }
   let threadsCached = cache.get('threadLoopCache');
+
   if (!inBoxCounted) {
-    Logger.log (`${user} - Continuing Inbox count from: ${inBoxCached}`)
+    Logger.log (`${user} - Continuing Inbox count from: ${inBoxCache}`)
     countStart = getInboxCount(inc);
     // check to see if inBox count is complete
   }else if (threadsCached === null) {
-    countStart = inBoxCached;
-    Logger.log (`${user} - Using cached Inbox of: ${inBoxCached}`)
+    countStart = inBoxCache;
+    Logger.log (`${user} - Using cached Inbox of: ${inBoxCache}`)
   }else{
     countStart = threadsCached;
     Logger.log (`${user} - Using cached threads of: ${threadsCached}`)

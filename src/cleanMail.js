@@ -52,32 +52,7 @@ for (let i = rulesCached; i < rules.length; i++) {
     
       for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
 
-
-        if (isTimeUp_(scriptStart, timeOutLimit)) {
-        /** * When script runs close to the 5 min timeout limit take the count, 
-         * cache it and set a trigger to researt after 2 mins */
-        Logger.log(`${user} - Inbox rules loop time limit exceeded.`);
-        if (action === 'Archive'){
-          Logger.log(`${user} - ${counter} total threads archived`);
-        };
-        if (action === 'Purge'){
-          Logger.log(`${user} - ${counter} total threads deleted`);
-        };
-        makeCache('ruleLoopCache', i); // cache the rule loop location
-        makeCache('threadLoopCache', countStart); // cache the thread loop location
-        if(triggerActive('cleanMore') === false){
-          Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
-          setCleanMoreTrigger();
-        }else{
-          Logger.log (`${user} - cleanMore already Set`)
-        }
-        
-        loopBreak = 1; // Break the FOR (i & j) loop(s)
-        break;  // Break the DO loop
-      }
-      
-      
-      const msgDate = threads[j].getLastMessageDate();
+        const msgDate = threads[j].getLastMessageDate();
   
         if (action === 'Archive') {
                     
@@ -92,12 +67,37 @@ for (let i = rulesCached; i < rules.length; i++) {
             ++counter;
           }
         }
-        if (loopBreak === 1) {
-        break; //Break to For (j) loop if there was a TimeOut
-        }
+
+        if (isTimeUp_(scriptStart, timeOutLimit)) {
+          /** * When script runs close to the 5 min timeout limit take the count, 
+           * cache it and set a trigger to researt after an hour */
+          Logger.log(`${user} - Inbox rules loop time limit exceeded.`);
+          if (action === 'Archive'){
+            Logger.log(`${user} - ${counter} total threads archived`);
+          };
+          if (action === 'Purge'){
+            Logger.log(`${user} - ${counter} total threads deleted`);
+          };
+          makeCache('ruleLoopCache', i); // cache the rule loop location
+          makeCache('threadLoopCache', countStart); // cache the thread loop location
+          if(triggerActive('cleanMore') === false && triggerActive('countMore') === false){
+            Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
+            setMoreTrigger('cleanMore');
+          }else{
+            Logger.log (`${user} - Next trigger already Set`)
+          }
+          
+          loopBreak = 1; // Break the FOR (DO & i) loop(s)
+          break;  // Break the j loop
+      }
+      
+
+
       };
       countStart -= inc; // work backwarads through the inbox in incremental chunks
-      
+        if (loopBreak === 1) {
+          break; //Break for DO loop if there was a TimeOut
+        }
     } while (countStart > -1);
     
       if (loopBreak === 1) {
