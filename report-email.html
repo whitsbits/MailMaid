@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html><head>
+    <base target="_top">
+<style>.wp-table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.wp-table tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+.wp-table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.wp-table th:first-child, 
+.wp-table td:first-child {
+    padding-left: 16px;
+}
+
+.wp-table td, 
+.wp-table th {
+    padding: 8px 8px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+}
+
+.wp-table th {
+    font-weight: bold;
+}
+ 
+.wp-table {
+    font-size: 13px!important;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    display: table;
+}</style></head>
+
+<body><b>MailMaid sucessfully processed the following results:</b>
+    <script>
+        <div id="container"></div>
+        var data = ["doge", "cate", "birb", "doggo", "moon moon", "awkward seal"];//reportArr;
+
+        var myTable = "<table class=\"wp-table\"><tr>";
+
+        var perrow = 1; 
+        data.forEach((value, i) => {
+
+        myTable += `<td>${value}</td>`;
+
+        var next = i + 1;
+        if (next%perrow==0 && next!=data.length) { myTable += "</tr><tr>"; }
+        });
+
+        myTable += "</tr></table>";
+        document.getElementById("container").innerHTML = myTable;
+    </script>
+</body>
+</html>
