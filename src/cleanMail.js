@@ -126,7 +126,7 @@ for (let i = rulesCached; i < rules.length; i++) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
-    sendLogEmail(true);
+    sendReportEmail(true);
   }
 };
 
