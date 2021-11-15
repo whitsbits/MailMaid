@@ -1,54 +1,13 @@
 <!DOCTYPE html>
-<html><head>
-    <base target="_top">
-<style>.wp-table tr:nth-child(odd) {
-    background-color: #fff;
-}
-
-.wp-table tr:nth-child(even) {
-    background-color: #f1f1f1;
-}
-
-.wp-table tr {
-    border-bottom: 1px solid #ddd;
-}
-
-.wp-table th:first-child, 
-.wp-table td:first-child {
-    padding-left: 16px;
-}
-
-.wp-table td, 
-.wp-table th {
-    padding: 8px 8px;
-    display: table-cell;
-    text-align: left;
-    vertical-align: top;
-}
-
-.wp-table th {
-    font-weight: bold;
-}
- 
-.wp-table {
-    font-size: 13px!important;
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    display: table;
-}</style></head>
+<html>
 
 <body>
     <b>MailMaid sucessfully processed the following results:</b>
 
-    <table class="wp-table">
+    <table class="wp-table" style="border: 1px solid #ccc;border-collapse: collapse;border-spacing: 0;width: 100%;display: table;font-size: 13px!important;">
       <? for (var i = 0; i < results.length; i++) { ?>
-        <tr>
-            <td><?= results[i] ?></td>
+        <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 8px 8px;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i] ?></td>
         </tr>
       <? } ?>
     </table>
-
-</body>
-</html>

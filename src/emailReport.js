@@ -2,7 +2,6 @@
       sendReportEmail(true);
     }
     
-    
     /**
      *  Generate a log, then email it to the person who ran the script.
      * Not currently used
@@ -10,7 +9,7 @@
     */
 
     function sendReportEmail(bool) {
-      var results = ["doge", "cate", "birb", "doggo", "moon moon", "awkward seal"];//reportArr;
+      var results = reportArr;
       var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
        if (bool === true){        
