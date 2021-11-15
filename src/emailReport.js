@@ -10,15 +10,11 @@
     */
 
     function sendReportEmail(bool) {
-      var templ = HtmlService
-      .createTemplateFromFile('report-email');
-  
-      var results = formatTable();
+      var results = ["doge", "cate", "birb", "doggo", "moon moon", "awkward seal"];//reportArr;
       var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
-       if (bool === true){
-        //templ.results = results;
-        var message = templ.evaluate().getContent();
+       if (bool === true){        
+        var message = getEmailHTML(results)
       }else{
           var message = `MailMaid had no rules to process your Inbox. \n\n Please set your rules in the app`;
         };
@@ -31,22 +27,9 @@
     }
 
 
-function formatTable() {
-
-    var data = ["doge", "cate", "birb", "doggo", "moon moon", "awkward seal"];//reportArr;
-
-    var myTable = "<table class=\"wp-table\"><tr>";
-    
-    var perrow = 1; 
-    data.forEach((value, i) => {
-
-      myTable += `<td>${value}</td>`;
-
-      var next = i + 1;
-      if (next%perrow==0 && next!=data.length) { myTable += "</tr><tr>"; }
-    });
-
-    myTable += "</tr></table>";
-     
-return myTable
+function getEmailHTML(results) {
+  var templ = HtmlService.createTemplateFromFile('report-email.html');
+  templ.results = results;
+  var htmlBody = templ.evaluate().getContent();
+  return htmlBody
 }

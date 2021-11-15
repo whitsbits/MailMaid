@@ -39,24 +39,16 @@
     display: table;
 }</style></head>
 
-<body><b>MailMaid sucessfully processed the following results:</b>
-    <script>
-        <div id="container"></div>
-        var data = ["doge", "cate", "birb", "doggo", "moon moon", "awkward seal"];//reportArr;
+<body>
+    <b>MailMaid sucessfully processed the following results:</b>
 
-        var myTable = "<table class=\"wp-table\"><tr>";
+    <table class="wp-table">
+      <? for (var i = 0; i < results.length; i++) { ?>
+        <tr>
+            <td><?= results[i] ?></td>
+        </tr>
+      <? } ?>
+    </table>
 
-        var perrow = 1; 
-        data.forEach((value, i) => {
-
-        myTable += `<td>${value}</td>`;
-
-        var next = i + 1;
-        if (next%perrow==0 && next!=data.length) { myTable += "</tr><tr>"; }
-        });
-
-        myTable += "</tr></table>";
-        document.getElementById("container").innerHTML = myTable;
-    </script>
 </body>
 </html>
