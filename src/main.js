@@ -194,11 +194,11 @@ function disclosuresSection() {
   //----------------------Base state widget------------------------------//
   if(e === null || action === undefined || search === undefined || days === undefined){
     const _searchText = CardService.newTextParagraph()
-    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed:</b>')
+    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be removed:</b>')
     
     var _search = CardService.newTextInput()
       .setFieldName('search')
-      .setValue("")
+      .setValue("category:promotions")
       .setHint(`Use standard GMail Query Language`);
 
     const _daysText = CardService.newTextParagraph()
@@ -206,8 +206,8 @@ function disclosuresSection() {
 
     var _days = CardService.newTextInput()
       .setFieldName('days')
-      .setValue("")
-      .setHint('Number of days before MailMaid processes the action.');
+      .setValue("7")
+      .setHint('Number of days before MailMaid removes this email.');
 
     const _actionText = CardService.newTextParagraph()
         .setText('<b>Which action do you want the MailMaid to take?</b>')
@@ -245,7 +245,7 @@ function disclosuresSection() {
       .setText(editRuleNumText)    
     
     const _searchText = CardService.newTextParagraph()
-    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be processed:</b>')
+    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be removed:</b>')
     
     var _search = CardService.newTextInput()
         .setFieldName('search')
@@ -258,7 +258,7 @@ function disclosuresSection() {
     var _days = CardService.newTextInput()
         .setFieldName('days')
         .setValue(days)
-        .setHint('Number of days before the MailMaid processes the action.');
+        .setHint('Number of days before MailMaid removes this email.');
 
         if (action === 'Purge') {
             var item1 = true
