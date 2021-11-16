@@ -31,9 +31,14 @@ function removeDupeTriggers() {
   var strArray = getTriggersArr();
   let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
   let dupes = (findDuplicates(strArray)).toString() // All duplicates
-  Logger.log (`Found duplicate trigger ${dupes}, removing duplicate`)
   //console.log([...new Set(findDuplicates(strArray))]) // Unique duplicates
-  removeTriggers(dupes);
+  if (dupes != ""){
+    Logger.log (`${user} - Found duplicate trigger ${dupes}, removing duplicate`)
+    removeTriggers(dupes);
+    initSchedule(); //re-initialize the scheduled trigger if main trigger was dupe
+  }else{
+    Logger.log (`${user} - No dupes found`)
+  }
 }
 
 /**
