@@ -12,8 +12,8 @@ function cleanMail() {
   
   var rules = getRulesArr();
   const scriptStart = new Date();
-  let rulesCached = cache.get('ruleLoopCache');
-  let counter = cache.get('counterCache');
+  let rulesCached = cache.getNumber('ruleLoopCache');
+  let counter = cache.getNumber('counterCache');
   let loopBreak = 0;
   
   if (rulesCached === null) {
@@ -81,9 +81,9 @@ for (let i = rulesCached; i < rules.length; i++) {
           if (action === 'Purge'){
             Logger.log(`${user} - ${counter} total threads deleted`);
           };
-          makeCache('counterCache', counter) // cache the count
-          makeCache('ruleLoopCache', i); // cache the rule loop location
-          makeCache('threadLoopCache', countStart); // cache the thread loop location
+          cache.putNumber('counterCache', counter) // cache the count
+          cache.putNumber('ruleLoopCache', i); // cache the rule loop location
+          cache.putNumber('threadLoopCache', countStart); // cache the thread loop location
           listCache();
           if(triggerActive('cleanMore') === false && triggerActive('countMore') === false){
             Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
@@ -109,18 +109,9 @@ for (let i = rulesCached; i < rules.length; i++) {
         break; //Break to For (i) loop if there was a TimeOut
    };
 
-
-    if (action === 'Archive'){
-      var archiveReport = `\n${counter} total threads archived from rule set: ${action}, ${searchString}, ${days}`
-      Logger.log(`${user} - ${counter} total threads archived`);
-      reportArr.push(archiveReport);
-    };
-    if (action === 'Purge'){
-      var purgeReport = `\n${counter} total threads purged from rule set: ${action}, ${searchString}, ${days}`
-      Logger.log(`${user} - ${counter} total threads deleted`);
-      reportArr.push(purgeReport);
-    };
     if (countStart < 0){
+      Logger.log(`${user} - ${counter} total threads ${action}d`);
+      cache.putObject(`rule ${i}`,{ counter: counter, action: action, searchString:searchString, days:days });
       countStart = 0;
     }
 

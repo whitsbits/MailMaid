@@ -8,11 +8,11 @@
 function runDebugNow() {
   clearAllCache();
   removeTriggers('cleanMore');
-  makeCache('inBoxCounted', true);
+  cache.putBoolean('inBoxCounted', true);
   removeTriggers('countMore');
-  makeCache('inBoxCache', 28000);
-  //makeCache('ruleLoopCache', 4)
-  //makeCache('threadLoopCache', 1000)
+  cache.putNumber('inBoxCache', 28000);
+  //cache.putNumber('ruleLoopCache', 4)
+  //cache.putNumber('threadLoopCache', 1000)
   cleanMail();
 }
 
@@ -122,7 +122,7 @@ userProperties.setProperties({[newKey] : jarray});
 
 function loadRules() {
   clearAllRules();
-  makeCache('editRuleNum', 'rule0');
+  cache.putString('editRuleNum', 'rule0');
     userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:promotions','7'])});
     userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
     userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});

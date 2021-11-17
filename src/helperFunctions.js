@@ -9,7 +9,7 @@
 function MailMaid() {
     removeDupeTriggers();
     removeTriggers('cleanMore');
-    makeCache('inBoxCounted', false);
+    cache.putBoolean('inBoxCounted', false);
     removeTriggers('countMore');
     cleanMail();
   }
@@ -27,7 +27,7 @@ function MailMaid() {
  */
  function countMore() {
   removeTriggers('countMore');
-  makeCache('inBoxCounted', false);
+  cache.putBoolean('inBoxCounted', false);
   cleanMail();
 }
 
@@ -105,7 +105,7 @@ function initSchedule() {
 }
 
 function initRules() {
-  makeCache('editRuleNum', 'rule0');
+  cache.putString('editRuleNum', 'rule0');
 }
 
   /**
@@ -126,7 +126,7 @@ function checkInitStatus() {
  */
 
  function makeCache (name, data) {
-  cache.put(name, data, 82800) //23 hour cache
+  cache.putString(name, data, 82800) //23 hour cache
   Logger.log (`${user} - Added ${name} cache with value: ${data}`)
 }
 
@@ -152,12 +152,12 @@ function clearAllCache() {
  */
 function listCache() {
   Logger.log (user + " - Current cached values are: \n" + 
-            "inboxNum: " + cache.get('inBoxCache') + "\n" +
-            "inBoxCounted: " + cache.get('inBoxCounted') + "\n" +
-            "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
-            "threadNum: " + cache.get('threadLoopCache') + "\n" +
-            "threadCounter: " + cache.get('counterCache') + "\n" +
-            "editRuleNum: " + cache.get('editRuleNum'));
+            "inboxNum: " + cache.getNumber('inBoxCache') + "\n" +
+            "inBoxCounted: " + cache.getBoolean('inBoxCounted') + "\n" +
+            "ruleNum: " + cache.getNumber('ruleLoopCache') + "\n" +
+            "threadNum: " + cache.getNumber('threadLoopCache') + "\n" +
+            "threadCounter: " + cache.getNumber('counterCache') + "\n" +
+            "editRuleNum: " + cache.getNumber('editRuleNum'));
   }
 /**
  * Returns userProperties in the PropertyService
@@ -213,14 +213,14 @@ function getScheduleArr() {
  *  * @return {countStart} the index number for where to start the process
  */
 function getCountStart() {
-  let inBoxCounted = JSON.parse(cache.get('inBoxCounted').toLowerCase());
-  let inBoxCache = cache.get('inBoxCache');
+  let inBoxCounted = cache.getBoolean('inBoxCounted')
+  let inBoxCache = cache.getNumber('inBoxCache');
         if (inBoxCache === null){
           inBoxCache = 0
         }else{
           inBoxCache = parseInt(inBoxCache);
         }
-  let threadsCached = cache.get('threadLoopCache');
+  let threadsCached = cache.getNumber('threadLoopCache');
 
   if (!inBoxCounted) {
     Logger.log (`${user} - Continuing Inbox count from: ${inBoxCache}`)

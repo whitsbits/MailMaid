@@ -1,7 +1,8 @@
 /**
  * Global Variables
  */
-let reportArr = [];
+const EnhancedCacheService = wrap(CacheService.getUserCache());
+const cache = EnhancedCacheService;
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
 const inc = 500; // InBox Iteration Increment
@@ -309,7 +310,7 @@ function disclosuresSection() {
  */
   function onModeChange(e) {
     let ruleNum = (e.formInput.editRule);
-    makeCache('editRuleNum', ruleNum);
+    cache.putString('editRuleNum', ruleNum);
     let ruleElementsArr = reportRulesArrElements(ruleNum);
     Logger.log (`${user} - The element array is: ${ruleElementsArr}`);
     var action = ruleElementsArr[0];
