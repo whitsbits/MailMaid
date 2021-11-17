@@ -4,7 +4,6 @@
 let reportArr = [];
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
-const cache = CacheService.getUserCache();
 const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');

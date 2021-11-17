@@ -24,5 +24,8 @@
   },
   "bugs": {
     "url": "https://github.com/slwhitman/GMail-Maintenance/issues"
+  },
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.41"
   }
 }
