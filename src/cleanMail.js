@@ -115,9 +115,11 @@ for (let i = rulesCached; i < rules.length; i++) {
     Logger.log(`${user} - ${counter} total threads deleted`);
     reportArr.push(purgeReport);
   };
+  
   if (countStart < 0){
     countStart = 0;
   }
+
   Logger.log(`${user} - Finished processing Inbox from index ${countStart}`);
   threadsCached = null;
   clearCache('threadLoopCache');
