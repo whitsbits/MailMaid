@@ -17,5 +17,6 @@ Get full presentation of rule structure to item selection list
 Warn before Delete All
 Compress dupe Rule input code
 Investigate Suggestion Picker
+Refactor HTML Email (https://blog.gsmart.in/google-apps-script-send-html-email/)
 
 

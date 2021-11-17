@@ -21,6 +21,7 @@ function initApp() {
       userProperties.setProperties({'initialized':true});
       Logger.log (`${user} - App Initialized` );
     }else{
+      initSchedule(); //clear any "This trigger has been disabled for an unknown reason."
       Logger.log (`${user} - App already initialized`);
     }
     return true;
