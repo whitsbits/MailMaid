@@ -66,7 +66,7 @@ function initApp() {
   * @return {CardService.Section} Return the section to build the card.
  */
   function homepageRulesSection() {
-    var rulesText = `Your current rules are: \n\n ${reportRulesText()}`;  
+    var rulesText = `MailMaid is doing these tasks for you: \n\n ${reportRulesText()}`;  
     const rulesBodyText = CardService.newTextParagraph()
         .setText(
             rulesText
@@ -194,23 +194,23 @@ function disclosuresSection() {
   //----------------------Base state widget------------------------------//
   if(e === null || action === undefined || search === undefined || days === undefined){
     const _searchText = CardService.newTextParagraph()
-    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be removed:</b>')
+    .setText('<b>Use <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to tell MailMaid which messages need to be removed:</b>')
     
     var _search = CardService.newTextInput()
       .setFieldName('search')
-      .setValue("category:promotions")
+      .setValue("")
       .setHint(`Use standard GMail Query Language`);
 
     const _daysText = CardService.newTextParagraph()
-        .setText('<b>How many days until action?</b>')
+        .setText('<b>How many days before MailMaid cleans the messages?</b>')
 
     var _days = CardService.newTextInput()
       .setFieldName('days')
-      .setValue("7")
+      .setValue("")
       .setHint('Number of days before MailMaid removes this email.');
 
     const _actionText = CardService.newTextParagraph()
-        .setText('<b>Which action do you want the MailMaid to take?</b>')
+        .setText('<b>What do you want MailMaid to do?</b>')
         
     var _action = CardService.newSelectionInput()
       .setType(CardService.SelectionInputType.RADIO_BUTTON)
@@ -245,7 +245,7 @@ function disclosuresSection() {
       .setText(editRuleNumText)    
     
     const _searchText = CardService.newTextParagraph()
-    .setText('<b>Enter the <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to find the messages to be removed:</b>')
+    .setText('<b>Use <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to tell MailMaid which messages need to be removed:</b>')
     
     var _search = CardService.newTextInput()
         .setFieldName('search')
@@ -253,7 +253,7 @@ function disclosuresSection() {
         .setHint(`Use standard GMail Query Language`);
 
     const _daysText = CardService.newTextParagraph()
-        .setText('<b>How many days until action?</b>')
+        .setText('<b>How many days until before MailMaid cleans the messages?</b>')
 
     var _days = CardService.newTextInput()
         .setFieldName('days')
@@ -269,7 +269,7 @@ function disclosuresSection() {
         };
   
     const _actionText = CardService.newTextParagraph()
-        .setText('<b>Which action do you want the MailMaid to take?</b>')
+        .setText('<b>What do you want MailMaid to do?</b>')
 
     var _action = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
@@ -416,7 +416,7 @@ function scheduleReportWidget() {
 function scheduleFieldsSection() {
 
     const everyDaysText = CardService.newTextParagraph()
-      .setText ('<b>How often to you want to process messages?</b>');
+      .setText ('<b>How often do you want MailMaid to clean?</b>');
     
     const everyDays = CardService.newTextInput()
         .setFieldName('everyDays')
@@ -431,7 +431,7 @@ function scheduleFieldsSection() {
     .setHours(2); */
 
     const atHourText = CardService.newTextParagraph()
-        .setText ('<b>What time of day do you want the process to run?</b>');
+        .setText ('<b>What time of day do you want MailMaid to clean?</b>');
 
     const atHour = CardService.newTextInput()
         .setFieldName('atHour')

@@ -351,7 +351,7 @@ return ruleCount
         var everyDays = schedule[0];
         var militaryTime = schedule[1];
 
-      text = `You are currently running the schedule: \n   <b>Every:</b> ${everyDays} day(s) \n   <b>At Hour:</b> ${militaryTime}:00h \n\n`
+      text = `MailMaid is currently schedule to work: \n   <b>Every:</b> ${everyDays} day(s) \n   <b>At Hour:</b> ${militaryTime}:00h \n\n`
     Logger.log (`${user} - Returning reportSchedule Text: \n ${text}`)
     return text
   };
