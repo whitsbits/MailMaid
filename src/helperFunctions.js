@@ -7,6 +7,7 @@
  */
 
 function MailMaid() {
+    removeDupeTriggers();
     removeTriggers('cleanMore');
     makeCache('inBoxCounted', false);
     removeTriggers('countMore');
@@ -88,13 +89,18 @@ function clearSchedule(){
  * Function to initialize the schedule data to the userProperties
  */
 function initSchedule() {
-  var atHour = 1
-  var everyDays = 1
-  if (userProperties.getProperty('schedule')===null){
+  let schedule = userProperties.getProperty('schedule')
+  if (schedule===null){
+        var atHour = 1
+        var everyDays = 1
+  }else{
+      let schedule = getScheduleArr();
+      var atHour = schedule[0]
+      var everyDays = schedule[1]
+  }
     userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
     removeTriggers('MailMaid');
     setTrigger('MailMaid', atHour, everyDays)
-  }
   Logger.log (`${user} - Schedule Initialized`)
 }
 
@@ -345,7 +351,7 @@ return ruleCount
         var everyDays = schedule[0];
         var militaryTime = schedule[1];
 
-      text = `You are currently running the schedule: \n   <b>Every:</b> ${everyDays} day(s) \n   <b>At Hour:</b> ${militaryTime}:00h \n\n`
+      text = `MailMaid is currently schedule to work: \n   <b>Every:</b> ${everyDays} day(s) \n   <b>At Hour:</b> ${militaryTime}:00h \n\n`
     Logger.log (`${user} - Returning reportSchedule Text: \n ${text}`)
     return text
   };

@@ -24,6 +24,22 @@ function triggerActive(triggerName) {
   return triggerBool
 }
 
+/**
+ * Find and remove and triggers that have been duplicated
+ */
+function removeDupeTriggers() {
+  var strArray = getTriggersArr();
+  let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
+  let dupes = (findDuplicates(strArray)).toString() // All duplicates
+  //console.log([...new Set(findDuplicates(strArray))]) // Unique duplicates
+  if (dupes != ""){
+    Logger.log (`${user} - Found duplicate trigger ${dupes}, removing duplicate`)
+    removeTriggers(dupes);
+    initSchedule(); //re-initialize the scheduled trigger if main trigger was dupe
+  }else{
+    Logger.log (`${user} - No dupes found`)
+  }
+}
 
 /**
  * Create a trigger that executes the main function to run nightly
@@ -53,7 +69,7 @@ function triggerActive(triggerName) {
   }
 
   /**
- * Deletes all triggers
+ * Deletes named trigger
  * @param {triggerName}
  */
  function removeTriggers(triggerName) {

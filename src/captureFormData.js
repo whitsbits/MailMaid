@@ -11,6 +11,14 @@ function captureRuleFormData(e) {
         var days = e.formInput.days;
         var action = e.formInput.action;
 
+        if (search === undefined) {
+          return notify (`Please tell MailMaid which messages need to be removed by adding a search term`, rulesManagerCard())
+        }else if (days === undefined) {
+          return notify (`Please enter a number of days before MailMaid cleans the messages`, rulesManagerCard())
+        }else if (isNaN (days)) {
+          return notify (`Please enter a number only for days`, rulesManagerCard())
+        }
+
         if (e.parameters.ruleNum === undefined){
           var key =  null;
         }else{
@@ -57,6 +65,19 @@ function captureRuleFormData(e) {
 function captureScheduleFormData(e) {
   var everyDays = parseInt(e.formInput.everyDays,10);
   var atHour = parseInt(e.formInput.atHour,10);
+  
+    if (everyDays === undefined) {
+      return notify (`Please enter the number of days for how often you want MailMaid to clean`, scheduleCard())
+    }else if (isNaN (everyDays)) {
+      return notify (`Please enter a number only for how often you want MailMaid to clean`, scheduleCard())
+    }
+
+    if (atHour === undefined) {
+      return notify (`Please enter the the time of day you want MailMaid to clean`, scheduleCard())
+    }else if (isNaN (atHour)) {
+      return notify (`Please enter a number only for time of day you want MailMaid to clean`, scheduleCard())
+    }
+   
   var schedule = [everyDays, atHour];
   var jarray = JSON.stringify(schedule);
 
