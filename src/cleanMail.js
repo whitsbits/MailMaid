@@ -13,7 +13,7 @@ function cleanMail() {
   var rules = getRulesArr();
   const scriptStart = new Date();
   let rulesCached = cache.get('ruleLoopCache');
- 
+  let counter = cache.get('counterCache');
   let loopBreak = 0;
   
   if (rulesCached === null) {
@@ -21,9 +21,12 @@ function cleanMail() {
     rulesCached = 0;
   }
 for (let i = rulesCached; i < rules.length; i++) {
-  let counter = 0;
+  if (counter === null) {
+    // check to see if the value has not been cached and use zero if it has
+    counter = 0;
+  }
   let countStart = getCountStart();
-  listCache();
+
   if (Array.isArray(rules)) {
       var action = rules[i][0];
       var searchString = rules[i][1];
@@ -78,8 +81,10 @@ for (let i = rulesCached; i < rules.length; i++) {
           if (action === 'Purge'){
             Logger.log(`${user} - ${counter} total threads deleted`);
           };
+          makeCache('counterCache', counter) // cache the count
           makeCache('ruleLoopCache', i); // cache the rule loop location
           makeCache('threadLoopCache', countStart); // cache the thread loop location
+          listCache();
           if(triggerActive('cleanMore') === false && triggerActive('countMore') === false){
             Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
             setMoreTrigger('cleanMore');
@@ -94,7 +99,7 @@ for (let i = rulesCached; i < rules.length; i++) {
 
 
       };
-      countStart -= inc; // work backwarads through the inbox in incremental chunks
+        countStart -= inc; // work backwarads through the inbox in incremental chunks
         if (loopBreak === 1) {
           break; //Break for DO loop if there was a TimeOut
         }
@@ -105,24 +110,24 @@ for (let i = rulesCached; i < rules.length; i++) {
    };
 
 
-  if (action === 'Archive'){
-    var archiveReport = `\n${counter} total threads archived from rule set: ${action}, ${searchString}, ${days}`
-    Logger.log(`${user} - ${counter} total threads archived`);
-    reportArr.push(archiveReport);
-  };
-  if (action === 'Purge'){
-    var purgeReport = `\n${counter} total threads purged from rule set: ${action}, ${searchString}, ${days}`
-    Logger.log(`${user} - ${counter} total threads deleted`);
-    reportArr.push(purgeReport);
-  };
-  
-  if (countStart < 0){
-    countStart = 0;
-  }
+    if (action === 'Archive'){
+      var archiveReport = `\n${counter} total threads archived from rule set: ${action}, ${searchString}, ${days}`
+      Logger.log(`${user} - ${counter} total threads archived`);
+      reportArr.push(archiveReport);
+    };
+    if (action === 'Purge'){
+      var purgeReport = `\n${counter} total threads purged from rule set: ${action}, ${searchString}, ${days}`
+      Logger.log(`${user} - ${counter} total threads deleted`);
+      reportArr.push(purgeReport);
+    };
+    if (countStart < 0){
+      countStart = 0;
+    }
 
-  Logger.log(`${user} - Finished processing Inbox from index ${countStart}`);
+  Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
   threadsCached = null;
   clearCache('threadLoopCache');
+  clearCache('counterCache');
 }
   if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
     clearCache('ruleLoopCache');
