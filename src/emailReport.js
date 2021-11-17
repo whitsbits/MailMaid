@@ -9,7 +9,7 @@
     */
 
     function sendReportEmail(bool) {
-      var results = reportArr;
+      var results = reportArr; //["akward seal","baby shark","cate","doggo","E","face palm"];
       var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
        if (bool === true){        
@@ -27,7 +27,7 @@
 
 
 function getEmailHTML(results) {
-  var templ = HtmlService.createTemplateFromFile('report-email.html');
+  var templ = HtmlService.createTemplateFromFile('src/report-email.html');
   templ.results = results;
   var htmlBody = templ.evaluate().getContent();
   return htmlBody
