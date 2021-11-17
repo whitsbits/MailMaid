@@ -151,8 +151,6 @@ function clearAllCache() {
  * list the cache(s) values
  */
 function listCache() {
-  
-  Logger.log (cache)
   Logger.log (user + " - Current cached values are: \n" + 
             "inboxNum: " + cache.get('inBoxCache') + "\n" +
             "inBoxCounted: " + cache.get('inBoxCounted') + "\n" +
