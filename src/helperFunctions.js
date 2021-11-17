@@ -144,17 +144,21 @@ function clearAllCache() {
   cache.remove('inBoxCounted');
   cache.remove('ruleLoopCache');
   cache.remove('threadLoopCache');
+  cache.remove('counterCache');
   Logger.log (`${user} - All Caches Cleared`)
     }
   /**
  * list the cache(s) values
  */
 function listCache() {
+  
+  Logger.log (cache)
   Logger.log (user + " - Current cached values are: \n" + 
             "inboxNum: " + cache.get('inBoxCache') + "\n" +
             "inBoxCounted: " + cache.get('inBoxCounted') + "\n" +
             "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
             "threadNum: " + cache.get('threadLoopCache') + "\n" +
+            "threadCounter: " + cache.get('counterCache') + "\n" +
             "editRuleNum: " + cache.get('editRuleNum'));
   }
 /**
