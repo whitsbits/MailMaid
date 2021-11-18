@@ -9,7 +9,7 @@ const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');
 const cardSectionDivider = CardService.newDivider();
-const timeOutLimit = 297500; // just under 5  mins in MS
+const timeOutLimit = 285000; // just under 5  mins in MS
 
 
 function initApp() {
