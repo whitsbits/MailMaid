@@ -23,6 +23,7 @@
         subject: subject,
         htmlBody: message
       });
+      Logger.log (`${user} - Email sent to ${recipient}`)
     }
 
 
