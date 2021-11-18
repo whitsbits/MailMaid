@@ -22,7 +22,7 @@ function cleanMail() {
   }
 for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
-  let countStart = getCountStart();
+  let countStart = 0//getCountStart();
   listCache();
   if (Array.isArray(rules)) {
       var action = rules[i][0];
