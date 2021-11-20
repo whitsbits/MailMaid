@@ -30,7 +30,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       var days = rules[i][2];
   }else{
     Logger.log (`${user} - No rules set for processing`)
-    sendLogEmail(false);
+    sendReportEmail(false);
     loopBreak = 1;
   }
   const actionDate = new Date();

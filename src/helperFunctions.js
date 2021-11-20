@@ -9,8 +9,8 @@
 function MailMaid() {
     removeDupeTriggers();
     removeTriggers('cleanMore');
-    makeCache('inBoxCounted', false);
-    removeTriggers('countMore');
+    //makeCache('inBoxCounted', false);
+    //removeTriggers('countMore');
     cleanMail();
   }
 
