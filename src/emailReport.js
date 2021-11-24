@@ -8,8 +8,8 @@
      * TODO figure out a way to do this in a more user friendly manner.
     */
 
-    function sendReportEmail(bool) {
-      var results = reportArr; //["akward seal","baby shark","cate","doggo","E","face palm"];
+    function sendReportEmail(bool, results) {
+      //var results = reportArr; //["akward seal","baby shark","cate","doggo","E","face palm"];
       var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';
        if (bool === true){        
