@@ -1,22 +1,19 @@
-    function callSendEmail () {
-      sendReportEmail(true);
+    function testSendEmail () {
+      sendReportEmail(["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
+      //sendReportEmail(["akward seal","baby shark","cate","doggo","E","face palm"]);
     }
     
     /**
      *  Generate a log, then email it to the person who ran the script.
-     * Not currently used
-     * TODO figure out a way to do this in a more user friendly manner.
+     * @param {Object} results - Array for the message to be sent in the email.
+     *                           one line per array element
     */
 
-    function sendReportEmail(bool, results) {
-      //var results = reportArr; //["akward seal","baby shark","cate","doggo","E","face palm"];
+    function sendReportEmail(results) {
+      
       var recipient = Session.getActiveUser().getEmail();
-      var subject = 'MailMaid Results';
-       if (bool === true){        
-        var message = getEmailHTML(results)
-      }else{
-          var message = `MailMaid had no rules to process your Inbox. \n\n Please set your rules in the app`;
-        };
+      var subject = 'MailMaid Results';     
+      var message = getEmailHTML(results)
 
       MailApp.sendEmail({
         to: recipient,

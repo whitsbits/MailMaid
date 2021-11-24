@@ -30,7 +30,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       var days = rules[i][2];
   }else{
     Logger.log (`${user} - No rules set for processing`)
-    sendReportEmail(false);
+    sendReportEmail(["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
     loopBreak = 1;
   }
   const actionDate = new Date();
@@ -128,7 +128,7 @@ for (let i = rulesCached; i < rules.length; i++) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
-    sendReportEmail(true);
+    sendReportEmail(reportArr);
   }
 };
 
