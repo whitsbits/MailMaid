@@ -7,6 +7,7 @@
  */
 
 function MailMaid() {
+    Logger.log (`${user} - Trigger ran HEAD version`)
     removeDupeTriggers();
     removeTriggers('cleanMore');
     //makeCache('inBoxCounted', false);
@@ -95,8 +96,8 @@ function initSchedule() {
         var everyDays = 1
   }else{
       let schedule = getScheduleArr();
-      var atHour = schedule[0]
-      var everyDays = schedule[1]
+      var atHour = schedule[1]
+      var everyDays = schedule[0]
   }
     userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
     removeTriggers('MailMaid');
