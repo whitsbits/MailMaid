@@ -11,12 +11,22 @@ function MailMaid() {
     cleanMail();
   }
 
+/**
+ * Check that the schedule is working
+ */  
+
 function checkLastRun() {
-  var maxTime = 90061000 //1 days, 1 hours, 1 minutes and 1 seconds
+  let schedule = getScheduleArr();
+  let days= parseInt((schedule[0]),10);
+  Logger.log (`${user} - Has schedule MailMaid every ${days}`)
+  var maxTime = Math.round(+days * 86400000)
   var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'),10);
-  if ((Date.now() - lastRunEpoch) > maxTime){
+  var elapsedTime = (Date.now() - lastRunEpoch);
+  if (elapsedTime > maxTime){
+    Logger.log (`${user} - Schedule is failing`)
     return true
   }
+  Logger.log (`${user} - Schedule is working`)
   return false
 }
 
