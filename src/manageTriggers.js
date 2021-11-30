@@ -53,6 +53,7 @@ function removeDupeTriggers() {
     .everyDays(everyDays) // Frequency is required if you are using atHour() or nearMinute()
     .inTimezone(userTimeZone)
     .create();
+  Logger.log (`${user} - Trigger ${triggerName} created`)
 }
 
 

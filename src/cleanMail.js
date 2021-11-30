@@ -21,19 +21,16 @@ function cleanMail() {
     rulesCached = 0;
   }
 for (let i = rulesCached; i < rules.length; i++) {
-  if (counter === null) {
-    // check to see if the value has not been cached and use zero if it has
-    counter = 0;
-  }
-  let countStart = getCountStart();
-
+  let counter = 0;
+  let countStart = 0//getCountStart();
+  listCache();
   if (Array.isArray(rules)) {
       var action = rules[i][0];
       var searchString = rules[i][1];
       var days = rules[i][2];
   }else{
     Logger.log (`${user} - No rules set for processing`)
-    sendLogEmail(false);
+    sendReportEmail(["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
     loopBreak = 1;
   }
   const actionDate = new Date();
@@ -124,7 +121,11 @@ for (let i = rulesCached; i < rules.length; i++) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
-    sendReportEmail(true);
+    var lastRun = JSON.stringify(Date.now());
+    userProperties.deleteProperty('lastRunEpoch')
+    userProperties.setProperties({'lastRunEpoch': lastRun})
+    Logger.log (`${user} - Setting last run data as ${lastRun}`)
+    sendReportEmail(reportArr);
   }
 };
 

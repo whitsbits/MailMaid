@@ -6,16 +6,22 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
+  if (checkLastRun()) {
+    initSchedule();
+  }  
   clearAllCache();
   removeTriggers('cleanMore');
-  cache.putBoolean('inBoxCounted', true);
-  removeTriggers('countMore');
-  cache.putNumber('inBoxCache', 28000);
-  //cache.putNumber('ruleLoopCache', 4)
-  //cache.putNumber('threadLoopCache', 1000)
+  makeCache('ruleLoopCache', 5)
+  //makeCache('threadLoopCache', 1000)
   cleanMail();
 }
 
+function test() {
+    var lastRun = JSON.stringify(Date.now());
+    userProperties.deleteProperty('lastRunEpoch')
+    userProperties.setProperties({'lastRunEpoch': lastRun})
+    Logger.log (`${user} - Setting last run data as ${lastRun}`)
+}
 
 function getHash() {
   const user = "kplachhwani@gmail.com"
@@ -27,6 +33,36 @@ function getHash() {
 function zeroLicense() {
   userProperties.setProperties({"license" : ""})
 }
+
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function deleteTrigger(triggerId) {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    if (allTriggers[i].getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(allTriggers[i]);
+      break;
+    }
+  }
+}
+
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function listTriggers() {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    var currTrigger = allTriggers[i].getUniqueId()
+      Logger.log(currTrigger);
+    }
+  }
 
   /**
  * Clean up on aisle More trigger

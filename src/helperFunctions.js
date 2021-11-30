@@ -6,13 +6,20 @@
  * Sets the environmental variable to baseline before running the main process
  */
 
-function MailMaid() {
-    removeDupeTriggers();
+function MailMaid() { 
     removeTriggers('cleanMore');
-    cache.putBoolean('inBoxCounted', false);
-    removeTriggers('countMore');
     cleanMail();
   }
+
+function checkLastRun() {
+  var maxTime = 90061000 //1 days, 1 hours, 1 minutes and 1 seconds
+  var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'),10);
+  if ((Date.now() - lastRunEpoch) > maxTime){
+    return true
+  }
+  return false
+}
+
 
   /**
  * Wrapper for the purge function called by timeOut trigger
@@ -95,8 +102,8 @@ function initSchedule() {
         var everyDays = 1
   }else{
       let schedule = getScheduleArr();
-      var atHour = schedule[0]
-      var everyDays = schedule[1]
+      var atHour = schedule[1]
+      var everyDays = schedule[0]
   }
     userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
     removeTriggers('MailMaid');
