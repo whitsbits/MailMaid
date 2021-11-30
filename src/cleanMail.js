@@ -128,8 +128,10 @@ for (let i = rulesCached; i < rules.length; i++) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
+    var lastRun = JSON.stringify(Date.now());
     userProperties.deleteProperty('lastRunEpoch')
-    userProperties.setProperties('lastRunEpoch', Date.now())
+    userProperties.setProperties({'lastRunEpoch': lastRun})
+    Logger.log (`${user} - Setting last run data as ${lastRun}`)
     sendReportEmail(reportArr);
   }
 };

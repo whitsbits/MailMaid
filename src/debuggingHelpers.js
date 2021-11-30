@@ -6,16 +6,22 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
+  if (checkLastRun()) {
+    initSchedule();
+  }  
   clearAllCache();
   removeTriggers('cleanMore');
-  makeCache('inBoxCounted', true);
-  removeTriggers('countMore');
-  makeCache('inBoxCache', 28000);
-  //makeCache('ruleLoopCache', 4)
+  makeCache('ruleLoopCache', 5)
   //makeCache('threadLoopCache', 1000)
   cleanMail();
 }
 
+function test() {
+    var lastRun = JSON.stringify(Date.now());
+    userProperties.deleteProperty('lastRunEpoch')
+    userProperties.setProperties({'lastRunEpoch': lastRun})
+    Logger.log (`${user} - Setting last run data as ${lastRun}`)
+}
 
 function getHash() {
   const user = "kplachhwani@gmail.com"

@@ -6,18 +6,15 @@
  * Sets the environmental variable to baseline before running the main process
  */
 
-function MailMaid() {
-    Logger.log (`${user} - Trigger ran HEAD version`)
-    if (!checkLastRun) {
-      initSchedule();
-    }  
+function MailMaid() { 
     removeTriggers('cleanMore');
     cleanMail();
   }
 
 function checkLastRun() {
-  var maxTime = 90061 //1 days, 1 hours, 1 minutes and 1 seconds
-  var lastRunEpoch = userProperties.getProperty('lastRunEpoch');
+  var maxTime = 90061000 //1 days, 1 hours, 1 minutes and 1 seconds
+  var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'),10);
+  Logger.log (Date.now() - lastRunEpoch)
   if ((Date.now() - lastRunEpoch) > maxTime){
     return true
   }
