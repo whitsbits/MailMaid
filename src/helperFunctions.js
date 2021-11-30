@@ -8,12 +8,22 @@
 
 function MailMaid() {
     Logger.log (`${user} - Trigger ran HEAD version`)
-    removeDupeTriggers();
+    if (!checkLastRun) {
+      initSchedule();
+    }  
     removeTriggers('cleanMore');
-    //makeCache('inBoxCounted', false);
-    //removeTriggers('countMore');
     cleanMail();
   }
+
+function checkLastRun() {
+  var maxTime = 90061 //1 days, 1 hours, 1 minutes and 1 seconds
+  var lastRunEpoch = userProperties.getProperty('lastRunEpoch');
+  if ((Date.now() - lastRunEpoch) > maxTime){
+    return true
+  }
+  return false
+}
+
 
   /**
  * Wrapper for the purge function called by timeOut trigger

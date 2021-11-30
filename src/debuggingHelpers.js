@@ -28,6 +28,36 @@ function zeroLicense() {
   userProperties.setProperties({"license" : ""})
 }
 
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function deleteTrigger(triggerId) {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    if (allTriggers[i].getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(allTriggers[i]);
+      break;
+    }
+  }
+}
+
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function listTriggers() {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    var currTrigger = allTriggers[i].getUniqueId()
+      Logger.log(currTrigger);
+    }
+  }
+
   /**
  * Clean up on aisle More trigger
  */

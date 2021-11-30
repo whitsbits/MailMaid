@@ -128,6 +128,8 @@ for (let i = rulesCached; i < rules.length; i++) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
+    userProperties.deleteProperty('lastRunEpoch')
+    userProperties.setProperties('lastRunEpoch', Date.now())
     sendReportEmail(reportArr);
   }
 };
