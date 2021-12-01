@@ -14,6 +14,19 @@ function runDebugNow() {
   cleanMail();
 }
 
+function testThreadsEnd() {
+  let countStart = 0
+  do{
+  var threads = GmailApp.search('category:promotions', countStart, 100);
+  Logger.log (threads.length);
+  for (let j = 0; j < threads.length; j++){
+    let id = threads[j].getLastMessageDate();
+      Logger.log ("Batch: " + countStart + " - " + id)
+    }
+    countStart += 100
+  } while (threads.length > 0);
+}
+
 function testCache() {
 var test = cache.getObject('rule5')
 Logger.log (test)

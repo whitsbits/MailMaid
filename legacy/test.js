@@ -1,11 +1,3 @@
-var restultsArr = []
-//Timeout
-        cache.putNumber('counterCache', counter, ttl) // cache the count
-        cache.putNumber('ruleLoopCache', i, ttl); // cache the rule loop location
-        cache.putNumber('threadLoopCache', j, ttl); // cache the thread loop location
-        Logger.log(`${user} - Timed out at partial count of ${counter} in Rule ${i} and Thread ${j}. Values put in cache`);
-          
-          
           
 //one rule loop completed          
           resultsArr.push ([{ id: i, counter: counter, action: action, searchString:searchString, days:days }])
