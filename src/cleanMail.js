@@ -114,11 +114,11 @@ for (let i = rulesCached; i < rules.length; i++) {
 
   Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
   threadsCached = null;
-  clearCache('threadLoopCache');
-  clearCache('counterCache');
+  cache.remove('threadLoopCache');
+  cache.remove('counterCache');
 }
   if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
-    clearCache('ruleLoopCache');
+    cache.remove('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${reportArr}`);
     var lastRun = JSON.stringify(Date.now());

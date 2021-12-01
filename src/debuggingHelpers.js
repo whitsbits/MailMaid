@@ -8,11 +8,12 @@
 function runDebugNow() {
   if (checkLastRun()) {
     initSchedule();
-  }  
-  clearAllCache();
+  };
+  cache.remove('inBoxCache');
+  cache.remove('ruleLoopCache');
   removeTriggers('cleanMore');
-  makeCache('ruleLoopCache', 5)
-  //makeCache('threadLoopCache', 1000)
+  cache.putNumber('ruleLoopCache', 5)
+  //cache.putNumber('threadLoopCache', 1000)
   cleanMail();
 }
 
@@ -82,15 +83,6 @@ function clearAllTriggers() {
   removeTriggers('countMore');
 }
 
-
-
-  function clearInBoxCache() {
-    cache.remove('inBoxCache');
-  }
-
-  function clearLoopCache() {
-    cache.remove('ruleLoopCache');
-  }
 
 /**
  * Returns userProperties in the PropertyService
