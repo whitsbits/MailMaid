@@ -8,20 +8,17 @@
 function runDebugNow() {
   if (checkLastRun()) {
     initSchedule();
-  };
-  cache.remove('inBoxCache');
-  cache.remove('ruleLoopCache');
+  }  
+  clearAllCache();
   removeTriggers('cleanMore');
   cache.putNumber('ruleLoopCache', 5)
-  //cache.putNumber('threadLoopCache', 1000)
+  cache.putNumber('threadLoopCache', 1000)
   cleanMail();
 }
 
-function test() {
-    var lastRun = JSON.stringify(Date.now());
-    userProperties.deleteProperty('lastRunEpoch')
-    userProperties.setProperties({'lastRunEpoch': lastRun})
-    Logger.log (`${user} - Setting last run data as ${lastRun}`)
+function testCache() {
+var test = cache.getObject('rule5')
+Logger.log (test)
 }
 
 function getHash() {
@@ -83,6 +80,15 @@ function clearAllTriggers() {
   removeTriggers('countMore');
 }
 
+
+
+  function clearInBoxCache() {
+    cache.remove('inBoxCache');
+  }
+
+  function clearLoopCache() {
+    cache.remove('ruleLoopCache');
+  }
 
 /**
  * Returns userProperties in the PropertyService

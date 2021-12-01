@@ -12,7 +12,6 @@ const cardSectionDivider = CardService.newDivider();
 const timeOutLimit = 285000; // just under 5  mins in MS
 const ttl = 82800; //23 hours
 
-
 function initApp() {
     let init = checkInitStatus();
     if (init === false){
@@ -240,7 +239,7 @@ function disclosuresSection() {
 
 //-----------------------edit rule selected widget--------------------------//
   }else if (action != undefined || search != undefined || days != undefined){
-    let ruleNum = cache.getString('editRuleNum')
+    let ruleNum = cache.get('editRuleNum')
     let editRuleNumData = userProperties.getProperty(ruleNum)
         .replace(/[\[\]"]/g,'');
         //.split(',');
@@ -324,7 +323,7 @@ function disclosuresSection() {
 }
 
     function ruleButtonsSet() {
-        let ruleNum = cache.getString('editRuleNum')
+        let ruleNum = cache.get('editRuleNum')
         if (ruleNum === null){ruleNum='rule0'}
         const saveAction = CardService.newAction()
             .setFunctionName('captureRuleFormData')

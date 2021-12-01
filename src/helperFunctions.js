@@ -39,6 +39,15 @@ function checkLastRun() {
   cleanMail();
 }
 
+  /**
+ * Wrapper for the inbox count function called by timeOut trigger
+ */
+ function countMore() {
+  removeTriggers('countMore');
+  cache.putBoolean('inBoxCounted', false);
+  cleanMail();
+}
+
 
   /**
  * Function to clear all rules data from the userProperties
@@ -128,6 +137,11 @@ function checkInitStatus() {
       }
 }
 
+function clearCache (name) {
+  cache.remove(name)
+  Logger.log (`${user} - Removed ${name} cache.`)
+}
+
   /**
  * Clears the cache(s)
  */
@@ -199,6 +213,36 @@ function getScheduleArr() {
     Logger.log (`${user} - Returning scheduleArr ${schedule}`)
   return schedule;
 };
+
+/**
+ * Determines where the prior run of scripts stopped and
+ * restarts script based on prior state of cached values
+ *  * @return {countStart} the index number for where to start the process
+ */
+function getCountStart() {
+  let inBoxCounted = cache.getBoolean('inBoxCounted')
+  let inBoxCache = cache.getNumber('inBoxCache');
+        if (inBoxCache === null){
+          inBoxCache = 0
+        }else{
+          inBoxCache = parseInt(inBoxCache);
+        }
+  let threadsCached = cache.getNumber('threadLoopCache');
+
+  if (!inBoxCounted) {
+    Logger.log (`${user} - Continuing Inbox count from: ${inBoxCache}`)
+    countStart = getInboxCount(inc);
+    // check to see if inBox count is complete
+  }else if (threadsCached === null) {
+    countStart = inBoxCache;
+    Logger.log (`${user} - Using cached Inbox of: ${inBoxCache}`)
+  }else{
+    countStart = threadsCached;
+    Logger.log (`${user} - Using cached threads of: ${threadsCached}`)
+  };
+  Logger.log (`${user} - Returning Starting count of ${countStart}`)
+  return countStart
+}
 
 /**
  * Determines the length of an object
