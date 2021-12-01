@@ -30,7 +30,6 @@ function checkLastRun() {
   return false
 }
 
-
   /**
  * Wrapper for the purge function called by timeOut trigger
  */
@@ -38,16 +37,6 @@ function checkLastRun() {
   removeTriggers('cleanMore');
   cleanMail();
 }
-
-  /**
- * Wrapper for the inbox count function called by timeOut trigger
- */
- function countMore() {
-  removeTriggers('countMore');
-  cache.putBoolean('inBoxCounted', false);
-  cleanMail();
-}
-
 
   /**
  * Function to clear all rules data from the userProperties
@@ -137,35 +126,6 @@ function checkInitStatus() {
       }
 }
 
-function clearCache (name) {
-  cache.remove(name)
-  Logger.log (`${user} - Removed ${name} cache.`)
-}
-
-  /**
- * Clears the cache(s)
- */
-
-function clearAllCache() {
-  cache.remove('inBoxCache');
-  cache.remove('inBoxCounted');
-  cache.remove('ruleLoopCache');
-  cache.remove('threadLoopCache');
-  cache.remove('counterCache');
-  Logger.log (`${user} - All Caches Cleared`)
-    }
-  /**
- * list the cache(s) values
- */
-function listCache() {
-  Logger.log (user + " - Current cached values are: \n" + 
-            "inboxNum: " + cache.getNumber('inBoxCache') + "\n" +
-            "inBoxCounted: " + cache.getBoolean('inBoxCounted') + "\n" +
-            "ruleNum: " + cache.getNumber('ruleLoopCache') + "\n" +
-            "threadNum: " + cache.getNumber('threadLoopCache') + "\n" +
-            "threadCounter: " + cache.getNumber('counterCache') + "\n" +
-            "editRuleNum: " + cache.getNumber('editRuleNum'));
-  }
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
@@ -220,27 +180,14 @@ function getScheduleArr() {
  *  * @return {countStart} the index number for where to start the process
  */
 function getCountStart() {
-  let inBoxCounted = cache.getBoolean('inBoxCounted')
-  let inBoxCache = cache.getNumber('inBoxCache');
-        if (inBoxCache === null){
-          inBoxCache = 0
-        }else{
-          inBoxCache = parseInt(inBoxCache);
-        }
   let threadsCached = cache.getNumber('threadLoopCache');
-
-  if (!inBoxCounted) {
-    Logger.log (`${user} - Continuing Inbox count from: ${inBoxCache}`)
-    countStart = getInboxCount(inc);
-    // check to see if inBox count is complete
-  }else if (threadsCached === null) {
-    countStart = inBoxCache;
-    Logger.log (`${user} - Using cached Inbox of: ${inBoxCache}`)
+ if (threadsCached === null) {
+    countStart = 0;
+    Logger.log (`${user} - Starting Inbox count from 0`)
   }else{
     countStart = threadsCached;
     Logger.log (`${user} - Using cached threads of: ${threadsCached}`)
   };
-  Logger.log (`${user} - Returning Starting count of ${countStart}`)
   return countStart
 }
 

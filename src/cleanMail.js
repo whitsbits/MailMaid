@@ -1,5 +1,5 @@
 /**
- * Get each of the rules and attributes from getUserPropsArr()
+ * Get each of the rules and attributes from getRulesArr()
  * Find messages pertaining to the search
  * step through each thread batch set by 'inc' (default Global var set to 500)
  * process them according to the action 
@@ -9,21 +9,33 @@
  */
 
 function cleanMail() {
-  
   var rules = getRulesArr();
+  let resultsArr = [];
   const scriptStart = new Date();
-  let rulesCached = cache.getNumber('ruleLoopCache');
-  let counter = cache.getNumber('counterCache');
-  let loopBreak = 0;
+  
+  let rulesCached = cache.getNumber('ruleLoopCache'); //get value from cache if app is woken from timout
+  let countStart = cache.getNumber('threadLoopCache'); 
+  let counterCached = cache.getNumber('counterCache'); 
+  let resultsCached = cache.getObject('results');
   
   if (rulesCached === null) {
-    // check to see if the value has not been cached and use zero if it has
+    // check to see if the value has not been cached and use zero to start from begining if it hasn't
     rulesCached = 0;
   }
+  if (resultsCached !== null) {
+    // check to see if the value has not been cached and use zero to start from begining if it hasn't
+    resultsArr = resultsCached;
+  }
+
+rulesloop:
 for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
-  let countStart = 0//getCountStart();
-  listCache();
+  if (rulesCached !== null && counterCached !== null) {
+    // check to see if the app is worken from sleep and get last count value  
+    // and if count has been cached use value to resume count of the process
+    counter = counterCached;
+  };
+
   if (Array.isArray(rules)) {
       var action = rules[i][0];
       var searchString = rules[i][1];
@@ -31,25 +43,25 @@ for (let i = rulesCached; i < rules.length; i++) {
   }else{
     Logger.log (`${user} - No rules set for processing`)
     sendReportEmail(["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
-    loopBreak = 1;
+    break rulesloop;
   }
+
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
     Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
+  
+    if (countStart === null) {
+      // check to see if the value has not been cached and use zero to start from begining if it hasn't
+      countStart = 0;
+    }
 
+    searchloop:
     do {
-   
-      //Use for debugging when Google limits number of daily search calls
-      
-      /*
-      for (let j = 0; j < inc; j++) {
-      Utilities.sleep(10);
-      };
-      */
-      
       const threads = GmailApp.search(searchString, countStart, inc);  // find a block of messages
-    
+      
+
+      threadloop:
       for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
 
         const msgDate = threads[j].getLastMessageDate();
@@ -78,54 +90,43 @@ for (let i = rulesCached; i < rules.length; i++) {
           if (action === 'Purge'){
             Logger.log(`${user} - ${counter} total threads deleted`);
           };
-          cache.putNumber('counterCache', counter) // cache the count
-          cache.putNumber('ruleLoopCache', i); // cache the rule loop location
-          cache.putNumber('threadLoopCache', countStart); // cache the thread loop location
-          listCache();
-          if(triggerActive('cleanMore') === false && triggerActive('countMore') === false){
+          cache.putNumber('counterCache', counter, ttl) // cache the count
+          cache.putNumber('ruleLoopCache', i, ttl); // cache the rule loop location
+          cache.putNumber('threadLoopCache', j, ttl); // cache the thread loop location
+          Logger.log(`${user} - Timed out at partial count of ${counter} in Rule ${i} and Thread ${j}. Values put in cache`);
+          if(triggerActive('cleanMore') === false){
             Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
             setMoreTrigger('cleanMore');
           }else{
             Logger.log (`${user} - Next trigger already Set`)
           }
           
-          loopBreak = 1; // Break the FOR (DO & i) loop(s)
-          break;  // Break the j loop
-      }
-      
-
-
+          break rulesloop;
+         }
       };
-        countStart -= inc; // work backwarads through the inbox in incremental chunks
-        if (loopBreak === 1) {
-          break; //Break for DO loop if there was a TimeOut
-        }
-    } while (countStart > -1);
     
-      if (loopBreak === 1) {
-        break; //Break to For (i) loop if there was a TimeOut
-   };
+    countStart += inc; // work through the inbox in incremental chunks
 
-    if (countStart < 0){
+    } while ((countStart % inc !== 0));
+
       Logger.log(`${user} - ${counter} total threads ${action}d`);
-      cache.putObject(`rule${i}`,{ counter: counter, action: action, searchString:searchString, days:days });
-      countStart = 0;
-    }
-
-  Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
-  threadsCached = null;
-  clearCache('threadLoopCache');
-  clearCache('counterCache');
+      resultsArr.push ([{ id:i, counter:counter, action:action, searchString:searchString, days:days }])
+      cache.putObject(`result`, resultsArr);
+      Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
+      clearCache('threadLoopCache');
+      clearCache('counterCache');
 }
-  if (loopBreak != 1) { //If the loop didnt break, end the processing of the script
+
+//If the loop didnt break, end the processing of the script
+  if (i = rules.length) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
-    Logger.log(`${user} - Final tally: \n ${reportArr}`);
+    Logger.log(`${user} - Final tally: \n ${resultsArr}`);
     var lastRun = JSON.stringify(Date.now());
     userProperties.deleteProperty('lastRunEpoch')
     userProperties.setProperties({'lastRunEpoch': lastRun})
     Logger.log (`${user} - Setting last run data as ${lastRun}`)
-    sendReportEmail(reportArr);
+    sendReportEmail(resultsArr);
   }
 };
 

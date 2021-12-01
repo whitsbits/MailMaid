@@ -5,12 +5,12 @@ const EnhancedCacheService = wrap(CacheService.getUserCache());
 const cache = EnhancedCacheService;
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
-const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');
 const cardSectionDivider = CardService.newDivider();
+const inc = 500; // Inbox Message Iteration Increment
 const timeOutLimit = 285000; // just under 5  mins in MS
-const ttl = 82800; //23 hours
+const ttl = 82800; //23 hours in seconds
 
 function initApp() {
     let init = checkInitStatus();
