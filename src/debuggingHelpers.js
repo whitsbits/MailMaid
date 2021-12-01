@@ -6,12 +6,10 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
-  if (checkLastRun()) {
-    initSchedule();
-  }  
+  timeOutLimit = 5000;  
   clearAllCache();
   removeTriggers('cleanMore');
-  cache.putNumber('ruleLoopCache', 5)
+  cache.putNumber('ruleLoopCache', 4)
   cache.putNumber('threadLoopCache', 1000)
   cleanMail();
 }
