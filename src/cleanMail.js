@@ -12,7 +12,8 @@ function cleanMail() {
   var rules = getRulesArr();
   let resultsArr = [];
   const scriptStart = new Date();
-  
+  let loopBreak = 0;
+
   let rulesCached = cache.getNumber('ruleLoopCache'); //get value from cache if app is woken from timout
   let countStart = cache.getNumber('threadLoopCache'); 
   let counterCached = cache.getNumber('counterCache'); 
@@ -57,11 +58,12 @@ for (let i = rulesCached; i < rules.length; i++) {
     }
 
     searchloop:
-    do {
+    while (loopBreak = 0) {
       const threads = GmailApp.search(searchString, countStart, inc);  // find a block of messages
-      
+      if (threads.length === 0) {
+          break searchloop;
+      }
 
-      threadloop:
       for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
 
         const msgDate = threads[j].getLastMessageDate();
@@ -100,14 +102,13 @@ for (let i = rulesCached; i < rules.length; i++) {
           }else{
             Logger.log (`${user} - Next trigger already Set`)
           }
-          
+          loopBreak = 1;
           break rulesloop;
          }
       };
     
     countStart += inc; // work through the inbox in incremental chunks
-
-    } while ((countStart % inc !== 0));
+    };
 
       Logger.log(`${user} - ${counter} total threads ${action}d`);
       resultsArr.push ([{ id:i, counter:counter, action:action, searchString:searchString, days:days }])
@@ -118,7 +119,7 @@ for (let i = rulesCached; i < rules.length; i++) {
 }
 
 //If the loop didnt break, end the processing of the script
-  if (i = rules.length) {
+  if (loopBreak != 1) {
     clearCache('ruleLoopCache');
     removeTriggers('cleanMore')
     Logger.log(`${user} - Final tally: \n ${resultsArr}`);
