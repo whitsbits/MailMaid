@@ -13,7 +13,6 @@ function cleanMail() {
   let resultsArr = [];
   const scriptStart = new Date();
   let loopBreak = 0;
-  let countStart = 0;
   let rulesCached = cache.getNumber('ruleLoopCache'); //get value from cache if app is woken from timout
   let counterCached = cache.getNumber('counterCache'); 
   let resultsCached = cache.getObject('results');
@@ -29,6 +28,7 @@ function cleanMail() {
 
 rulesloop:
 for (let i = rulesCached; i < rules.length; i++) {
+  let countStart = 0;
   let counter = 0;
   if (counterCached !== null) {
     // check to see if the app is worken from sleep and get last count value  
