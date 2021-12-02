@@ -1,8 +1,10 @@
     function testSendEmail () {
-      sendReportEmail([
+      sendReportEmail(cache.getObject('result'))
+        /*[
         { id:1, counter:10, action:"Purge", searchString:"category:promotions", days:7 },
         { id:2, counter:100, action:"Purge", searchString:"category:social", days:14 }]);
       //(["akward seal","baby shark","cate","doggo","E","face palm"]);
+      **/
     }
     
     /**
