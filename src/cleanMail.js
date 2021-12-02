@@ -50,7 +50,7 @@ for (let i = rulesCached; i < rules.length; i++) {
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
-    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
+    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days} from index ${counter}`);
 
     searchloop:
     while (loopBreak === 0) {
