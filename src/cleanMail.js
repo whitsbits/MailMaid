@@ -13,9 +13,8 @@ function cleanMail() {
   let resultsArr = [];
   const scriptStart = new Date();
   let loopBreak = 0;
-
+  let countStart = 0;
   let rulesCached = cache.getNumber('ruleLoopCache'); //get value from cache if app is woken from timout
-  let countStart = cache.getNumber('threadLoopCache'); 
   let counterCached = cache.getNumber('counterCache'); 
   let resultsCached = cache.getObject('results');
   
@@ -31,10 +30,11 @@ function cleanMail() {
 rulesloop:
 for (let i = rulesCached; i < rules.length; i++) {
   let counter = 0;
-  if (rulesCached !== null && counterCached !== null) {
+  if (counterCached !== null) {
     // check to see if the app is worken from sleep and get last count value  
     // and if count has been cached use value to resume count of the process
     counter = counterCached;
+    countStart = counterCached
   };
 
   if (Array.isArray(rules)) {
@@ -50,15 +50,10 @@ for (let i = rulesCached; i < rules.length; i++) {
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
-    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days}`);
-  
-    if (countStart === null) {
-      // check to see if the value has not been cached and use zero to start from begining if it hasn't
-      countStart = 0;
-    }
+    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days}  from index ${countStart}`);
 
     searchloop:
-    while (loopBreak = 0) {
+    while (loopBreak === 0) {
       const threads = GmailApp.search(searchString, countStart, inc);  // find a block of messages
       if (threads.length === 0) {
           break searchloop;
@@ -94,8 +89,8 @@ for (let i = rulesCached; i < rules.length; i++) {
           };
           cache.putNumber('counterCache', counter, ttl) // cache the count
           cache.putNumber('ruleLoopCache', i, ttl); // cache the rule loop location
-          cache.putNumber('threadLoopCache', j, ttl); // cache the thread loop location
           Logger.log(`${user} - Timed out at partial count of ${counter} in Rule ${i} and Thread ${j}. Values put in cache`);
+          listCache();
           if(triggerActive('cleanMore') === false){
             Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
             setMoreTrigger('cleanMore');
@@ -113,9 +108,9 @@ for (let i = rulesCached; i < rules.length; i++) {
       Logger.log(`${user} - ${counter} total threads ${action}d`);
       resultsArr.push ([{ id:i, counter:counter, action:action, searchString:searchString, days:days }])
       cache.putObject(`result`, resultsArr);
-      Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
-      clearCache('threadLoopCache');
+      Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}`);
       clearCache('counterCache');
+      listCache();
 }
 
 //If the loop didnt break, end the processing of the script
