@@ -50,7 +50,7 @@ for (let i = rulesCached; i < rules.length; i++) {
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
       
-    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days}  from index ${countStart}`);
+    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days} from index ${countStart}`);
 
     searchloop:
     while (loopBreak === 0) {
@@ -59,23 +59,20 @@ for (let i = rulesCached; i < rules.length; i++) {
           break searchloop;
       }
 
-      for (let j = 0; j < threads.length; j++) {  //Start looping the messages in threads
+      for (let j = counter; j < threads.length; j++) {  //Start looping the messages in threads
 
         const msgDate = threads[j].getLastMessageDate();
-  
-        if (action === 'Archive') {
                     
-          if (msgDate < actionDate) {
+        if (msgDate < actionDate) {
+          if (action === 'Archive') {
             threads[j].moveToArchive();
             ++counter;
           }
-        }
           if (action === 'Purge') {
-          if (msgDate < actionDate) {
             threads[j].moveToTrash();
             ++counter;
           }
-        }
+        } // End Threads loop (j)
 
         if (isTimeUp_(scriptStart, timeOutLimit)) {
           /** * When script runs close to the 5 min timeout limit take the count, 
@@ -87,7 +84,7 @@ for (let i = rulesCached; i < rules.length; i++) {
           if (action === 'Purge'){
             Logger.log(`${user} - ${counter} total threads deleted`);
           };
-          cache.putNumber('counterCache', counter, ttl) // cache the count
+          cache.putNumber('counterCache', j, ttl) // cache the count
           cache.putNumber('ruleLoopCache', i, ttl); // cache the rule loop location
           Logger.log(`${user} - Timed out at partial count of ${counter} in Rule ${i} and Thread ${j}. Values put in cache`);
           listCache();
@@ -99,19 +96,18 @@ for (let i = rulesCached; i < rules.length; i++) {
           }
           loopBreak = 1;
           break rulesloop;
-         }
+         } // END TimeOut Condition 
       };
     
     countStart += inc; // work through the inbox in incremental chunks
-    };
+    }; // END While Loop
 
-      Logger.log(`${user} - ${counter} total threads ${action}d`);
       resultsArr.push ([{ id:i, counter:counter, action:action, searchString:searchString, days:days }])
       cache.putObject(`result`, resultsArr);
-      Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}`);
+      Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`);
       clearCache('counterCache');
       listCache();
-}
+} // End Rules loop (i)
 
 //If the loop didnt break, end the processing of the script
   if (loopBreak != 1) {
