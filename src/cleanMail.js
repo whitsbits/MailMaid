@@ -13,28 +13,46 @@ function cleanMail() {
   let resultsArr = [];
   const scriptStart = new Date();
   let loopBreak = 0;
-  let rulesCached = cache.getNumber('ruleLoopCache'); //get value from cache if app is woken from timout
+
+    /**  
+    * check to see if the app is worken from sleep and get last count value  
+    * and if count has been cached use value to resume count of the process
+    */
+  let rulesCached = cache.getNumber('rulesCache');
+  let searchBatchStartCached = cache.getNumber('searchBatchStartCache'); 
+  let threadsCached = cache.getNumber('threadsCache');
   let counterCached = cache.getNumber('counterCache'); 
   let resultsCached = cache.getObject('results');
   
+    /**
+    * Set the init for the start value or the cached value
+    */
   if (rulesCached === null) {
-    // check to see if the value has not been cached and use zero to start from begining if it hasn't
     rulesCached = 0;
   }
+
   if (resultsCached !== null) {
-    // check to see if the value has not been cached and use zero to start from begining if it hasn't
     resultsArr = resultsCached;
   }
 
+
 rulesloop:
 for (let i = rulesCached; i < rules.length; i++) {
-  let countStart = 0;
+
+    /**
+    * Set the init for the start value or the cached value
+    */
+    
+  let searchBatchStart = 0;
+  if (searchBatchStartCached !== null) {
+    searchBatchStart = searchBatchStartCached;
+  };
+  if (threadsCached === null) {
+    threadsCached = 0;
+  };
   let counter = 0;
   if (counterCached !== null) {
-    // check to see if the app is worken from sleep and get last count value  
-    // and if count has been cached use value to resume count of the process
     counter = counterCached;
-    countStart = counterCached
   };
 
   if (Array.isArray(rules)) {
@@ -49,17 +67,17 @@ for (let i = rulesCached; i < rules.length; i++) {
 
   const actionDate = new Date();
       actionDate.setDate(actionDate.getDate() - days);
-      
-    Logger.log (`${user} - Processing inbox with rule set: ${action}, ${searchString}, ${days} from index ${counter}`);
 
     searchloop:
     while (loopBreak === 0) {
-      const threads = GmailApp.search(searchString, countStart, inc);  // find a block of messages
+      const threads = GmailApp.search(searchString, searchBatchStart, inc);  // find a block of messages
+      let batch = (`${searchBatchStart} to ${searchBatchStart + inc}`);
+      Logger.log (`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, ${days}, starting at thread ${threadsCached}.`);
       if (threads.length === 0) {
           break searchloop;
       }
 
-      for (let j = counter; j < threads.length; j++) {  //Start looping the messages in threads
+      for (let j = threadsCached; j < threads.length; j++) {  //Start looping the messages in threads
 
         const msgDate = threads[j].getLastMessageDate();
                     
@@ -75,8 +93,10 @@ for (let i = rulesCached; i < rules.length; i++) {
         } // End Threads loop (j)
 
         if (isTimeUp_(scriptStart, timeOutLimit)) {
-          /** * When script runs close to the 5 min timeout limit take the count, 
-           * cache it and set a trigger to researt after an hour */
+          /** 
+           * When script runs close to the 5 min timeout limit take the count, 
+           * cache it and set a trigger to researt after an hour
+           */
           Logger.log(`${user} - Inbox rules loop time limit exceeded.`);
           if (action === 'Archive'){
             Logger.log(`${user} - ${counter} total threads archived`);
@@ -84,10 +104,19 @@ for (let i = rulesCached; i < rules.length; i++) {
           if (action === 'Purge'){
             Logger.log(`${user} - ${counter} total threads deleted`);
           };
-          cache.putNumber('counterCache', j, ttl) // cache the count
-          cache.putNumber('ruleLoopCache', i, ttl); // cache the rule loop location
-          Logger.log(`${user} - Timed out at partial count of ${counter} in Rule ${i} and Thread ${j}. Values put in cache`);
+          /**
+           * Cache all the placeholders to resume at exact spot after timout ends
+           */
+          cache.putNumber('rulesCache', i, ttl); // cache the rule loop location
+          cache.putNumber('searchBatchStartCache', searchBatchStart, ttl) // cache the count
+          cache.putNumber('threadsCache', j, ttl) // cache the count
+          cache.putNumber('counterCache', counter, ttl) // cache the count
+          Logger.log(`${user} - Timed out in Rule ${i}, Batch start ${searchBatchStart} and Thread ${j} with partial count of ${counter}. Values put in cache`);
           listCache();
+
+          /**
+           * Set the trigger to resume after timeout ends (60min for Add-ons)
+           */
           if(triggerActive('cleanMore') === false){
             Logger.log (`${user} - Setting a trigger to call the cleanMore function.`)
             setMoreTrigger('cleanMore');
@@ -99,14 +128,23 @@ for (let i = rulesCached; i < rules.length; i++) {
          } // END TimeOut Condition 
       };
     
-    countStart += inc; // work through the inbox in incremental chunks
+    searchBatchStart += inc; // work through the inbox in incremental chunks
     }; // END While Loop
 
+    /**
+     * Take the results and build the array needed for the report
+     * Store the array in the cache
+     * clean up the loop placeholder caches
+     */
       resultsArr.push ({ id:i, counter:counter, action:action, searchString:searchString, days:days })
       cache.putObject('result', resultsArr);
       Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`);
+      clearCache('rulesCache');
+      clearCache('searchBatchStartCache');
+      clearCache('threadsCache');
       clearCache('counterCache');
       listCache();
+      batch = '';
 } // End Rules loop (i)
 
 //If the loop didnt break, end the processing of the script

@@ -6,11 +6,13 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
-  timeOutLimit = 8000;  
+  timeOutLimit = 10000;  
   clearAllCache();
   removeTriggers('cleanMore');
-  //cache.putNumber('ruleLoopCache', 4)
-  //cache.putNumber('threadLoopCache', 1000)
+  //cache.putNumber('ruleLoopCache', 2)
+  //cache.putNumber('searchBatchStartCache', 500)
+  //cache.putNumber('threadLoopCache', 299)
+  //cache.putNumber('counterCache', 31)
   cleanMail();
 }
 
@@ -18,21 +20,23 @@ function runDebugNow() {
  * Wrapper for the purge function called by timeOut trigger
  */
  function reunDebugCleanMore() {
-   //timeOutLimit = 8000;
+  timeOutLimit = 20000;
   removeTriggers('cleanMore');
   cleanMail();
 }
 
 function testThreadsEnd() {
+  let increment = 10
   let countStart = 0
   do{
-  var threads = GmailApp.search('category:promotions', countStart, 100);
+  var threads = GmailApp.search('from:stewart.l.whitman@gmail.com', countStart, increment);
   Logger.log (threads.length);
+  let batch = (`${countStart} to ${countStart + increment}`);
   for (let j = 0; j < threads.length; j++){
-    let id = threads[j].getLastMessageDate();
-      Logger.log ("Batch: " + countStart + " - " + id)
+    let id = threads[j].getFirstMessageSubject();
+      Logger.log ("Batch: " + batch + " - " + id)
     }
-    countStart += 100
+    countStart += increment
   } while (threads.length > 0);
 }
 

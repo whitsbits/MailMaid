@@ -3,15 +3,17 @@
    /**
    * Function to return array of cache labels in use
    * MUST be manually maintained
-   * no way to query AppScript to return this list
+   * no way to query AppScript to return this list.
+   * use synthValue for setting up synthtic cache for testing
    */ 
   
    function getCacheArray() {
      return [
-       {name:'counterCache', type:'Number', synthValue:1250},
-       {name:'ruleLoopCache', type:'Number', synthValue:3},
-       {name:'threadLoopCache', type:'Number',synthValue:25},
-       {name:'result', type:'Object', synthValue:[{ id:3, counter:1250, action:"Purge", searchString:"category:promotions", days:7 }]},
+       {name:'rulesCache', type:'Number', synthValue:3},
+       {name:'searchBatchStartCache', type:'Number', synthValue:500},
+       {name:'threadsCache', type:'Number',synthValue:82},
+       {name:'counterCache', type:'Number', synthValue:31},
+       {name:'result', type:'Object', synthValue:[{ id:3, counter:31, action:"Purge", searchString:"category:promotions", days:7 }]},
        {name:'editRuleNum', type:'String', synthValue:'rule0'}
        ]
    }
@@ -27,7 +29,7 @@
 
 
   /**
-   * Clears the cache(s)
+   * Clears ALLthecache(s)
    */
   
   function clearAllCache() {
@@ -41,7 +43,7 @@
     }
 
     /**
-   * list the cache(s) values
+   * list ALLthe cache(s) values
    */
   function listCache() {
     var cacheArr = getCacheArray();
@@ -55,7 +57,9 @@
     Logger.log (user + " - \nCurrent cached values are: \n" + cacheList)
     }
 
-
+    /**
+   * setup ALLthe cache(s) with synthetic values for testing
+   */
     function setSyntheticCaches() {
       var cacheArr = getCacheArray();
       for (let i=0; i < cacheArr.length; i++) {
