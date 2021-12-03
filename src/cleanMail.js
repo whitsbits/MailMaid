@@ -18,22 +18,12 @@ function cleanMail() {
     * check to see if the app is worken from sleep and get last count value  
     * and if count has been cached use value to resume count of the process
     */
+
   let rulesCached = cache.getNumber('rulesCache');
-  let searchBatchStartCached = cache.getNumber('searchBatchStartCache'); 
-  let threadsCached = cache.getNumber('threadsCache');
-  let counterCached = cache.getNumber('counterCache'); 
-  let resultsCached = cache.getObject('results');
-  
-    /**
-    * Set the init for the start value or the cached value
-    */
   if (rulesCached === null) {
     rulesCached = 0;
   }
 
-  if (resultsCached !== null) {
-    resultsArr = resultsCached;
-  }
 
 
 rulesloop:
@@ -42,18 +32,13 @@ for (let i = rulesCached; i < rules.length; i++) {
     /**
     * Set the init for the start value or the cached value
     */
-    
+  let searchBatchStartCached = cache.getNumber('searchBatchStartCache');   
   let searchBatchStart = 0;
   if (searchBatchStartCached !== null) {
     searchBatchStart = searchBatchStartCached;
   };
-  if (threadsCached === null) {
-    threadsCached = 0;
-  };
+
   let counter = 0;
-  if (counterCached !== null) {
-    counter = counterCached;
-  };
 
   if (Array.isArray(rules)) {
       var action = rules[i][0];
@@ -70,14 +55,23 @@ for (let i = rulesCached; i < rules.length; i++) {
 
     searchloop:
     while (loopBreak === 0) {
+      let threadsCached = cache.getNumber('threadsCache');
+      let threadsCount = 0;
+      if (threadsCached !== null) {
+        threadsCount = threadsCached;
+      };
+      let counterCached = cache.getNumber('counterCache');
+      if (counterCached !== null) {
+        counter = counterCached;
+      };
       const threads = GmailApp.search(searchString, searchBatchStart, inc);  // find a block of messages
-      let batch = (`${searchBatchStart} to ${searchBatchStart + inc}`);
-      Logger.log (`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, ${days}, starting at thread ${threadsCached}.`);
+      let batch = (`${searchBatchStart} to ${searchBatchStart + threads.length}`);
+      Logger.log (`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, ${days}, starting at thread ${threadsCount}.`);
       if (threads.length === 0) {
           break searchloop;
       }
 
-      for (let j = threadsCached; j < threads.length; j++) {  //Start looping the messages in threads
+      for (let j = threadsCount; j < threads.length; j++) {  //Start looping the messages in threads
 
         const msgDate = threads[j].getLastMessageDate();
                     
@@ -129,6 +123,7 @@ for (let i = rulesCached; i < rules.length; i++) {
       };
     
     searchBatchStart += inc; // work through the inbox in incremental chunks
+    clearCache('threadsCache');
     }; // END While Loop
 
     /**
@@ -136,6 +131,10 @@ for (let i = rulesCached; i < rules.length; i++) {
      * Store the array in the cache
      * clean up the loop placeholder caches
      */
+      let resultsCached = cache.getObject('results');
+      if (resultsCached !== null) {
+        resultsArr = resultsCached;
+      }
       resultsArr.push ({ id:i, counter:counter, action:action, searchString:searchString, days:days })
       cache.putObject('result', resultsArr);
       Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`);
