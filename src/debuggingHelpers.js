@@ -6,7 +6,7 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
-  timeOutLimit = 18000;  
+  timeOutLimit = 3000;  
   clearAllCache();
   removeTriggers('cleanMore');
   //cache.putNumber('ruleLoopCache', 2)
@@ -20,7 +20,7 @@ function runDebugNow() {
  * Wrapper for the purge function called by timeOut trigger
  */
  function runDebugCleanMore() {
-  timeOutLimit = 200000;
+  timeOutLimit = 100000;
   removeTriggers('cleanMore');
   cleanMail();
 }
