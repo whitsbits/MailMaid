@@ -7,6 +7,7 @@
  */
 
 function MailMaid() { 
+    clearAllCache();
     removeTriggers('cleanMore');
     cleanMail();
   }

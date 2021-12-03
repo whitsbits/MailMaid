@@ -102,8 +102,8 @@ for (let i = rulesCached; i < rules.length; i++) {
     countStart += inc; // work through the inbox in incremental chunks
     }; // END While Loop
 
-      resultsArr.push ([{ id:i, counter:counter, action:action, searchString:searchString, days:days }])
-      cache.putObject(`result`, resultsArr);
+      resultsArr.push ({ id:i, counter:counter, action:action, searchString:searchString, days:days })
+      cache.putObject('result', resultsArr);
       Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`);
       clearCache('counterCache');
       listCache();
