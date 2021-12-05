@@ -46,7 +46,7 @@ Logger.log (test)
 }
 
 function getHash() {
-  const user = "kplachhwani@gmail.com"
+  const user = "stew@pasighudson.com"
   const userString = String(user)
   const userhash = MD5( userString, false );
   Logger.log (userhash)
