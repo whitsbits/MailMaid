@@ -44,6 +44,7 @@ for (let i = rulesCached; i < rules.length; i++) {
   }else{
     Logger.log (`${user} - No rules set for processing`)
     sendReportEmail(["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
+    loopBreak = 1;
     break rulesloop;
   }
 
