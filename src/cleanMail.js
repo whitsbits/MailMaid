@@ -74,14 +74,14 @@ for (let i = rulesCached; i < rules.length; i++) {
             threads[j].moveToTrash();
             ++counter;
           }
-        } // End Threads loop (j)
 
         if (isTimeUp_(scriptStart, timeOutLimit)) {
-          timeOut(i,searchBatchStart, j, counter);
+          timeOut(i, searchBatchStart, j, counter);
           loopBreak = 1;
           break rulesloop;
          }
-    
+    } // End Threads loop (j)
+
     searchBatchStart += inc; // work through the inbox in incremental chunks
     clearCache('threadsCache');
     }; // END While Loop
