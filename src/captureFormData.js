@@ -43,7 +43,6 @@ function captureRuleFormData(e) {
         var jarray = JSON.stringify(rule);
         Logger.log (`${user} - Key set as ${key}`);
     try {
-      var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({[key] : jarray});
     } 
     catch (e) {

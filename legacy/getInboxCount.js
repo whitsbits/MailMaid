@@ -15,6 +15,23 @@ function getInboxCount(inc) {
   
   let total = 0;
   const scriptStart = new Date();
+
+  let inBoxCache = cache.getNumber('inBoxCache');
+  if (inBoxCache === null){
+    inBoxCache = 0
+    Logger.log (`${user} - Starting Inbox count from 0`);
+  }else{
+    inBoxCache = parseInt(inBoxCache);
+  }
+  const inBoxCounted = cache.getBoolean('inBoxCounted');
+
+  if (inBoxCounted){
+    Logger.log (`${user} - Using cached Inbox count of: ${inBoxCache}`);
+    return inBoxCache;
+  }else if (inBoxCache != null){
+    Logger.log(`${user} - Resuming Inbox count from ${inBoxCache}`);
+      total += inBoxCache;
+  }
   
   do {
     var page = GmailApp.search('', total, inc); /** * GAS wont accept 'let' here, need to use 'var'. 
@@ -24,8 +41,8 @@ function getInboxCount(inc) {
       /** * When script runs close to the 5 min timeout limit take the count, 
        * cache it and set a trigger to researt after 2 mins */
       Logger.log(`${user} - Setting Trigger to resume counting InBox at ${total}`)
-      makeCache('inBoxCache', total); // cache for 23 hours
-      makeCache('inBoxCounted', false); // cache for 23 hours
+        cache.putNumber('inBoxCache', total); // cache for 23 hours
+        cache.putBoolean('inBoxCounted', true); // cache for 23 hours
       setMoreTrigger('countMore'); //set trigger to restart script
       return false
     } 
@@ -35,7 +52,7 @@ function getInboxCount(inc) {
 } while (page.length > 0);
 
   Logger.log(`${user} - The total Inbox is ${total}`);
-  makeCache('inBoxCache', total); // cache for 23 hours
-  makeCache('inBoxCounted', true); // cache for 23 hours
+  cache.putNumber('inBoxCache', total); // cache for 23 hours
+  cache.putBoolean('inBoxCounted', true); // cache for 23 hours
   return total;
 }

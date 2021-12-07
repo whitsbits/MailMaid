@@ -6,19 +6,47 @@
  * Run a debug with fresh values for triggers and caches
  */
 function runDebugNow() {
+  timeOutLimit = 3000;  
   clearAllCache();
   removeTriggers('cleanMore');
-  makeCache('inBoxCounted', true);
-  removeTriggers('countMore');
-  makeCache('inBoxCache', 28000);
-  //makeCache('ruleLoopCache', 4)
-  //makeCache('threadLoopCache', 1000)
+  //cache.putNumber('ruleLoopCache', 2)
+  //cache.putNumber('searchBatchStartCache', 500)
+  //cache.putNumber('threadLoopCache', 299)
+  //cache.putNumber('counterCache', 31)
   cleanMail();
 }
 
+ /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+ function runDebugCleanMore() {
+  timeOutLimit = 100000;
+  removeTriggers('cleanMore');
+  cleanMail();
+}
+
+function testThreadsEnd() {
+  let increment = 10
+  let countStart = 0
+  do{
+  var threads = GmailApp.search('from:stewart.l.whitman@gmail.com', countStart, increment);
+  Logger.log (threads.length);
+  let batch = (`${countStart} to ${countStart + increment}`);
+  for (let j = 0; j < threads.length; j++){
+    let id = threads[j].getFirstMessageSubject();
+      Logger.log ("Batch: " + batch + " - " + id)
+    }
+    countStart += increment
+  } while (threads.length > 0);
+}
+
+function testCache() {
+var test = cache.getObject('rule5')
+Logger.log (test)
+}
 
 function getHash() {
-  const user = "kplachhwani@gmail.com"
+  const user = "stew@pasighudson.com"
   const userString = String(user)
   const userhash = MD5( userString, false );
   Logger.log (userhash)
@@ -27,6 +55,36 @@ function getHash() {
 function zeroLicense() {
   userProperties.setProperties({"license" : ""})
 }
+
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function deleteTrigger(triggerId) {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    if (allTriggers[i].getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(allTriggers[i]);
+      break;
+    }
+  }
+}
+
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function listTriggers() {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    var currTrigger = allTriggers[i].getUniqueId()
+      Logger.log(currTrigger);
+    }
+  }
 
   /**
  * Clean up on aisle More trigger
@@ -122,7 +180,7 @@ userProperties.setProperties({[newKey] : jarray});
 
 function loadRules() {
   clearAllRules();
-  makeCache('editRuleNum', 'rule0');
+  cache.putString('editRuleNum', 'rule0');
     userProperties.setProperties({rule1 : JSON.stringify(['Purge','category:promotions','7'])});
     userProperties.setProperties({rule2 : JSON.stringify(['Purge','category:social','7'])});
     userProperties.setProperties({rule3 : JSON.stringify(["Archive","category:updates","30"])});

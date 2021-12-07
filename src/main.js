@@ -1,16 +1,16 @@
 /**
  * Global Variables
  */
-let reportArr = [];
+const EnhancedCacheService = wrap(CacheService.getUserCache());
+const cache = EnhancedCacheService;
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
-const cache = CacheService.getUserCache();
-const inc = 500; // InBox Iteration Increment
 const whiteSpace = CardService.newTextParagraph()
           .setText('\n');
 const cardSectionDivider = CardService.newDivider();
-const timeOutLimit = 285000; // just under 5  mins in MS
-
+const inc = 500; // Inbox Message Iteration Increment
+let timeOutLimit = 285000; // just under 5  mins in MS
+let ttl = 82800; //23 hours in seconds
 
 function initApp() {
     let init = checkInitStatus();
@@ -21,7 +21,9 @@ function initApp() {
       userProperties.setProperties({'initialized':true});
       Logger.log (`${user} - App Initialized` );
     }else{
-      initSchedule(); //clear any "This trigger has been disabled for an unknown reason."
+      if (checkLastRun()) { //clear any "This trigger has been disabled for an unknown reason."
+        initSchedule();
+      }
       Logger.log (`${user} - App already initialized`);
     }
     return true;
@@ -310,7 +312,7 @@ function disclosuresSection() {
  */
   function onModeChange(e) {
     let ruleNum = (e.formInput.editRule);
-    makeCache('editRuleNum', ruleNum);
+    cache.putString('editRuleNum', ruleNum);
     let ruleElementsArr = reportRulesArrElements(ruleNum);
     Logger.log (`${user} - The element array is: ${ruleElementsArr}`);
     var action = ruleElementsArr[0];

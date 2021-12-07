@@ -6,13 +6,34 @@
  * Sets the environmental variable to baseline before running the main process
  */
 
-function MailMaid() {
-    removeDupeTriggers();
+function MailMaid() { 
+    clearAllCache();
     removeTriggers('cleanMore');
-    //makeCache('inBoxCounted', false);
-    //removeTriggers('countMore');
     cleanMail();
   }
+
+/**
+ * Check that the schedule is working
+ */  
+
+function checkLastRun() {
+  let schedule = getScheduleArr();
+  if (schedule === null){
+    initSchedule();
+    schedule = getScheduleArr();
+  }
+  let days= parseInt((schedule[0]),10);
+  Logger.log (`${user} - Has schedule MailMaid every ${days}`)
+  var maxTime = Math.round(+days * 86400000)
+  var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'),10);
+  var elapsedTime = (Date.now() - lastRunEpoch);
+  if (elapsedTime > maxTime){
+    Logger.log (`${user} - Schedule is failing`)
+    return true
+  }
+  Logger.log (`${user} - Schedule is working`)
+  return false
+}
 
   /**
  * Wrapper for the purge function called by timeOut trigger
@@ -21,16 +42,6 @@ function MailMaid() {
   removeTriggers('cleanMore');
   cleanMail();
 }
-
-  /**
- * Wrapper for the inbox count function called by timeOut trigger
- */
- function countMore() {
-  removeTriggers('countMore');
-  makeCache('inBoxCounted', false);
-  cleanMail();
-}
-
 
   /**
  * Function to clear all rules data from the userProperties
@@ -95,8 +106,8 @@ function initSchedule() {
         var everyDays = 1
   }else{
       let schedule = getScheduleArr();
-      var atHour = schedule[0]
-      var everyDays = schedule[1]
+      var atHour = schedule[1]
+      var everyDays = schedule[0]
   }
     userProperties.setProperties({'schedule' : JSON.stringify([atHour, everyDays])})
     removeTriggers('MailMaid');
@@ -105,7 +116,7 @@ function initSchedule() {
 }
 
 function initRules() {
-  makeCache('editRuleNum', 'rule0');
+  cache.putString('editRuleNum', 'rule0');
 }
 
   /**
@@ -120,43 +131,6 @@ function checkInitStatus() {
       }
 }
 
-
-/**
- * Put or remove data into cache
- */
-
- function makeCache (name, data) {
-  cache.put(name, data, 82800) //23 hour cache
-  Logger.log (`${user} - Added ${name} cache with value: ${data}`)
-}
-
-function clearCache (name) {
-  cache.remove(name)
-  Logger.log (`${user} - Removed ${name} cache.`)
-}
-
-  /**
- * Clears the cache(s)
- */
-
-function clearAllCache() {
-  cache.remove('inBoxCache');
-  cache.remove('inBoxCounted');
-  cache.remove('ruleLoopCache');
-  cache.remove('threadLoopCache');
-  Logger.log (`${user} - All Caches Cleared`)
-    }
-  /**
- * list the cache(s) values
- */
-function listCache() {
-  Logger.log (user + " - Current cached values are: \n" + 
-            "inboxNum: " + cache.get('inBoxCache') + "\n" +
-            "inBoxCounted: " + cache.get('inBoxCounted') + "\n" +
-            "ruleNum: " + cache.get('ruleLoopCache') + "\n" +
-            "threadNum: " + cache.get('threadLoopCache') + "\n" +
-            "editRuleNum: " + cache.get('editRuleNum'));
-  }
 /**
  * Returns userProperties in the PropertyService
  * sorts the objects and converts the object to an array 
@@ -211,27 +185,14 @@ function getScheduleArr() {
  *  * @return {countStart} the index number for where to start the process
  */
 function getCountStart() {
-  let inBoxCounted = JSON.parse(cache.get('inBoxCounted').toLowerCase());
-  let inBoxCache = cache.get('inBoxCache');
-        if (inBoxCache === null){
-          inBoxCache = 0
-        }else{
-          inBoxCache = parseInt(inBoxCache);
-        }
-  let threadsCached = cache.get('threadLoopCache');
-
-  if (!inBoxCounted) {
-    Logger.log (`${user} - Continuing Inbox count from: ${inBoxCache}`)
-    countStart = getInboxCount(inc);
-    // check to see if inBox count is complete
-  }else if (threadsCached === null) {
-    countStart = inBoxCache;
-    Logger.log (`${user} - Using cached Inbox of: ${inBoxCache}`)
+  let threadsCached = cache.getNumber('threadLoopCache');
+ if (threadsCached === null) {
+    countStart = 0;
+    Logger.log (`${user} - Starting Inbox count from 0`)
   }else{
     countStart = threadsCached;
     Logger.log (`${user} - Using cached threads of: ${threadsCached}`)
   };
-  Logger.log (`${user} - Returning Starting count of ${countStart}`)
   return countStart
 }
 
