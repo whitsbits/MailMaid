@@ -18,6 +18,5 @@ Warn before Delete All
 Compress dupe Rule input code
 Investigate Suggestion Picker
 default rule for "Purge, subject:(MailMaid Results), 3 days"
-investigate performance of using older_than:7d in Gmail.search and action all.
-investigate adding preview rule to UI
+investigate adding rule preview rule to UI
 
