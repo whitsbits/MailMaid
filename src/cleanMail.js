@@ -9,19 +9,17 @@
  */
 
 function cleanMail() {
-  var rules = getRulesArr();
   const scriptStart = new Date();
+  var rules = getRulesArr();
   let loopBreak = 0;
-
     /**  
     * check to see if the app is worken from sleep and get last count value  
     * and if count has been cached use value to resume count of the process
     */
-
   let rulesCached = cache.getNumber('rulesCache');
   if (rulesCached === null) {
     rulesCached = 0;
-  }
+  };
 
 rulesloop:
 for (let i = rulesCached; i < rules.length; i++) {
@@ -35,22 +33,19 @@ for (let i = rulesCached; i < rules.length; i++) {
     searchBatchStart = searchBatchStartCached;
   };
 
-  let counter = 0;
-
+  let counter = 0
   if (Array.isArray(rules)) {
-      var action = rules[i][0];
-      var searchString = rules[i][1];
-      var days = rules[i][2];
-  }else{
+    var action = rules[i][0];
+    var searchString = rules[i][1];
+    var days = rules[i][2];
+}else{
     Logger.log (`${user} - No rules set for processing`)
     sendReportEmail(["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
     loopBreak = 1;
     break rulesloop;
   }
-
-  const actionDate = new Date();
-      actionDate.setDate(actionDate.getDate() - days);
-
+  searchString = searchQueryBuilder(action, searchString, days);
+    
     searchloop:
     while (loopBreak === 0) {
       let threadsCached = cache.getNumber('threadsCache');
@@ -64,16 +59,13 @@ for (let i = rulesCached; i < rules.length; i++) {
       };
       const threads = GmailApp.search(searchString, searchBatchStart, inc);  // find a block of messages
       let batch = (`${searchBatchStart} to ${searchBatchStart + threads.length}`);
-      Logger.log (`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, ${days}, starting at thread ${threadsCount}.`);
+      Logger.log (`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, starting at thread ${threadsCount}.`);
       if (threads.length === 0) {
           break searchloop;
       }
 
       for (let j = threadsCount; j < threads.length; j++) {  //Start looping the messages in threads
-
-        const msgDate = threads[j].getLastMessageDate();
                     
-        if (msgDate < actionDate) {
           if (action === 'Archive') {
             threads[j].moveToArchive();
             ++counter;
@@ -89,7 +81,6 @@ for (let i = rulesCached; i < rules.length; i++) {
           loopBreak = 1;
           break rulesloop;
          }
-      };
     
     searchBatchStart += inc; // work through the inbox in incremental chunks
     clearCache('threadsCache');
@@ -103,7 +94,15 @@ for (let i = rulesCached; i < rules.length; i++) {
   }
 };
 
-
+function searchQueryBuilder(action, searchString, days) {
+let query = '';
+if (action === "Archive"){
+  query = (searchString + " " + "in:inbox" + " " + "older_than:" + days +"d");
+}else if (action === "Purge"){
+  query = (searchString + " " + "older_than:" + days +"d");
+}
+  return query
+}
 
 
 /** 
