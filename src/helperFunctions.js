@@ -18,6 +18,10 @@ function MailMaid() {
 
 function checkLastRun() {
   let schedule = getScheduleArr();
+  if (schedule === null){
+    initSchedule();
+    schedule= getScheduleArr();
+  }
   let days= parseInt((schedule[0]),10);
   Logger.log (`${user} - Has schedule MailMaid every ${days}`)
   var maxTime = Math.round(+days * 86400000)
