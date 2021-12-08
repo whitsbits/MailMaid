@@ -3,7 +3,7 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
 */
 
 function sendSenderEmail () {
-  sendReportEmail(sender_list());
+  sendReportEmail('src/senders-email.html', sender_list());
 }
 
 
@@ -19,7 +19,7 @@ function sender_list() {
 
 searchloop:
   do{
-    var inbox_threads=GmailApp.search('-in:spam in:inbox',total,inc);
+    var inbox_threads=GmailApp.search('-in:spam',total,inc);
     if (inbox_threads.length === 0) {
           break searchloop;
       }
@@ -63,8 +63,21 @@ searchloop:
   sh.appendRow(['Email Address']);
   sh.getRange(2, 1,sender_array.length,2).setValues(sender_array).sort({column:2,decending:true});
 */
-  return sender_array;
+
+var topValues = sender_array.sort(decendingSort).slice(0,5);
+console.log(topValues);
+
+  return topValues;
 
   }
 
+
+function decendingSort(a, b) {
+    if (b[1] === a[1]) {
+        return 0;
+    }
+    else {
+        return (b[1] < a[1]) ? -1 : 1;
+    }
+}
   

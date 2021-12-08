@@ -1,6 +1,8 @@
     function testSendEmail () {
-      sendReportEmail(cache.getObject('result'))
-        /*[
+      sendReportEmail('src/report-email.html',["MailMaid had no rules to process your Inbox","Please set up your rules in the app."]);
+        /*
+        cache.getObject('result')
+        [
         { id:1, counter:10, action:"Purge", searchString:"category:promotions", days:7 },
         { id:2, counter:100, action:"Purge", searchString:"category:social", days:14 }]);
       //(["akward seal","baby shark","cate","doggo","E","face palm"]);
@@ -13,11 +15,11 @@
      *                           one line per array element
     */
 
-    function sendReportEmail(results) {
+    function sendReportEmail(template, results) {
       
       var recipient = Session.getActiveUser().getEmail();
       var subject = 'MailMaid Results';     
-      var message = getEmailHTML(results)
+      var message = getEmailHTML(template, results)
 
       MailApp.sendEmail({
         to: recipient,
@@ -28,8 +30,8 @@
     }
 
 
-function getEmailHTML(results) {
-  var templ = HtmlService.createTemplateFromFile('src/report-email.html');
+function getEmailHTML(template, results) {
+  var templ = HtmlService.createTemplateFromFile(template);
   templ.results = results;
   var htmlBody = templ.evaluate().getContent();
   return htmlBody

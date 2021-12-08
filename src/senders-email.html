@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <b>MailMaid sucessfully processed the following results:</b><br><br>
+
+    <table class="wp-table" style="border: 1px solid #ccc;table-layout: auto;border-collapse: collapse;border-spacing: 0;width: 40%;display: table;font-size: 13px!important;">
+      <tr style="border-bottom: 1px solid #ddd;background-color: #347ff7">
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Sender</td>
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Number of Threads</td>
+      </tr>
+      <? for (var i = 0; i < results.length; i++) { ?>
+        <? if (i % 2 === 0) { ?>
+        <tr style="border-bottom: 1px solid #ddd;background-color: #fff">
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][0] ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][1] ?></td>         
+        </tr>
+        <? }else {?>  
+        <tr style="border-bottom: 1px solid #ddd;background-color: #f1f1f1;">
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][0] ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][1] ?></td>
+    </tr>
+        <? } ?>
+      <? } ?>
+    </table>
+</body>
+</html>
