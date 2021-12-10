@@ -27,7 +27,7 @@ function callSenderListPaged() {
       for(var i = 0; i < inbox_threads.messages.length; i++) {
       var message = inbox_threads.messages[i].getMessages();
       for(var j = 0;j < message.length; j++) {
-        var sender = message[x].getFrom();  
+        var sender=GmailApp.getMessageById(list.messages[i].id).getFrom(); 
         if(uA.indexOf(sender)==-1) {
           uA.push(sender);
           sender_array.push([sender]);

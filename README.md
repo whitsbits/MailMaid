@@ -19,4 +19,5 @@ Compress dupe Rule input code
 Investigate Suggestion Picker
 default rule for "Purge, subject:(MailMaid Results), 3 days"
 investigate adding rule preview rule to UI
+investigate https://gist.github.com/isiahmeadows/63716b78c58b116c8eb7#file-gmail-filter-by-search-query-md
 
