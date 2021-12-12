@@ -3,40 +3,56 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
 */
 
 function sendSenderEmail () {
-  sendReportEmail('src/senders-email.html', sender_list());
+  sendReportEmail('src/senders-email.html', countSenders());
 }
 
 
-function sender_list() {
+function countSenders() {
   const scriptStart = new Date();
-  var total = 0;
+  let loopBreak = 0;
+
+      /**  
+    * check to see if the app is worken from sleep and get last count value  
+    * and if count has been cached use value to resume count of the process
+    */
+
+  var total = cache.getNumber('sendersCache');
+  if (total === null){
+    total = 0;
+  };
+
+  Logger.log (`${user} - Starting Sender count from ${total}`);
 
   let sender_array = cache.get('senderArr');
-      if (sender_array === null){
-        sender_array = []
-        Logger.log (`${user} - Starting Sender count from 0`);
-      }
+    if (sender_array === null){
+      sender_array = [];
+    };  
+  let uA = cache.getObject('senderuA')
+  if (uA === null){
+    uA = [];
+  };
+  let cObj = cache.getObject('sendercObj');
+  if (cObj === null){
+    cObj = {};
+  };
 
 searchloop:
   do{
-    var inbox_threads=GmailApp.search('-in:spam',total,inc);
-    if (inbox_threads.length === 0) {
+    let threadsCached = cache.getNumber('senderThreadsCache');
+      let threadsCount = 0;
+      if (threadsCached !== null) {
+        threadsCount = threadsCached;
+      };
+
+    var threads=GmailApp.search('-in:spam', total, inc);
+    let batch = (`${total} to ${total + threads.length}`);
+      Logger.log (`${user} - Processing batch ${batch} starting at thread ${threadsCount}.`);
+    if (threads.length === 0) {
           break searchloop;
       }
 
-    var uA=[];
-    var cObj={};
-    if (isTimeUp_(scriptStart, timeOutLimit)) {
-      /** * When script runs close to the 5 min timeout limit take the count, 
-       * cache it and set a trigger to researt after 2 mins */
-      Logger.log(`${user} - Setting Trigger to resume counting Senders at ${total}`)
-      makeCache('sendersCache', total); // cache for 23 hours
-      makeCache('senderArr', sender_array); // cache for 23 hours
-      setMoreTrigger('countMoreSenders'); //set trigger to restart script
-    }
-
-    for(var i=0;i<inbox_threads.length;i++) {
-      var message=inbox_threads[i].getMessages();
+    for(var i=threadsCount;i<threads.length;i++) {
+      var message=threads[i].getMessages();
       for(var x=0;x<message.length; x++) {
         var sender=message[x].getFrom();  
         if(uA.indexOf(sender)==-1) {
@@ -46,30 +62,41 @@ searchloop:
         }else{
           cObj[sender]+=1;
         }
+        if (isTimeUp_(scriptStart, timeOutLimit)) {
+          /** * When script runs close to the 5 min timeout limit take the count, 
+           * cache it and set a trigger to researt after 2 mins */
+          Logger.log(`${user} - Setting Trigger to resume counting Senders at ${total}`)
+          cache.putNumber('sendersCache', total, ttl); // cache for 23 hours
+          cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
+          cache.putObject('senderuA', uA, ttl)
+          cache.putObject('sendercObj', cObj, ttl)
+          setMoreTrigger('countMoreSenders'); //set trigger to restart script
+          loopBreak = 1;
+          break searchloop;
+        }
       }
     }
-    
-    sender_array.forEach(function(r){
-      r.splice(1,0,cObj[r[0]]);
-    });
 
-    total -= inbox_threads.length;
-  }while (total > 0);
+    total += inc;
+  }while (threads.length > 0);
 
-/**
-  var ss=SpreadsheetApp.openById('1QNm63pG8fe9ezMfOnvv4_Im-GgrHQyeMVLFxm-k8v-Y')
-  var sh=ss.getActiveSheet()
-  sh.clear();
-  sh.appendRow(['Email Address']);
-  sh.getRange(2, 1,sender_array.length,2).setValues(sender_array).sort({column:2,decending:true});
-*/
+if (loopBreak != 1){  
+  sender_array.forEach(function(r){
+    r.splice(1,0,cObj[r[0]]);
+  });
 
-var topValues = sender_array.sort(decendingSort).slice(0,5);
-console.log(topValues);
+  var topValues = sender_array.sort(decendingSort).slice(0,5);
+
+  clearCache('sendersCache');
+  clearCache('senderArr');
+  clearCache('senderuA');
+  clearCache('sendercObj');
+
+  console.log(topValues);
 
   return topValues;
-
   }
+}
 
 
 function decendingSort(a, b) {

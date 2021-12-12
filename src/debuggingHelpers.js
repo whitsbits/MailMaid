@@ -5,7 +5,7 @@
   /**
  * Run a debug with fresh values for triggers and caches
  */
-function runDebugNow() {
+function runDebugCleanNow() {
   timeOutLimit = 3000;  
   clearAllCache();
   removeTriggers('cleanMore');
@@ -14,6 +14,17 @@ function runDebugNow() {
   //cache.putNumber('threadLoopCache', 299)
   //cache.putNumber('counterCache', 31)
   cleanMail();
+}
+
+function runDebugSendersNow() {
+  timeOutLimit = 3000;  
+  clearAllCache();
+  removeTriggers('countMoreSenders');
+  //cache.putNumber('sendersCache', total, ttl); // cache for 23 hours
+  //cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
+  //cache.putObject('senderuA', uA, ttl)
+  //cache.putObject('sendercObj', cObj, ttl)
+  sendSenderEmail();
 }
 
  /**

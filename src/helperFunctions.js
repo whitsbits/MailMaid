@@ -13,6 +13,32 @@ function MailMaid() {
   }
 
 /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+ function cleanMore() {
+  removeTriggers('cleanMore');
+  cleanMail();
+}
+
+  /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+   function countMoreSenders() {
+    removeTriggers('countMoreSenders');
+    countSenders();
+  }
+
+  
+/**
+ * Header info for all log lines
+ * @returns Header info for all logging
+ */
+function logLine(message) {
+  let logLine = console.log(`${user} - ${message}`);
+  return logLine
+}
+
+/**
  * Check that the schedule is working
  */  
 
@@ -35,13 +61,6 @@ function checkLastRun() {
   return false
 }
 
-  /**
- * Wrapper for the purge function called by timeOut trigger
- */
- function cleanMore() {
-  removeTriggers('cleanMore');
-  cleanMail();
-}
 
   /**
  * Function to clear all rules data from the userProperties
