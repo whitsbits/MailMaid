@@ -2,32 +2,24 @@
 https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-sender
 */
 
-function callSenderListPaged() {
-  cache.remove('senderArr')
-  sender_list_paged();
-}
-
   function sender_list_paged(token) {
+    const scriptStart = new Date();
     var token=token||null;
     var query="-in:spam"; 
-    let sender_array = cache.getObject('senderArr');
-      if (sender_array === null){
-        sender_array = []
-        Logger.log (`${user} - Starting Sender count from 0`);
-      }else{
-        Logger.log (`${user} - Starting Sender count from ${sender_array.length}`);
-      }
-
+    let sender_array = []
     var uA=[];
     var cObj={}; //Count of messages
 
+    searchloop:
     do{
-      var inbox_threads=Gmail.Users.Messages.list('me', {maxResults:100,pageToken:token,q:query});
-      Logger.log (inbox_threads.messages.length);
-      for(var i = 0; i < inbox_threads.messages.length; i++) {
-      var message = inbox_threads.messages[i].getMessages();
-      for(var j = 0;j < message.length; j++) {
-        var sender=GmailApp.getMessageById(list.messages[i].id).getFrom(); 
+      var threads=Gmail.Users.Messages.list('me', {maxResults:100, pageToken:token, q:query});
+      Logger.log (`${user} - Processing page${token}.`);
+      if (threads.length === 0) {
+        break searchloop;
+      }
+
+      for(var i=0;i<threads.messages.length;i++) {
+        var sender=GmailApp.getMessageById(threads.messages[i].id).getFrom();
         if(uA.indexOf(sender)==-1) {
           uA.push(sender);
           sender_array.push([sender]);
@@ -36,19 +28,23 @@ function callSenderListPaged() {
           cObj[sender]+=1;
         }
       }
-    }
-      token=inbox_threads.nextPageToken
 
-      if (token !== (null || undefined)) {
-        cache.getNumber("lastpagetoken", token);
+        if (isTimeUp_(scriptStart, timeOutLimit)) {
         cache.putObject("senderArr", sender_array);
-        //Logger.log (`Putting ${sender_array} to cache`)
+        setMoreTrigger('countMoreSendersAPI'); //set trigger to restart script
+      };
+
+      token=threads.nextPageToken
+      cache.putString('lastPageToken',token)
+      if (token !== (null || undefined)) {
+        cache.getString("lastPageToken", token);
         Logger.log (`LastToken Saved as ${token}`);
         sender_list_paged(getLastPageToken());
       }else{
         Logger.log (`Last page reached`)
-      }
-      
+        break searchloop;
+      };
+
     }while(token);
 
     Logger.log (`Total number of senders ${sender_array.length}`) 
@@ -69,5 +65,5 @@ function callSenderListPaged() {
   }
 
   function getLastPageToken() {
-    return cache.getNumber("lastpagetoken")
+    return cache.getString("lastPageToken")
   }

@@ -45,6 +45,22 @@ function runDebugSendersNow() {
   countSenders();
 }
 
+function runDebugSenderListPaged() {
+  timeOutLimit = 3000;  
+  clearAllCache();
+  removeTriggers('countMoreSendersAPI');
+  sender_list_paged();
+}
+
+ /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+  function runDebugSendersMore() {
+    timeOutLimit = 290000;
+    removeTriggers('countMoreSendersAPI');
+    findMoreSenders();
+  }
+
 function testThreadsEnd() {
   let increment = 10
   let countStart = 0

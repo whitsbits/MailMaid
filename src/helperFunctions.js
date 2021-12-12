@@ -28,6 +28,15 @@ function MailMaid() {
     countSenders();
   }
 
+    /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+     function countMoreSenders() {
+      removeTriggers('countMoreSendersAPI');
+      findMoreSenders();
+    }
+  
+
   
 /**
  * Header info for all log lines
