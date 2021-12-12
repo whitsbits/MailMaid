@@ -2,11 +2,6 @@
 https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-sender
 */
 
-function sendSenderEmail () {
-  sendReportEmail('src/senders-email.html', countSenders());
-}
-
-
 function countSenders() {
   const scriptStart = new Date();
   let loopBreak = 0;
@@ -94,7 +89,7 @@ if (loopBreak != 1){
 
   console.log(topValues);
 
-  return topValues;
+  sendReportEmail('src/senders-email.html', topValues);
   }
 }
 
