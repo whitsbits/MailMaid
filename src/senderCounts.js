@@ -11,12 +11,10 @@ function countSenders() {
     * and if count has been cached use value to resume count of the process
     */
 
-  var total = cache.getNumber('sendersCache');
-  if (total === null){
-    total = 0;
+  var searchBatchStart = cache.getNumber('sendersCache');
+  if (searchBatchStart === null){
+    searchBatchStart = 0;
   };
-
-  Logger.log (`${user} - Starting Sender count from ${total}`);
 
   let sender_array = cache.getObject('senderArr');
     if (sender_array === null){
@@ -39,8 +37,8 @@ searchloop:
         threadsCount = threadsCached;
       };
 
-    var threads=GmailApp.search('-in:spam', total, inc);
-    let batch = (`${total} to ${total + threads.length}`);
+    var threads=GmailApp.search('-in:spam', searchBatchStart, inc);
+    let batch = (`${searchBatchStart} to ${searchBatchStart + threads.length}`);
       Logger.log (`${user} - Processing batch ${batch} starting at thread ${threadsCount}.`);
     if (threads.length === 0) {
           break searchloop;
@@ -60,10 +58,10 @@ searchloop:
         if (isTimeUp_(scriptStart, timeOutLimit)) {
           /** * When script runs close to the 5 min timeout limit take the count, 
            * cache it and set a trigger to researt after 2 mins */
-          Logger.log(`${user} - Setting Trigger to resume counting Senders at ${total}`)
-          cache.putNumber('sendersCache', total, ttl); // cache for 23 hours
+          Logger.log(`${user} - Timed out in Thread ${i}, Batch start ${searchBatchStart} and Message ${x}. Values put in cache`);
+          cache.putNumber('sendersCache', searchBatchStart, ttl); // cache for 23 hours
           cache.putNumber('senderThreadsCache', i, ttl);
-          cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
+          cache.putObject('senderArr', sender_array, ttl); // cache for 23 hours
           cache.putObject('senderuA', uA, ttl)
           cache.putObject('sendercObj', cObj, ttl) 
           setMoreTrigger('countMoreSenders'); //set trigger to restart script
@@ -72,11 +70,27 @@ searchloop:
         }
       }
     }
-
-    total += inc;
+    clearCache('senderThreadsCache');
+    searchBatchStart += inc;
   }while (threads.length > 0);
 
 if (loopBreak != 1){  
+  finishSendersCount(sender_array,cObj);
+  }
+}
+
+function callFinish() {
+    let sender_array = cache.getObject('senderArr');
+    if (sender_array === null){
+      sender_array = [];
+    };  
+  let cObj = cache.getObject('sendercObj');
+  if (cObj === null){
+    cObj = {};
+  };
+  finishSendersCount(sender_array,cObj)
+}
+function finishSendersCount(sender_array,cObj) {
   sender_array.forEach(function(r){
     r.splice(1,0,cObj[r[0]]);
   });
@@ -84,6 +98,7 @@ if (loopBreak != 1){
   var topValues = sender_array.sort(decendingSort).slice(0,5);
 
   clearCache('sendersCache');
+
   clearCache('senderArr');
   clearCache('senderuA');
   clearCache('sendercObj');
@@ -91,9 +106,7 @@ if (loopBreak != 1){
   console.log(topValues);
 
   sendReportEmail('src/senders-email.html', topValues);
-  }
 }
-
 
 function decendingSort(a, b) {
     if (b[1] === a[1]) {

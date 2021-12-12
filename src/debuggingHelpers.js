@@ -40,8 +40,8 @@ function runDebugSendersNow() {
  * Wrapper for the purge function called by timeOut trigger
  */
  function runDebugSendersMore() {
-  timeOutLimit = 100000;
-  removeTriggers('cleanMore');
+  timeOutLimit = 290000;
+  removeTriggers('countMoreSenders');
   countSenders();
 }
 
