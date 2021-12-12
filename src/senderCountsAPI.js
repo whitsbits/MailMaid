@@ -12,14 +12,17 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
 
     searchloop:
     do{
-      var threads=Gmail.Users.Messages.list('me', {maxResults:100, pageToken:token, q:query});
-      Logger.log (`${user} - Processing page${token}.`);
+      var threads=Gmail.Users.Messages.list('me', {maxResults:inc, pageToken:token, q:query});
+      Logger.log (`${user} - Processing page: ${token}.`);
       if (threads.length === 0) {
         break searchloop;
       }
-
+      threadloop:
       for(var i=0;i<threads.messages.length;i++) {
         var sender=GmailApp.getMessageById(threads.messages[i].id).getFrom();
+        if (sender === Session.getActiveUser().getEmail()){
+          break threadloop;
+        }
         if(uA.indexOf(sender)==-1) {
           uA.push(sender);
           sender_array.push([sender]);
@@ -27,12 +30,11 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
         }else{
           cObj[sender]+=1;
         }
-      }
-
         if (isTimeUp_(scriptStart, timeOutLimit)) {
-        cache.putObject("senderArr", sender_array);
-        setMoreTrigger('countMoreSendersAPI'); //set trigger to restart script
-      };
+          cache.putObject("senderArr", sender_array);
+          setMoreTrigger('countMoreSendersAPI'); //set trigger to restart script
+        };
+      }
 
       token=threads.nextPageToken
       cache.putString('lastPageToken',token)
