@@ -62,9 +62,10 @@ searchloop:
            * cache it and set a trigger to researt after 2 mins */
           Logger.log(`${user} - Setting Trigger to resume counting Senders at ${total}`)
           cache.putNumber('sendersCache', total, ttl); // cache for 23 hours
-          cache.putObject('senderArr', sender_array, ttl); // cache for 23 hours
+          cache.putNumber('senderThreadsCache', i, ttl);
+          cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
           cache.putObject('senderuA', uA, ttl)
-          cache.putObject('sendercObj', cObj, ttl)
+          cache.putObject('sendercObj', cObj, ttl) 
           setMoreTrigger('countMoreSenders'); //set trigger to restart script
           loopBreak = 1;
           break searchloop;
