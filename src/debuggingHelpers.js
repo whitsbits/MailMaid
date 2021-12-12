@@ -16,6 +16,15 @@ function runDebugCleanNow() {
   cleanMail();
 }
 
+ /**
+ * Wrapper for the purge function called by timeOut trigger
+ */
+ function runDebugCleanMore() {
+  timeOutLimit = 100000;
+  removeTriggers('cleanMore');
+  cleanMail();
+}
+
 function runDebugSendersNow() {
   timeOutLimit = 3000;  
   clearAllCache();
@@ -24,16 +33,16 @@ function runDebugSendersNow() {
   //cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
   //cache.putObject('senderuA', uA, ttl)
   //cache.putObject('sendercObj', cObj, ttl)
-  sendSenderEmail();
+  countSenders();
 }
 
  /**
  * Wrapper for the purge function called by timeOut trigger
  */
- function runDebugCleanMore() {
+ function runDebugSendersMore() {
   timeOutLimit = 100000;
   removeTriggers('cleanMore');
-  cleanMail();
+  countSenders();
 }
 
 function testThreadsEnd() {

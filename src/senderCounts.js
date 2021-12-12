@@ -18,7 +18,7 @@ function countSenders() {
 
   Logger.log (`${user} - Starting Sender count from ${total}`);
 
-  let sender_array = cache.get('senderArr');
+  let sender_array = cache.getObject('senderArr');
     if (sender_array === null){
       sender_array = [];
     };  
@@ -62,7 +62,7 @@ searchloop:
            * cache it and set a trigger to researt after 2 mins */
           Logger.log(`${user} - Setting Trigger to resume counting Senders at ${total}`)
           cache.putNumber('sendersCache', total, ttl); // cache for 23 hours
-          cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
+          cache.putObject('senderArr', sender_array, ttl); // cache for 23 hours
           cache.putObject('senderuA', uA, ttl)
           cache.putObject('sendercObj', cObj, ttl)
           setMoreTrigger('countMoreSenders'); //set trigger to restart script

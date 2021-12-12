@@ -14,7 +14,12 @@
        {name:'threadsCache', type:'Number',synthValue:82},
        {name:'counterCache', type:'Number', synthValue:31},
        {name:'result', type:'Object', synthValue:[{ id:3, counter:31, action:"Purge", searchString:"category:promotions", days:7 }]},
-       {name:'editRuleNum', type:'String', synthValue:'rule0'}
+       {name:'editRuleNum', type:'String', synthValue:'rule0'},
+       {name:'sendersCache', type:'Number', synthValue:1000},
+       {name:'senderThreadsCache', type:'Number', synthValue:310},
+       {name:'senderArr', type:'Object', synthValue:[]},
+       {name:'senderuA', type:'Object', synthValue:[]},
+       {name:'sendercObj', type:'Object', synthValue:{}}
        ]
    }
 
