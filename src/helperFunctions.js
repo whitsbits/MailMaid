@@ -20,6 +20,12 @@ function MailMaid() {
   cleanMail();
 }
 
+function SenderSuggestions() { 
+  clearAllCache();
+  removeTriggers('countMoreSender');
+  countSenders();
+}
+
   /**
  * Wrapper for the purge function called by timeOut trigger
  */
@@ -28,16 +34,6 @@ function MailMaid() {
     countSenders();
   }
 
-    /**
- * Wrapper for the purge function called by timeOut trigger
- */
-     function countMoreSenders() {
-      removeTriggers('countMoreSendersAPI');
-      findMoreSenders();
-    }
-  
-
-  
 /**
  * Header info for all log lines
  * @returns Header info for all logging
