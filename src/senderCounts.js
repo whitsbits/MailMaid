@@ -82,6 +82,10 @@ function countSenders() {
   if (loopBreak != 1) {
     emailSendersCount(sender_array, cObj);
     writeToSheet(sender_array, cObj)
+    clearCache('sendersCache');
+    clearCache('senderArr');
+    clearCache('senderuA');
+    clearCache('sendercObj');
   }
 }
 
@@ -92,12 +96,6 @@ function emailSendersCount(sender_array, cObj) {
 
   var topValues = sender_array.sort(decendingSort).slice(0, 5);
 
-  clearCache('sendersCache');
-
-  clearCache('senderArr');
-  clearCache('senderuA');
-  clearCache('sendercObj');
-
   console.log(topValues);
 
   sendReportEmail('src/senders-email.html', topValues);
@@ -107,11 +105,6 @@ function writeToSheet(sender_array, cObj) {
   sender_array.forEach(function (r) {
     r.splice(1, 0, cObj[r[0]]);
   });
-
-  clearCache('sendersCache');
-  clearCache('senderArr');
-  clearCache('senderuA');
-  clearCache('sendercObj');
 
   var ss = SpreadsheetApp.openById('1QNm63pG8fe9ezMfOnvv4_Im-GgrHQyeMVLFxm-k8v-Y')
   var sh = ss.getActiveSheet()
