@@ -4,11 +4,12 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
 
   function sender_list_paged(token) {
     const scriptStart = new Date();
+    let loopBreak = 0;
     var token=token||null;
-    var query="-in:spam"; 
+    const query="-in:spam"; 
     let sender_array = []
-    var uA=[];
-    var cObj={}; //Count of messages
+    let uA=[];
+    let cObj={}; //Count of messages
 
     searchloop:
     do{
@@ -30,36 +31,38 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
         }else{
           cObj[sender]+=1;
         }
-        if (isTimeUp_(scriptStart, timeOutLimit)) {
-          cache.putObject("senderArr", sender_array);
-          setMoreTrigger('countMoreSendersAPI'); //set trigger to restart script
-        };
-      }
 
       token=threads.nextPageToken
-      cache.putString('lastPageToken',token)
+
+      cache.putString('lastPageToken',token);
       if (token !== (null || undefined)) {
         cache.getString("lastPageToken", token);
         Logger.log (`LastToken Saved as ${token}`);
+
+        if (isTimeUp_(scriptStart, timeOutLimit)) {
+          Logger.log(`${user} - Inbox senders loop time limit exceeded.`);
+          cache.putObject("senderArr", sender_array);
+          setMoreTrigger('countMoreSendersAPI'); //set trigger to restart script
+          loopBreak = 1;
+          break searchloop;
+        };
+
         sender_list_paged(getLastPageToken());
       }else{
-        Logger.log (`Last page reached`)
+        Logger.log (`Last page reached`);
         break searchloop;
       };
 
+      }
+
     }while(token);
 
-    Logger.log (`Total number of senders ${sender_array.length}`) 
-
-    sender_array.forEach(function(r){
-      r.splice(1,0,cObj[r[0]]);
-    });
-
-    var ss=SpreadsheetApp.openById('1QNm63pG8fe9ezMfOnvv4_Im-GgrHQyeMVLFxm-k8v-Y')
-    var sh=ss.getActiveSheet()
-    sh.clear();
-    sh.appendRow(['Email Address','Count']);
-    sh.getRange(2, 1,sender_array.length,2).setValues(sender_array).sort({column:2,decending:true});
+    Logger.log (`${user} - Total number of senders counted ${sender_array.length}`) 
+    
+    if (loopBreak !== 1) {
+      emailSendersCount(sender_array, cObj);
+      writeToSheet(sender_array, cObj);
+    }
   }
 
   function findMoreSenders() {
@@ -69,3 +72,4 @@ https://stackoverflow.com/questions/59216693/count-number-of-gmail-emails-per-se
   function getLastPageToken() {
     return cache.getString("lastPageToken")
   }
+

@@ -75,22 +75,11 @@ searchloop:
   }while (threads.length > 0);
 
 if (loopBreak != 1){  
-  finishSendersCount(sender_array,cObj);
+  emailSendersCount(sender_array,cObj);
   }
 }
 
-function callFinish() {
-    let sender_array = cache.getObject('senderArr');
-    if (sender_array === null){
-      sender_array = [];
-    };  
-  let cObj = cache.getObject('sendercObj');
-  if (cObj === null){
-    cObj = {};
-  };
-  finishSendersCount(sender_array,cObj)
-}
-function finishSendersCount(sender_array,cObj) {
+function emailSendersCount(sender_array,cObj) {
   sender_array.forEach(function(r){
     r.splice(1,0,cObj[r[0]]);
   });
@@ -107,6 +96,23 @@ function finishSendersCount(sender_array,cObj) {
 
   sendReportEmail('src/senders-email.html', topValues);
 }
+
+function writeToSheet(sender_array,cObj) {
+    sender_array.forEach(function(r){
+      r.splice(1,0,cObj[r[0]]);
+    });
+  
+    clearCache('sendersCache');
+    clearCache('senderArr');
+    clearCache('senderuA');
+    clearCache('sendercObj');
+  
+    var ss=SpreadsheetApp.openById('1QNm63pG8fe9ezMfOnvv4_Im-GgrHQyeMVLFxm-k8v-Y')
+    var sh=ss.getActiveSheet()
+    sh.clear();
+    sh.appendRow(['Email Address','Count']);
+    sh.getRange(2, 1,sender_array.length,2).setValues(sender_array).sort({column:2,decending:true});
+  }
 
 function decendingSort(a, b) {
     if (b[1] === a[1]) {
