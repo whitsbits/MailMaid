@@ -8,7 +8,7 @@ const userProperties = PropertiesService.getUserProperties();
 const whiteSpace = CardService.newTextParagraph()
     .setText('\n');
 const cardSectionDivider = CardService.newDivider();
-const inc = 500; // Inbox Message Iteration Increment
+var inc = 500; // Inbox Message Iteration Increment
 let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
