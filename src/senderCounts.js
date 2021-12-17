@@ -7,7 +7,7 @@ function countSenders() {
   let loopBreak = 0;
 
   /**  
-* check to see if the app is worken from sleep and get last count value  
+* check to see if the app is woken from sleep and get last count value  
 * and if count has been cached use value to resume count of the process
 */
 
@@ -45,7 +45,7 @@ function countSenders() {
     }
 
     for (var i = threadsCount; i < threads.length; i++) {
-      var message = threads[i].getMessages()[0];
+      var message = threads[i].getMessages();
       var sender = message[0].getFrom();
       if (uA.indexOf(sender) == -1) {
         uA.push(sender);
