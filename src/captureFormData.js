@@ -33,7 +33,7 @@ function captureRuleFormData(e) {
       */
 
         var ruleNum = (countRules() + 1);
-        var rule = [action, search, days];
+        var rule = [action, search, days, ruleNum];
         if (key === 'rule0') {
           return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
         }

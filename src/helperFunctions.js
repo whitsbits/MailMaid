@@ -145,7 +145,6 @@ function getRulesArr() {
     return rulesArr
   }
   i, len = keys.length;
-  keys.sort();
 
   if (licenseRead() === false){
     i,len = 1
@@ -158,6 +157,9 @@ function getRulesArr() {
       .split(',');
       rulesArr.push(ruleValue)
   }
+  rulesArr.sort(function(a,b) {
+    return a[3]-b[3]
+});
   Logger.log (`${user} - Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
@@ -326,17 +328,19 @@ return ruleCount
   function reIndexRules() {
     var rules = getRulesArr();
     var keys = getRuleKeys();
+    
     keys.sort();
     clearRules();
+
     for (i = 0; i < keys.length; i++) {
       var newKey = `rule${i + 1}`;
+      rules[i].splice(3,1); //remove the prior index from the array
+      rules[i].push(i + 1); // add the new index to the array
       userProperties.setProperty(newKey,JSON.stringify(rules[i]));
       Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
     }
     Logger.log (`${user} - Rules property store reindexed`)
   }
 
-
-    
 
 
