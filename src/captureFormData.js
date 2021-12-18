@@ -21,8 +21,10 @@ function captureRuleFormData(e) {
 
         if (e.parameters.ruleNum === undefined){
           var key =  null;
+          var ruleNum = (countRules() + 1);
         }else{
           var key = e.parameters.ruleNum.toString();
+          var ruleNum = key.substring(4);
         }
 
         //Keep for dev debugging without needing UI 
@@ -32,7 +34,7 @@ function captureRuleFormData(e) {
         var key = '{}';
       */
 
-        var ruleNum = (countRules() + 1);
+        
         var rule = [action, search, days, ruleNum];
         if (key === 'rule0') {
           return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
@@ -42,6 +44,7 @@ function captureRuleFormData(e) {
         }
         var jarray = JSON.stringify(rule);
         Logger.log (`${user} - Key set as ${key}`);
+        reIndexRules();
     try {
       userProperties.setProperties({[key] : jarray});
     } 
@@ -49,8 +52,8 @@ function captureRuleFormData(e) {
       Logger.log (`${user} - Error: ${e.toString()}`);  
       return `Error: ${e.toString()}`;
       }
-      Logger.log (`${user} - Cleaner Settings Saved as ${key}`);
-      return notify(`Cleaner Settings Saved as ${key}`, rulesManagerCard());
+      Logger.log (`${user} - Rule Saved as ${key}`);
+      return notify(`Rule Saved as ${key}`, rulesManagerCard());
   }
 
 
