@@ -44,7 +44,6 @@ function captureRuleFormData(e) {
         }
         var jarray = JSON.stringify(rule);
         Logger.log (`${user} - Key set as ${key}`);
-        reIndexRules();
     try {
       userProperties.setProperties({[key] : jarray});
     } 
