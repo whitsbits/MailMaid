@@ -289,7 +289,7 @@ return ruleCount
   /**
  * Returns the element attributes of the named rule
  *  * @param {ruleNum} the string for the rule number (rule1)
- *  * @return {ruleElements} an array with [action][search][days]
+ *  * @return {ruleElements} an array with [action][search][days][index]
  */
   function reportRulesArrElements (ruleNum) {
     const rule = userProperties.getProperty(ruleNum);

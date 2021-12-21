@@ -240,10 +240,8 @@ function disclosuresSection() {
 //-----------------------edit rule selected widget--------------------------//
   }else if (action != undefined || search != undefined || days != undefined){
     let ruleNum = cache.get('editRuleNum')
-    let editRuleNumData = userProperties.getProperty(ruleNum)
-        .replace(/[\[\]"]/g,'');
-        //.split(',');
-    var editRuleNumText = `You are currently editing ${ruleNum} \n ${editRuleNumData}`
+    let editRuleNumData = reportRulesArrElements(ruleNum);
+    var editRuleNumText = `<b><font color=\"#ff3355\">You are currently editing Rule #${editRuleNumData[3]}</b></font>\n   Action: ${editRuleNumData[0]}\n   Search: ${editRuleNumData[1]}\n   Days: ${editRuleNumData[2]}`;
     var editRuleNumWidget = CardService.newTextParagraph()
       .setText(editRuleNumText)    
     
@@ -284,8 +282,10 @@ function disclosuresSection() {
         .setText('<font color=\"#bcbcbc\">Purge moves to Trash \nArchive removes from Inbox</font>')
 
     rulesManagerSection
+      .addWidget(editRuleNumWidget)
       .addWidget(_actionText)
       .addWidget(_action)
+      .addWidget(_actionHint)
       .addWidget(cardSectionDivider)
       .addWidget(_searchText)
       .addWidget(_search)
