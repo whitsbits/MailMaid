@@ -9,14 +9,4 @@ Copyright 2021
 
 https://workspace.google.com/marketplace/app/mailmaid/767612186965
 
-TODO LIST:
-
-Investigate moving onHour from integer to time
-Fix presentation of escape characters in UI
-Get full presentation of rule structure to item selection list
-Warn before Delete All
-Compress dupe Rule input code
-Investigate Suggestion Picker
-default rule for "Purge, subject:(MailMaid Results), 3 days"
-investigate adding rule preview rule to UI
 
