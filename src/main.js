@@ -204,6 +204,11 @@ function disclosuresSection() {
       .setValue("")
       .setHint(`Use standard GMail Query Language`);
 
+    /**
+    const _testSearchText = CardService.newTextParagraph()
+    .setText(`<a href=${url}>Test my Search String</a>`)
+     */  
+
     const _daysText = CardService.newTextParagraph()
         .setText('<b>How many days before MailMaid cleans the messages?</b>')
 
@@ -227,6 +232,7 @@ function disclosuresSection() {
       .addWidget(cardSectionDivider)
       .addWidget(_searchText)
       .addWidget(_search)
+      //.addWidget(_testSearchText)
       .addWidget(cardSectionDivider)
       .addWidget(_daysText)
       .addWidget(_days)
@@ -323,8 +329,17 @@ function disclosuresSection() {
 }
 
     function ruleButtonsSet() {
-        let ruleNum = cache.get('editRuleNum')
-        if (ruleNum === null){ruleNum='rule0'}
+        let ruleNum = cache.get('editRuleNum');
+        if (ruleNum === null){ruleNum='rule0'};
+
+        const testAction = CardService.newAction()
+            .setFunctionName('buildSearchURL')
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const testButton = CardService.newTextButton()
+            .setText('Test Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(testAction);
+
         const saveAction = CardService.newAction()
             .setFunctionName('captureRuleFormData')
             .setLoadIndicator(CardService.LoadIndicator.SPINNER);
@@ -360,6 +375,7 @@ function disclosuresSection() {
             .setOnClickAction(clearAllAction);
 
         const ruleButtonSet = CardService.newButtonSet()
+            .addButton(testButton)
             .addButton(saveButton)
             .addButton(replaceButton)
             .addButton(clearSelectedButton)
