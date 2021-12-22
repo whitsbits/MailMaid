@@ -53,7 +53,7 @@ function clearAllRules() {
     userProperties.deleteProperty(`rule${i}`);
   };
   Logger.log (`${user} - Deleted ${i - 1} rules.`);
-  return notify(`Rules Cleared`, rulesManagerCard());
+  return notify(`Rules Cleared`, onHomepage());
 };
 
   /**

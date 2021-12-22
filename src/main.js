@@ -82,9 +82,18 @@ function initApp() {
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(addRuleDataAction);
 
+    const clearAllAction = CardService.newAction()
+        .setFunctionName('confirmDeleteAll')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const clearAllButton = CardService.newTextButton()
+        .setText('Delete All Rules')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(clearAllAction);
+
     const rulesBody = CardService.newCardSection()        
     .addWidget(addRuleDataButton)
-    .addWidget(rulesBodyText);
+    .addWidget(rulesBodyText)
+    .addWidget(clearAllButton);
 
     return rulesBody;
     };
@@ -155,6 +164,35 @@ function disclosuresSection() {
 
   return disclosuresSection;
 }
+
+//-----------------START DELETE ALL CONFIRMATION CARD---------------------------//
+function confirmDeleteAll() {
+    const confirmText = 'Are you sure you want to delete all your rules?'
+    const confirmMessageText = CardService.newTextParagraph()
+    .setText(
+        confirmText
+    );
+    
+    const confirmAction = CardService.newAction()
+        .setFunctionName('clearAllRules')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const confirmButton = CardService.newTextButton()
+        .setText('YES')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(confirmAction);
+
+    const confirmSection = CardService.newCardSection()
+        .addWidget(confirmMessageText)
+        .addWidget(confirmButton);
+
+    card.addSection(confirmSection);
+    card.setFixedFooter(navFooter());
+
+    return card.build();
+}
+//-----------------END DELETE ALL CONFIRMATION CARD---------------------------//
+
+
 //-----------------START RULES CARD---------------------------//
   /**
  * Callback for rendering the rulesManagerCard.
@@ -179,9 +217,8 @@ function disclosuresSection() {
         .addItem("Click here to select an existing Rule to edit","rule0", true)
 
         for (let i = 0; i < rules.length; i++) {
-            var ruleItem = rules[i];
             var ruleNum = `rule${i + 1}`;
-            var rulePres = `Rule ${i + 1}: ${ruleItem}`
+            var rulePres = `Rule ${i + 1}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }   
     }
@@ -203,11 +240,6 @@ function disclosuresSection() {
       .setFieldName('search')
       .setValue("")
       .setHint(`Use standard GMail Query Language`);
-
-    /**
-    const _testSearchText = CardService.newTextParagraph()
-    .setText(`<a href=${url}>Test my Search String</a>`)
-     */  
 
     const _daysText = CardService.newTextParagraph()
         .setText('<b>How many days before MailMaid cleans the messages?</b>')
@@ -237,7 +269,7 @@ function disclosuresSection() {
       .addWidget(_daysText)
       .addWidget(_days)
       .addWidget(cardSectionDivider)
-      .addWidget(ruleButtonsSet());
+      .addWidget(newRuleButtonSet());
 
       card.addSection(rulesManagerSection);
       card.setFixedFooter(navFooter());
@@ -285,7 +317,7 @@ function disclosuresSection() {
         .addItem('Archive - removes from inbox', 'Archive', item2);
 
     const _actionHint = CardService.newTextParagraph()
-        .setText('<font color=\"#bcbcbc\">Purge moves to Trash \nArchive removes from Inbox</font>')
+        .setText('<font color=\"#bcbcbc\">Purge moves to Trash \nArchive removes from Inbox</font>')        
 
     rulesManagerSection
       .addWidget(editRuleNumWidget)
@@ -299,7 +331,8 @@ function disclosuresSection() {
       .addWidget(_daysText)
       .addWidget(_days)
       .addWidget(cardSectionDivider)
-      .addWidget(ruleButtonsSet());
+      .addWidget(selectedRuleButtonSet())
+      .addWidget(newRuleButtonSet());
     }
 
     //-----------------END RULE INPUT WIDGET----------------------------//
@@ -328,25 +361,9 @@ function disclosuresSection() {
     return rulesManagerCard(e, action, search, days);
 }
 
-    function ruleButtonsSet() {
+    function selectedRuleButtonSet() {
         let ruleNum = cache.get('editRuleNum');
         if (ruleNum === null){ruleNum='rule0'};
-
-        const testAction = CardService.newAction()
-            .setFunctionName('buildSearchURL')
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const testButton = CardService.newTextButton()
-            .setText('Test Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(testAction);
-
-        const saveAction = CardService.newAction()
-            .setFunctionName('captureRuleFormData')
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const saveButton = CardService.newTextButton()
-            .setText('Save as New Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(saveAction);
 
         const replaceAction = CardService.newAction()
             .setFunctionName('captureRuleFormData')
@@ -365,23 +382,36 @@ function disclosuresSection() {
             .setText('Delete Selected Rule')
             .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
             .setOnClickAction(clearSelectedAction);
-            
-        const clearAllAction = CardService.newAction()
-            .setFunctionName('clearAllRules')
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const clearAllButton = CardService.newTextButton()
-            .setText('Delete All Rules')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(clearAllAction);
 
-        const ruleButtonSet = CardService.newButtonSet()
-            .addButton(testButton)
-            .addButton(saveButton)
+            const selectedRuleButtonSet = CardService.newButtonSet()
             .addButton(replaceButton)
-            .addButton(clearSelectedButton)
-            .addButton(clearAllButton);
+            .addButton(clearSelectedButton);
         
-    return ruleButtonSet
+    return selectedRuleButtonSet;
+    }
+
+    function newRuleButtonSet() {
+        const previewAction = CardService.newAction()
+            .setFunctionName('buildSearchURL')
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const previewButton = CardService.newTextButton()
+            .setText('Preview Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(previewAction);
+
+        const saveAction = CardService.newAction()
+            .setFunctionName('captureRuleFormData')
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const saveButton = CardService.newTextButton()
+            .setText('Save as New Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(saveAction);
+
+        const newRuleButtonSet = CardService.newButtonSet()
+            .addButton(previewButton)
+            .addButton(saveButton);
+        
+    return newRuleButtonSet;
     } 
 
 //-----------------END RULES CARD---------------------------//
@@ -568,12 +598,14 @@ function scheduleButtonsSection() {
    */
      function navFooter() {
        
-        /*var previousButton = CardService.newTextButton()
+        /**
+        var previousButton = CardService.newTextButton()
             .setText('BACK')
-            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
             .setOnClickAction(CardService.newAction()
             .setFunctionName('gotoPreviousCard'));
-*/
+        */
+
         var toRootButton = CardService.newTextButton()
             .setText('HOME')
             .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
