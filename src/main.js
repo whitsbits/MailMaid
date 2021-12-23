@@ -26,7 +26,9 @@ function initApp() {
       }
       Logger.log (`${user} - App already initialized`);
     }
-    return true;
+
+    var firstCard = onHomepage();
+    return firstCard;
 }
 
 
@@ -37,7 +39,6 @@ function initApp() {
  * @return {CardService.Card} The card to show to the user.
  */
  function onHomepage(e) {
-    initApp();
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
