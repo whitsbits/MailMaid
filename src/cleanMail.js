@@ -21,7 +21,11 @@ function cleanMail() {
     rulesCached = 0;
   };
 
-rulesloop:
+
+if (licenseRead() === true){
+  i,rules.length = 1
+}
+rulesloop:  
 for (let i = rulesCached; i < rules.length; i++) {
 
     /**

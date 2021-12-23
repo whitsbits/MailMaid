@@ -146,10 +146,6 @@ function getRulesArr() {
   }
   i, len = keys.length;
 
-  if (licenseRead() === false){
-    i,len = 1
-  }  
-
   for (var i = 0; i < len; i++) {
       k = keys[i];
       ruleValue = userProperties.getProperty(k)
