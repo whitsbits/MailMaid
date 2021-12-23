@@ -22,7 +22,7 @@ function cleanMail() {
   };
 
 
-if (licenseRead() === true){
+if (licenseRead() === false){
   i,rules.length = 1
 }
 rulesloop:  
