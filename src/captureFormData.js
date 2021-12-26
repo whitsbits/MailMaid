@@ -60,7 +60,7 @@ function captureRuleFormData(e) {
  * Build InBox Processing rule into Array and save user inputs to PropertiesService.
  * Cleaner shchedule set to Triggers
  * @param {Object} e - Event from add-on server
-@return {notify with Card to be built}
+ * @return {notify with Card to be built}
  */
 
 function captureScheduleFormData(e) {

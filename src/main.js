@@ -13,6 +13,7 @@ let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
 function initApp() {
+    reIndexRules();
     let init = checkInitStatus();
     if (init === false){
       initSchedule();
