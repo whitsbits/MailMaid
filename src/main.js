@@ -13,6 +13,7 @@ let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
 function initApp() {
+    reIndexRules();
     let init = checkInitStatus();
     if (init === false) {
         initSchedule();
@@ -26,7 +27,9 @@ function initApp() {
         }
         Logger.log(`${user} - App already initialized`);
     }
-    return true;
+
+    var firstCard = onHomepage();
+    return firstCard;
 }
 
 
@@ -36,8 +39,7 @@ function initApp() {
  * @param {Object} e - Event from add-on server
  * @return {CardService.Card} The card to show to the user.
  */
-function onHomepage(e) {
-    initApp();
+ function onHomepage(e) {
     card.addSection(homepageIntroSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
@@ -82,9 +84,18 @@ function homepageRulesSection() {
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(addRuleDataAction);
 
-    const rulesBody = CardService.newCardSection()
-        .addWidget(addRuleDataButton)
-        .addWidget(rulesBodyText);
+    const clearAllAction = CardService.newAction()
+        .setFunctionName('confirmDeleteAll')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const clearAllButton = CardService.newTextButton()
+        .setText('Delete All Rules')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(clearAllAction);
+
+    const rulesBody = CardService.newCardSection()        
+    .addWidget(addRuleDataButton)
+    .addWidget(rulesBodyText)
+    .addWidget(clearAllButton);
 
     return rulesBody;
 };
@@ -155,6 +166,35 @@ function disclosuresSection() {
 
     return disclosuresSection;
 }
+
+//-----------------START DELETE ALL CONFIRMATION CARD---------------------------//
+function confirmDeleteAll() {
+    const confirmText = 'Are you sure you want to delete all your rules?'
+    const confirmMessageText = CardService.newTextParagraph()
+    .setText(
+        confirmText
+    );
+    
+    const confirmAction = CardService.newAction()
+        .setFunctionName('clearAllRules')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const confirmButton = CardService.newTextButton()
+        .setText('YES')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(confirmAction);
+
+    const confirmSection = CardService.newCardSection()
+        .addWidget(confirmMessageText)
+        .addWidget(confirmButton);
+
+    card.addSection(confirmSection);
+    card.setFixedFooter(navFooter());
+
+    return card.build();
+}
+//-----------------END DELETE ALL CONFIRMATION CARD---------------------------//
+
+
 //-----------------START RULES CARD---------------------------//
 /**
 * Callback for rendering the rulesManagerCard.
@@ -179,9 +219,8 @@ function rulesManagerCard(e, action, search, days) {
             .addItem("Click here to select an existing Rule to edit", "rule0", true)
 
         for (let i = 0; i < rules.length; i++) {
-            var ruleItem = rules[i];
             var ruleNum = `rule${i + 1}`;
-            var rulePres = `Rule ${i + 1}: ${ruleItem}`
+            var rulePres = `Rule ${i + 1}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }
     }
@@ -270,30 +309,33 @@ function rulesManagerCard(e, action, search, days) {
             var item2 = true
             var item1 = false
         };
+  
+    const _actionText = CardService.newTextParagraph()
+        .setText('<b>What do you want MailMaid to do?</b>')
 
-        const _actionText = CardService.newTextParagraph()
-            .setText('<b>What do you want MailMaid to do?</b>')
+    var _action = CardService.newSelectionInput()
+        .setType(CardService.SelectionInputType.RADIO_BUTTON)
+        .setFieldName('action')
+        .addItem('Purge - moves to trash', 'Purge', item1)
+        .addItem('Archive - removes from inbox', 'Archive', item2);
 
-        var _action = CardService.newSelectionInput()
-            .setType(CardService.SelectionInputType.RADIO_BUTTON)
-            .setFieldName('action')
-            .addItem('Purge - moves to trash', 'Purge', item1)
-            .addItem('Archive - removes from inbox', 'Archive', item2);
+    const _actionHint = CardService.newTextParagraph()
+        .setText('<font color=\"#bcbcbc\">Purge moves to Trash \nArchive removes from Inbox</font>')        
 
-        const _actionHint = CardService.newTextParagraph()
-            .setText('<font color=\"#bcbcbc\">Purge moves to Trash \nArchive removes from Inbox</font>')
-
-        rulesManagerSection
-            .addWidget(_actionText)
-            .addWidget(_action)
-            .addWidget(cardSectionDivider)
-            .addWidget(_searchText)
-            .addWidget(_search)
-            .addWidget(cardSectionDivider)
-            .addWidget(_daysText)
-            .addWidget(_days)
-            .addWidget(cardSectionDivider)
-            .addWidget(ruleButtonsSet());
+    rulesManagerSection
+      .addWidget(editRuleNumWidget)
+      .addWidget(_actionText)
+      .addWidget(_action)
+      .addWidget(_actionHint)
+      .addWidget(cardSectionDivider)
+      .addWidget(_searchText)
+      .addWidget(_search)
+      .addWidget(cardSectionDivider)
+      .addWidget(_daysText)
+      .addWidget(_days)
+      .addWidget(cardSectionDivider)
+      .addWidget(selectedRuleButtonSet())
+      .addWidget(newRuleButtonSet());
     }
 
     //-----------------END RULE INPUT WIDGET----------------------------//
@@ -322,51 +364,58 @@ function onModeChange(e) {
     return rulesManagerCard(e, action, search, days);
 }
 
-function ruleButtonsSet() {
-    let ruleNum = cache.get('editRuleNum')
-    if (ruleNum === null) { ruleNum = 'rule0' }
-    const saveAction = CardService.newAction()
-        .setFunctionName('captureRuleFormData')
-        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const saveButton = CardService.newTextButton()
-        .setText('Save as New Rule')
-        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-        .setOnClickAction(saveAction);
+    function selectedRuleButtonSet() {
+        let ruleNum = cache.get('editRuleNum');
+        if (ruleNum === null){ruleNum='rule0'};
 
-    const replaceAction = CardService.newAction()
-        .setFunctionName('captureRuleFormData')
-        .setParameters({ ruleNum: ruleNum })
-        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const replaceButton = CardService.newTextButton()
-        .setText('Replace Selected Rule')
-        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-        .setOnClickAction(replaceAction);
+        const replaceAction = CardService.newAction()
+            .setFunctionName('captureRuleFormData')
+            .setParameters({ruleNum: ruleNum})
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const replaceButton = CardService.newTextButton()
+            .setText('Replace Selected Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(replaceAction);
+            
+        const clearSelectedAction = CardService.newAction()
+            .setFunctionName('clearSelectedRule')
+            .setParameters({ruleNum: ruleNum})
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const clearSelectedButton = CardService.newTextButton()
+            .setText('Delete Selected Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(clearSelectedAction);
 
-    const clearSelectedAction = CardService.newAction()
-        .setFunctionName('clearSelectedRule')
-        .setParameters({ ruleNum: ruleNum })
-        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const clearSelectedButton = CardService.newTextButton()
-        .setText('Delete Selected Rule')
-        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-        .setOnClickAction(clearSelectedAction);
+            const selectedRuleButtonSet = CardService.newButtonSet()
+            .addButton(replaceButton)
+            .addButton(clearSelectedButton);
+        
+    return selectedRuleButtonSet;
+    }
 
-    const clearAllAction = CardService.newAction()
-        .setFunctionName('clearAllRules')
-        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const clearAllButton = CardService.newTextButton()
-        .setText('Delete All Rules')
-        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-        .setOnClickAction(clearAllAction);
+    function newRuleButtonSet() {
+        const previewAction = CardService.newAction()
+            .setFunctionName('buildSearchURL')
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const previewButton = CardService.newTextButton()
+            .setText('Preview Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(previewAction);
 
-    const ruleButtonSet = CardService.newButtonSet()
-        .addButton(saveButton)
-        .addButton(replaceButton)
-        .addButton(clearSelectedButton)
-        .addButton(clearAllButton);
+        const saveAction = CardService.newAction()
+            .setFunctionName('captureRuleFormData')
+            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+        const saveButton = CardService.newTextButton()
+            .setText('Save as New Rule')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(saveAction);
 
-    return ruleButtonSet
-}
+        const newRuleButtonSet = CardService.newButtonSet()
+            .addButton(previewButton)
+            .addButton(saveButton);
+        
+    return newRuleButtonSet;
+    } 
 
 //-----------------END RULES CARD---------------------------//
 
@@ -542,26 +591,28 @@ function gotoRootCard() {
     return CardService.newActionResponseBuilder()
         .setNavigation(nav)
         .build();
-}
+  }
 
 
-/**
-*  Create a ButtonSet with two buttons: one that backtracks to the
-*  last card and another that returns to the original (root) card.
-*  @return {ButtonSet}
-*/
-function navFooter() {
+    /**
+   *  Create a ButtonSet with two buttons: one that backtracks to the
+   *  last card and another that returns to the original (root) card.
+   *  @return {ButtonSet}
+   */
+     function navFooter() {
+       
+        /**
+        var previousButton = CardService.newTextButton()
+            .setText('BACK')
+            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+            .setOnClickAction(CardService.newAction()
+            .setFunctionName('gotoPreviousCard'));
+        */
 
-    /*var previousButton = CardService.newTextButton()
-        .setText('BACK')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-        .setOnClickAction(CardService.newAction()
-        .setFunctionName('gotoPreviousCard'));
-*/
-    var toRootButton = CardService.newTextButton()
-        .setText('HOME')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-        .setOnClickAction(CardService.newAction()
+        var toRootButton = CardService.newTextButton()
+            .setText('HOME')
+            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setOnClickAction(CardService.newAction()
             .setFunctionName('gotoRootCard'));
 
     // Return a new fixedFooter containing these two buttons.

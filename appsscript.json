@@ -12,12 +12,12 @@
     "gmail": {
       "homepageTrigger": {
         "enabled": true,
-        "runFunction": "onHomepage"
+        "runFunction": "initApp"
       },
       "contextualTriggers": [
         {
           "unconditional": {},
-          "onTriggerFunction": "onHomepage"
+          "onTriggerFunction": "initApp"
         }
       ]
     }

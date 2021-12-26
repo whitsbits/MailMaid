@@ -202,14 +202,20 @@ function mockFormCapture() {
 function loadRules() {
   clearAllRules();
   cache.putString('editRuleNum', 'rule0');
-  userProperties.setProperties({ rule1: JSON.stringify(['Purge', 'category:promotions', '7']) });
-  userProperties.setProperties({ rule2: JSON.stringify(['Purge', 'category:social', '7']) });
-  userProperties.setProperties({ rule3: JSON.stringify(["Archive", "category:updates", "30"]) });
-  userProperties.setProperties({ rule4: JSON.stringify(["Purge", "category:updates -category:purchases", "180"]) });
-  userProperties.setProperties({ rule6: JSON.stringify(["Purge", "from:calendar-notification@google.com", "7"]) });
-  userProperties.setProperties({ rule5: JSON.stringify(["Purge", "subject:MailMaid Results", "3"]) });
-  userProperties.setProperties({ rule7: JSON.stringify(["Purge", "category:forums", "14"]) });
-  userProperties.setProperties({ rule8: JSON.stringify(["Purge", "label:GoodSync", "5"]) });
+  userProperties.setProperties({rule1 : JSON.stringify(['Purge', 'category:promotions', '7', '1'])});
+  userProperties.setProperties({rule2 : JSON.stringify(['Purge', 'subject:MailMaid Results', '3', '2'])});
+  userProperties.setProperties({rule3 : JSON.stringify(['Purge', 'from:calendar-notification@google.com', '7', '3'])});
+  userProperties.setProperties({rule4 : JSON.stringify(['Purge', 'category:forums', '14', '4'])});
+  userProperties.setProperties({rule5 : JSON.stringify(['Archive', 'category:updates -category:purchases', '30', '5'])});
+  userProperties.setProperties({rule6 : JSON.stringify(['Archive', 'category:purchases', '30', '6'])});
+  userProperties.setProperties({rule7 : JSON.stringify(['Purge', 'from:bobby.sentinelgoalie@gmail.com', '30', '7'])});
+  userProperties.setProperties({rule8 : JSON.stringify(['Purge', 'from:shipment-tracking@amazon.com', '180', '8'])});
+  userProperties.setProperties({rule9 : JSON.stringify(['Purge', 'from:auto-confirm@amazon.com', '180', '9'])});
+  userProperties.setProperties({rule10 : JSON.stringify(['Purge', 'from:newsletters@bostonglobe.com', '14', '10'])});
+  userProperties.setProperties({rule11 : JSON.stringify(['Purge', 'from:no-reply@accounts.google.com', '30', '11'])});
+  userProperties.setProperties({rule12 : JSON.stringify(['Purge', 'category:social', '7', '12'])});
+  userProperties.setProperties({rule13 : JSON.stringify(['Purge', 'label:GoodSync', '5', '13'])});
+  userProperties.setProperties({rule14 : JSON.stringify(['Purge', 'category:updates -category:purchases', '90', '14'])});
   getRulesArr();
 }
 

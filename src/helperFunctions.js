@@ -76,8 +76,8 @@ function clearAllRules() {
   for (var i = 1; i < numRules + 1; i++) {
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log(`${user} - Deleted ${i - 1} rules.`);
-  return notify(`Rules Cleared`, rulesManagerCard());
+  Logger.log (`${user} - Deleted ${i - 1} rules.`);
+  return notify(`Rules Cleared`, onHomepage());
 };
 
 /**
@@ -169,11 +169,6 @@ function getRulesArr() {
     return rulesArr
   }
   i, len = keys.length;
-  keys.sort();
-
-  if (licenseRead() === false) {
-    i, len = 1
-  }
 
   for (var i = 0; i < len; i++) {
     k = keys[i];
@@ -182,7 +177,10 @@ function getRulesArr() {
       .split(',');
     rulesArr.push(ruleValue)
   }
-  Logger.log(`${user} - Returning getRulesArr ${rulesArr}`)
+  rulesArr.sort(function(a,b) {
+    return a[3]-b[3]
+});
+  Logger.log (`${user} - Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -280,7 +278,7 @@ function reportRulesText() {
     text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
   if (licenseRead() === false) {
-    text += (`\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
+    text += (`\n<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will only clean Rule 1.\n\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
   }
 
   Logger.log(`${user} - Returning reportRulesText: \n ${text}`)
@@ -342,24 +340,27 @@ function reportSchedule() {
   return text
 };
 
+  /**
+ * Takes the array of rules and renumbers them in sequential order
+ * for after a rule is deleted
+ * saves new index to userProperties.setProperty
+ */
+  function reIndexRules() {
+    var rules = getRulesArr();
+    var keys = getRuleKeys();
+    
+    keys.sort();
+    clearRules();
 
-/**
-* Takes the array of rules and renumbers them in sequential order
-* for after a rule is deleted
-* saves new index to userProperties.setProperty
-*/
-function reIndexRules() {
-  var rules = getRulesArr();
-  var keys = getRuleKeys();
-  keys.sort();
-  clearRules();
-  for (i = 0; i < keys.length; i++) {
-    var newKey = `rule${i + 1}`;
-    userProperties.setProperty(newKey, JSON.stringify(rules[i]));
-    Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+    for (i = 0; i < keys.length; i++) {
+      var newKey = `rule${i + 1}`;
+      rules[i].splice(3,1); //remove the prior index from the array
+      rules[i].push(i + 1); // add the new index to the array
+      userProperties.setProperty(newKey,JSON.stringify(rules[i]));
+      Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+    }
+    Logger.log (`${user} - Rules property store reindexed`)
   }
-  Logger.log(`${user} - Rules property store reindexed`)
-}
 
 
 

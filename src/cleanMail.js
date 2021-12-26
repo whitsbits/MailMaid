@@ -21,8 +21,12 @@ function cleanMail() {
     rulesCached = 0;
   };
 
-  rulesloop:
-  for (let i = rulesCached; i < rules.length; i++) {
+
+if (licenseRead() === false){
+  i,rules.length = 1
+}
+rulesloop:  
+for (let i = rulesCached; i < rules.length; i++) {
 
     /**
     * Set the init for the start value or the cached value

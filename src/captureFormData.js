@@ -6,52 +6,46 @@
  */
 
 function captureRuleFormData(e) {
+       
+        var search = e.formInput.search;
+        var days = e.formInput.days;
+        var action = e.formInput.action;
 
-  var search = e.formInput.search;
-  var days = e.formInput.days;
-  var action = e.formInput.action;
+        if (search === undefined) {
+          return notify (`Please tell MailMaid which messages need to be removed by adding a search term`, rulesManagerCard())
+        }else if (days === undefined) {
+          return notify (`Please enter a number of days before MailMaid cleans the messages`, rulesManagerCard())
+        }else if (isNaN (days)) {
+          return notify (`Please enter a number only for days`, rulesManagerCard())
+        }
 
-  if (search === undefined) {
-    return notify(`Please tell MailMaid which messages need to be removed by adding a search term`, rulesManagerCard())
-  } else if (days === undefined) {
-    return notify(`Please enter a number of days before MailMaid cleans the messages`, rulesManagerCard())
-  } else if (isNaN(days)) {
-    return notify(`Please enter a number only for days`, rulesManagerCard())
-  }
+        if (e.parameters.ruleNum === undefined){
+          var key =  null;
+          var ruleNum = (countRules() + 1);
+        }else{
+          var key = e.parameters.ruleNum.toString();
+          var ruleNum = key.substring(4);
+        }
 
-  if (e.parameters.ruleNum === undefined) {
-    var key = null;
-  } else {
-    var key = e.parameters.ruleNum.toString();
-  }
-
-  //Keep for dev debugging without needing UI 
-  /*var search = "foo";
-   var days = 7;
-   var action = "Purge";
-   var key = '{}';
- */
-
-  var ruleNum = (countRules() + 1);
-  var rule = [action, search, days];
-  if (key === 'rule0') {
-    return notify("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
-  }
-  if (key === null) {
-    key = ('rule' + ruleNum);
-  }
-  var jarray = JSON.stringify(rule);
-  Logger.log(`${user} - Key set as ${key}`);
-  try {
-    userProperties.setProperties({ [key]: jarray });
-  }
-  catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
-    return `Error: ${e.toString()}`;
-  }
-  Logger.log(`${user} - Cleaner Settings Saved as ${key}`);
-  return notify(`Cleaner Settings Saved as ${key}`, rulesManagerCard());
-}
+        var rule = [action, search, days, ruleNum];
+        if (key === 'rule0') {
+          return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
+        }
+        if (key === null) {
+          key = ('rule' + ruleNum);
+        }
+        var jarray = JSON.stringify(rule);
+        Logger.log (`${user} - Key set as ${key}`);
+    try {
+      userProperties.setProperties({[key] : jarray});
+    } 
+    catch (e) {
+      Logger.log (`${user} - Error: ${e.toString()}`);  
+      return `Error: ${e.toString()}`;
+      }
+  Logger.log (`${user} - Rule Saved as ${key}`);
+  return notify(`Rule Saved as ${key}`, rulesManagerCard());
+  };
 
 
 /**
