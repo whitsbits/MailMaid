@@ -60,8 +60,18 @@ function homepageIntroSection() {
         .setText(
             introText
         );
+
+    const ruleSuggestions = CardService.newAction()
+        .setFunctionName('suggestionCard')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const ruleSuggestionButton = CardService.newTextButton()
+        .setText('Make Rule Suggestions')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(ruleSuggestions);
+    
     const introBody = CardService.newCardSection()
-        .addWidget(introBodyText);
+        .addWidget(introBodyText)
+        .addWidget(ruleSuggestionButton);
 
     return introBody;
 }
