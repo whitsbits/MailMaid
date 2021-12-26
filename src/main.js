@@ -270,7 +270,7 @@ function rulesManagerCard(e, action, search, days) {
             .addWidget(_daysText)
             .addWidget(_days)
             .addWidget(cardSectionDivider)
-            .addWidget(ruleButtonsSet());
+            .addWidget(newRuleButtonSet());
 
         card.addSection(rulesManagerSection);
         card.setFixedFooter(navFooter());
