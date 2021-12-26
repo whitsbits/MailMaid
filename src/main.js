@@ -276,36 +276,34 @@ function rulesManagerCard(e, action, search, days) {
         card.setFixedFooter(navFooter());
         return card.build();
 
-        //-----------------------edit rule selected widget--------------------------//
-    } else if (action != undefined || search != undefined || days != undefined) {
-        let ruleNum = cache.get('editRuleNum')
-        let editRuleNumData = userProperties.getProperty(ruleNum)
-            .replace(/[\[\]"]/g, '');
-        //.split(',');
-        var editRuleNumText = `You are currently editing ${ruleNum} \n ${editRuleNumData}`
-        var editRuleNumWidget = CardService.newTextParagraph()
-            .setText(editRuleNumText)
+ //-----------------------edit rule selected widget--------------------------//
+}else if (action != undefined || search != undefined || days != undefined){
+    let ruleNum = cache.get('editRuleNum')
+    let editRuleNumData = reportRulesArrElements(ruleNum);
+    var editRuleNumText = `<b><font color=\"#ff3355\">You are currently editing Rule #${editRuleNumData[3]}</b></font>\n   Action: ${editRuleNumData[0]}\n   Search: ${editRuleNumData[1]}\n   Days: ${editRuleNumData[2]}`;
+    var editRuleNumWidget = CardService.newTextParagraph()
+      .setText(editRuleNumText)    
+    
+    const _searchText = CardService.newTextParagraph()
+    .setText('<b>Use <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to tell MailMaid which messages need to be removed:</b>')
+    
+    var _search = CardService.newTextInput()
+        .setFieldName('search')
+        .setValue(search)
+        .setHint(`Use standard GMail Query Language`);
 
-        const _searchText = CardService.newTextParagraph()
-            .setText('<b>Use <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to tell MailMaid which messages need to be removed:</b>')
+    const _daysText = CardService.newTextParagraph()
+        .setText('<b>How many days until before MailMaid cleans the messages?</b>')
 
-        var _search = CardService.newTextInput()
-            .setFieldName('search')
-            .setValue(search)
-            .setHint(`Use standard GMail Query Language`);
-
-        const _daysText = CardService.newTextParagraph()
-            .setText('<b>How many days until before MailMaid cleans the messages?</b>')
-
-        var _days = CardService.newTextInput()
-            .setFieldName('days')
-            .setValue(days)
-            .setHint('Number of days before MailMaid removes this email.');
+    var _days = CardService.newTextInput()
+        .setFieldName('days')
+        .setValue(days)
+        .setHint('Number of days before MailMaid removes this email.');
 
         if (action === 'Purge') {
             var item1 = true
             var item2 = false
-        } else if (action === 'Archive') {
+        }else if (action === 'Archive'){
             var item2 = true
             var item1 = false
         };
