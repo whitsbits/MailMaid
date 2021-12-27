@@ -96,3 +96,38 @@ function captureScheduleFormData(e) {
 }
 
 
+/**
+* Build InBox Processing rule into Array and save user inputs to PropertiesService.
+* Cleaner shchedule set to Triggers
+* @param {Object} e - Event from add-on server
+* @return {notify with Card to be built}
+*/
+
+function captureSuggestionFormData(e) {
+  var beforeDate = Number(e.formInput.beforeDate.msSinceEpoch).toFixed(0);
+  var afterDate = Number(e.formInput.afterDate.msSinceEpoch).toFixed(0);
+  var numResults = parseInt(e.formInput.numResults, 10);
+  var suggestionResultChoice = e.formInput.suggestionResultChoice
+
+  if (beforeDate === undefined || afterDate === undefined) {
+    return notify(`Please enter a before and after date for the suggestion search`, suggestionCard())
+  } else if (isValidTimestamp(beforeDate) || isValidTimestamp(afterDate)) {
+    return notify(`Please enter only date value for the start and end of the suggestion search`, suggestionCard())
+  }
+
+  if (numResults === undefined || (isNaN(numResults)) ) {
+    return notify(`Please enter a number for how many suggestions you want MailMaid to make.`, suggestionCard())
+  };
+
+  try {
+    countSenders(afterDate, beforeDate, numResults, suggestionResultChoice); //TODO Make async via trigger or something else.
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+    return `Error: ${e.toString()}`;
+  }
+  let bDate = searchDateConverter(beforeDate);
+  let aDate = searchDateConverter(afterDate);
+  Logger.log(`${user} - SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`);
+  return notify(`SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`, suggestionCard());
+}

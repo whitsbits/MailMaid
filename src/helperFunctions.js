@@ -360,8 +360,47 @@ function reportSchedule() {
       Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
     }
     Logger.log (`${user} - Rules property store reindexed`)
-  }
+  };
+  
 
+  function isValidTimestamp(_timestamp) {
+    const newTimestamp = new Date(_timestamp).getTime();
+    return isNumeric(newTimestamp);
+}
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+
+function decendingSort(a, b) {
+  if (b[1] === a[1]) {
+    return 0;
+  }
+  else {
+    return (b[1] < a[1]) ? -1 : 1;
+  }
+}
+
+function searchDateConverter(epochTime){
+    epochTime = Number(epochTime);
+    var eTime = new Date(epochTime);
+    var dd = eTime.getDate();
+
+  var mm = eTime.getMonth()+1; 
+  var yyyy = eTime.getFullYear();
+  if(dd<10) 
+  {
+      dd='0'+dd;
+  } 
+
+  if(mm<10) 
+  {
+      mm='0'+mm;
+  }
+  eTime = yyyy+'/'+mm+'/'+dd;
+  return eTime;
+}
 
 
 
