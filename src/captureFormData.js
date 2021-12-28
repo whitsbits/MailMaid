@@ -6,46 +6,46 @@
  */
 
 function captureRuleFormData(e) {
-       
-        var search = e.formInput.search;
-        var days = e.formInput.days;
-        var action = e.formInput.action;
 
-        if (search === undefined) {
-          return notify (`Please tell MailMaid which messages need to be removed by adding a search term`, rulesManagerCard())
-        }else if (days === undefined) {
-          return notify (`Please enter a number of days before MailMaid cleans the messages`, rulesManagerCard())
-        }else if (isNaN (days)) {
-          return notify (`Please enter a number only for days`, rulesManagerCard())
-        }
+  var search = e.formInput.search;
+  var days = e.formInput.days;
+  var action = e.formInput.action;
 
-        if (e.parameters.ruleNum === undefined){
-          var key =  null;
-          var ruleNum = (countRules() + 1);
-        }else{
-          var key = e.parameters.ruleNum.toString();
-          var ruleNum = key.substring(4);
-        }
+  if (search === undefined) {
+    return notify(`Please tell MailMaid which messages need to be removed by adding a search term`, rulesManagerCard())
+  } else if (days === undefined) {
+    return notify(`Please enter a number of days before MailMaid cleans the messages`, rulesManagerCard())
+  } else if (isNaN(days)) {
+    return notify(`Please enter a number only for days`, rulesManagerCard())
+  }
 
-        var rule = [action, search, days, ruleNum];
-        if (key === 'rule0') {
-          return notify ("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
-        }
-        if (key === null) {
-          key = ('rule' + ruleNum);
-        }
-        var jarray = JSON.stringify(rule);
-        Logger.log (`${user} - Key set as ${key}`);
-    try {
-      userProperties.setProperties({[key] : jarray});
-    } 
-    catch (e) {
-      Logger.log (`${user} - Error: ${e.toString()}`);  
-      return `Error: ${e.toString()}`;
-      }
-  Logger.log (`${user} - Rule Saved as ${key}`);
+  if (e.parameters.ruleNum === undefined) {
+    var key = null;
+    var ruleNum = (countRules() + 1);
+  } else {
+    var key = e.parameters.ruleNum.toString();
+    var ruleNum = key.substring(4);
+  }
+
+  var rule = [action, search, days, ruleNum];
+  if (key === 'rule0') {
+    return notify("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
+  }
+  if (key === null) {
+    key = ('rule' + ruleNum);
+  }
+  var jarray = JSON.stringify(rule);
+  Logger.log(`${user} - Key set as ${key}`);
+  try {
+    userProperties.setProperties({ [key]: jarray });
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+    return `Error: ${e.toString()}`;
+  }
+  Logger.log(`${user} - Rule Saved as ${key}`);
   return notify(`Rule Saved as ${key}`, rulesManagerCard());
-  };
+};
 
 
 /**
@@ -115,19 +115,22 @@ function captureSuggestionFormData(e) {
     return notify(`Please enter only date value for the start and end of the suggestion search`, suggestionCard())
   }
 
-  if (numResults === undefined || (isNaN(numResults)) ) {
+  if (numResults === undefined || (isNaN(numResults))) {
     return notify(`Please enter a number for how many suggestions you want MailMaid to make.`, suggestionCard())
+  } else if (numResults < 5 || numResults > 100) {
+    return notify(`Please enter a number greater than 5 or less than 100.`, suggestionCard());
   };
 
+  let bDate = searchDateConverter(beforeDate);
+  let aDate = searchDateConverter(afterDate);
+  Logger.log(`${user} - SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`);
+
   try {
-    countSenders(afterDate, beforeDate, numResults, suggestionResultChoice); //TODO Make async via trigger or something else.
+    countSenders(aDate, bDate, numResults, suggestionResultChoice);
   }
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
-  let bDate = searchDateConverter(beforeDate);
-  let aDate = searchDateConverter(afterDate);
-  Logger.log(`${user} - SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`);
   return notify(`SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`, suggestionCard());
 }
