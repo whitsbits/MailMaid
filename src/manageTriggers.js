@@ -56,6 +56,17 @@ function setTrigger(triggerName, atHour, everyDays) {
   Logger.log(`${user} - Trigger ${triggerName} created`)
 }
 
+/**
+ * Create a time based trigger that executes a function one minute from now
+ * used for managing async processing of slow functions
+ * @param {triggerName}
+ */
+ function setNowTrigger(triggerName) {
+  ScriptApp.newTrigger(triggerName)
+    .timeBased()
+    .after(1)
+    .create();
+}
 
 /**
  * Create a time based trigger that executes a function one hour from now
