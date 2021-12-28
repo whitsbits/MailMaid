@@ -126,11 +126,11 @@ function captureSuggestionFormData(e) {
   Logger.log(`${user} - SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`);
 
   try {
-    countSenders(aDate, bDate, numResults, suggestionResultChoice);
+      Async.call('countSenders', aDate, bDate, numResults, suggestionResultChoice)
   }
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
-  return notify(`SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`, suggestionCard());
+  return notify(`Emailing Sender Suggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`, suggestionCard());
 }
