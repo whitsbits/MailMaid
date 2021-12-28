@@ -20,10 +20,6 @@ function cleanMore() {
   cleanMail();
 }
 
-function SenderSuggestions() {
-  removeTriggers('countMoreSender');
-  countSenders();
-}
 
 /**
 * Wrapper for the purge function called by timeOut trigger
