@@ -123,7 +123,7 @@ function captureSuggestionFormData(e) {
 
   let bDate = searchDateConverter(beforeDate);
   let aDate = searchDateConverter(afterDate);
-  Logger.log(`${user} - SenderSuggestions for ${bDate} to ${aDate} for ${suggestionResultChoice} with ${numResults} results`);
+  Logger.log(`${user} - SenderSuggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`);
 
   try {
       Async.call('countSenders', aDate, bDate, numResults, suggestionResultChoice)
