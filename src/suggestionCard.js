@@ -63,8 +63,8 @@ function suggestionCard() {
             .setFieldName('suggestionResultChoice')
             .setTitle('Choice')
             .setType(CardService.SelectionInputType.RADIO_BUTTON)
-            .addItem('Top # of senders by message count', 'topMessage', true)
-            .addItem('Greater than # message count', 'greaterThanMsg', false);
+            .addItem('Top # of senders by message count', 'Top', true)
+            .addItem('Greater than # message count', 'Greater Than', false);
     
         let cardSection3TextInput1 = CardService.newTextInput()
             .setFieldName('numResults')
