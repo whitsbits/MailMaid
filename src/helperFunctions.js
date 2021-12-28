@@ -21,7 +21,6 @@ function cleanMore() {
 }
 
 function SenderSuggestions() {
-  clearAllCache();
   removeTriggers('countMoreSender');
   countSenders();
 }
