@@ -86,14 +86,16 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       r.splice(1, 0, cObj[r[0]]);
     });
 
-    const index = sender_array.indexOf(user); //remove the  current user as a suggestion target
+    const index = sender_array.findIndex(element => JSON.stringify(element.includes(user))); //remove the  current user as a suggestion target
       if (index > -1) {
         sender_array.splice(index, 1);
     }
 
+    sender_array.sort(decendingSort);
+
     var topValues = []; // set an array for the top values to send the user
     if (suggestionResultChoice === 'Top'){
-      topValues = sender_array.sort(decendingSort).slice(0, numResults);
+      topValues = sender_array.slice(0, numResults);
     }else if (suggestionResultChoice === 'Greater Than'){
       sender_array.forEach(function(r){
         if(r[1] >= numResults){
