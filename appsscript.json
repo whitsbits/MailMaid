@@ -31,14 +31,5 @@
     "https://www.googleapis.com/auth/script.locale",
     "https://www.googleapis.com/auth/script.scriptapp",
     "https://www.googleapis.com/auth/gmail.modify"
-  ],
-  "dependencies": {
-    "enabledAdvancedServices": [
-      {
-        "userSymbol": "Gmail",
-        "version": "v1",
-        "serviceId": "gmail"
-      }
-    ]
-  }
+  ]
 }
