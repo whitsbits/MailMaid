@@ -13,13 +13,7 @@
       "homepageTrigger": {
         "enabled": true,
         "runFunction": "initApp"
-      },
-      "contextualTriggers": [
-        {
-          "unconditional": {},
-          "onTriggerFunction": "initApp"
-        }
-      ]
+      }
     }
   },
   "exceptionLogging": "STACKDRIVER",
