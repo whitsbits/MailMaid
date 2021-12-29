@@ -1,12 +1,12 @@
 function callCountSenders() {
-  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()),10,'Top');
-  Async.call ('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()),10,'Top');
+  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
+  Async.call('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
 }
 
 function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
   let loopBreak = 0;
-  const query  = suggestionSearchQueryBuilder(afterDate, beforeDate);
+  const query = suggestionSearchQueryBuilder(afterDate, beforeDate);
   /**  
 * check to see if the app is woken from sleep and get last count value  
 * and if count has been cached use value to resume count of the process
@@ -74,7 +74,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     searchBatchStart += inc;
     if (searchBatchStart === 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
       inc = 499; // reduce the increment to go to 19,999
-    }else if ( searchBatchStart === 19999) { //then kill the loop
+    } else if (searchBatchStart === 19999) { //then kill the loop
       loopBreak = 1;
       break searchloop;
     };
@@ -86,20 +86,20 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       r.splice(1, 0, cObj[r[0]]);
     });
 
-    const index = sender_array.findIndex(element => JSON.stringify(element.includes(user))); //remove the  current user as a suggestion target
-      if (index > -1) {
-        sender_array.splice(index, 1);
+    const index = sender_array.findIndex(element => JSON.stringify(element.includes(Session.getActiveUser().getEmail()))); //remove the  current user as a suggestion target
+    if (index > -1) {
+      sender_array.splice(index, 1);
     }
 
     sender_array.sort(decendingSort);
 
     var topValues = []; // set an array for the top values to send the user
-    if (suggestionResultChoice === 'Top'){
+    if (suggestionResultChoice === 'Top') {
       topValues = sender_array.slice(0, numResults);
-    }else if (suggestionResultChoice === 'Greater Than'){
-      sender_array.forEach(function(r){
-        if(r[1] >= numResults){
-          topValues.push([r[0],r[1]]);
+    } else if (suggestionResultChoice === 'Greater Than') {
+      sender_array.forEach(function (r) {
+        if (r[1] >= numResults) {
+          topValues.push([r[0], r[1]]);
         }
       })
     }
@@ -119,7 +119,7 @@ function emailSendersCount(topValues) {
 
 function suggestionSearchQueryBuilder(afterDate, beforeDate) {
   let query = '';
-    query = ('-in:spam' + " " + "after:" + afterDate + " before:" + beforeDate);
-  Logger.log (`${user} - Returning suggestion search query of: ${query}`)  
+  query = ('-in:spam' + " " + "after:" + afterDate + " before:" + beforeDate);
+  Logger.log(`${user} - Returning suggestion search query of: ${query}`)
   return query
 };

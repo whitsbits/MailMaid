@@ -71,7 +71,7 @@ function clearAllRules() {
   for (var i = 1; i < numRules + 1; i++) {
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log (`${user} - Deleted ${i - 1} rules.`);
+  Logger.log(`${user} - Deleted ${i - 1} rules.`);
   return notify(`Rules Cleared`, onHomepage());
 };
 
@@ -172,10 +172,10 @@ function getRulesArr() {
       .split(',');
     rulesArr.push(ruleValue)
   }
-  rulesArr.sort(function(a,b) {
-    return a[3]-b[3]
-});
-  Logger.log (`${user} - Returning getRulesArr ${rulesArr}`)
+  rulesArr.sort(function (a, b) {
+    return a[3] - b[3]
+  });
+  Logger.log(`${user} - Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -335,36 +335,36 @@ function reportSchedule() {
   return text
 };
 
-  /**
- * Takes the array of rules and renumbers them in sequential order
- * for after a rule is deleted
- * saves new index to userProperties.setProperty
- */
-  function reIndexRules() {
-    var rules = getRulesArr();
-    var keys = getRuleKeys();
-    
-    keys.sort();
-    clearRules();
+/**
+* Takes the array of rules and renumbers them in sequential order
+* for after a rule is deleted
+* saves new index to userProperties.setProperty
+*/
+function reIndexRules() {
+  var rules = getRulesArr();
+  var keys = getRuleKeys();
 
-    for (i = 0; i < keys.length; i++) {
-      var newKey = `rule${i + 1}`;
-      rules[i].splice(3,1); //remove the prior index from the array
-      rules[i].push(i + 1); // add the new index to the array
-      userProperties.setProperty(newKey,JSON.stringify(rules[i]));
-      Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
-    }
-    Logger.log (`${user} - Rules property store reindexed`)
-  };
-  
+  keys.sort();
+  clearRules();
 
-  function isValidTimestamp(_timestamp) {
-    const newTimestamp = new Date(_timestamp).getTime();
-    return isNumeric(newTimestamp);
+  for (i = 0; i < keys.length; i++) {
+    var newKey = `rule${i + 1}`;
+    rules[i].splice(3, 1); //remove the prior index from the array
+    rules[i].push(i + 1); // add the new index to the array
+    userProperties.setProperty(newKey, JSON.stringify(rules[i]));
+    Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+  }
+  Logger.log(`${user} - Rules property store reindexed`)
+};
+
+
+function isValidTimestamp(_timestamp) {
+  const newTimestamp = new Date(_timestamp).getTime();
+  return isNumeric(newTimestamp);
 }
 
 function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 
@@ -377,23 +377,21 @@ function decendingSort(a, b) {
   }
 }
 
-function searchDateConverter(epochTime){
-    epochTime = Number(epochTime);
-    var eTime = new Date(epochTime);
-    var dd = eTime.getDate();
+function searchDateConverter(epochTime) {
+  epochTime = Number(epochTime);
+  var eTime = new Date(epochTime);
+  var dd = eTime.getDate();
 
-  var mm = eTime.getMonth()+1; 
+  var mm = eTime.getMonth() + 1;
   var yyyy = eTime.getFullYear();
-  if(dd<10) 
-  {
-      dd='0'+dd;
-  } 
-
-  if(mm<10) 
-  {
-      mm='0'+mm;
+  if (dd < 10) {
+    dd = '0' + dd;
   }
-  eTime = yyyy+'/'+mm+'/'+dd;
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  eTime = yyyy + '/' + mm + '/' + dd;
   return eTime;
 }
 
