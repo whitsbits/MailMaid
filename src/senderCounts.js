@@ -104,6 +104,16 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       })
     }
 
+    for (var i=0; i=topValue.length; i++){ // stamp out the actual search string the user will paste into the UI
+      var string = topValues[i];
+      var regex = /<(.*)>/g; // regex to parse teh email
+      var matches = regex.exec(string);
+      var text = `from:${matches[1]}`
+      topValues[i].push(text);
+      Logger.log (topValues)
+    } 
+
+
     emailSendersCount(topValues);
     clearCache('sendersCache');
     clearCache('senderArr');
