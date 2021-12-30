@@ -48,7 +48,10 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     for (var i = threadsCount; i < threads.length; i++) {
       var message = threads[i].getMessages();
       var sender = message[0].getFrom();
-      if (uA.indexOf(sender) == -1) {
+      if (sender === Session.getActiveUser().getEmail()){
+          //skip the  current user as a suggestion target
+          continue;
+      }else if (uA.indexOf(sender) == -1) {
         uA.push(sender);
         sender_array.push([sender]);
         cObj[sender] = 1;
@@ -86,11 +89,6 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       r.splice(1, 0, cObj[r[0]]);
     });
 
-    const index = sender_array.findIndex(element => JSON.stringify(element.includes(user))); //remove the  current user as a suggestion target
-      if (index > -1) {
-        sender_array.splice(index, 1);
-    }
-
     sender_array.sort(decendingSort);
 
     var topValues = []; // set an array for the top values to send the user
@@ -104,13 +102,12 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       })
     }
 
-    for (var i=0; i=topValues.length; i++){ // stamp out the actual search string the user will paste into the UI
-      var string = topValues[i];
+    for (var i = 0; i < topValues.length; i++){ // stamp out the actual search string the user will paste into the UI
+      var string = topValues[i][0];
       var regex = /<(.*)>/g; // regex to parse teh email
       var matches = regex.exec(string);
       var text = `from:${matches[1]}`
       topValues[i].push(text);
-      Logger.log (topValues)
     } 
 
 
