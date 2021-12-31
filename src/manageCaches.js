@@ -17,6 +17,8 @@ function getCacheArray() {
     { name: 'editRuleNum', type: 'String', synthValue: 'rule0' },
     { name: 'senderQueryCache', type: 'String', synthValue: "-in:spam after:2021/01/01 before:2021/12/31" },
     { name: 'sendersCache', type: 'Number', synthValue: 1000 },
+    { name: 'senderChoiceCache', type: 'String', synthValue: 'Top' },
+    { name: 'senderNumResult', type: 'Number', synthValue: 20 },
     { name: 'senderThreadsCache', type: 'Number', synthValue: 310 },
     { name: 'senderArr', type: 'Object', synthValue: [] },
     { name: 'senderuA', type: 'Object', synthValue: [] },

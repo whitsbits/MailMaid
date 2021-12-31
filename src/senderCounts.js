@@ -28,6 +28,16 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     query = suggestionSearchQueryBuilder(afterDate, beforeDate);
   };
 
+  var num = cache.getNumber('senderNumResult');
+  if (num !== null) {
+    numResults = num;
+  };
+
+  var choice = cache.getString('senderChoiceCache');
+  if (choice !== null) {
+    suggestionResultChoice = choice;
+  };
+
   var searchBatchStart = cache.getNumber('sendersCache');
   if (searchBatchStart === null) {
     searchBatchStart = 0;
@@ -82,6 +92,8 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(`${user} - Timed out in Thread ${i}, Batch start ${searchBatchStart}. Values put in cache`);
         cache.putString('senderQueryCache', query, ttl);
+        cache.putNumber('senderNumResult', numResults, ttl);
+        cache.putString('senderChoiceCache', suggestionResultChoice, ttl);
         cache.putNumber('sendersCache', searchBatchStart, ttl); // cache for 23 hours
         cache.putNumber('senderThreadsCache', i, ttl);
         cache.putObject('senderArr', sender_array, ttl); // cache for 23 hours
@@ -135,7 +147,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
 
     emailSendersCount(topValues);
     clearCache('sendersCache');
-    clearCache('senderArr');
+    //clearCache('senderArr');
     clearCache('senderuA');
     clearCache('sendercObj');
   }
