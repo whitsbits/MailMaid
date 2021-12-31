@@ -84,12 +84,11 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     if (searchBatchStart === 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
       inc = 499; // reduce the increment to go to 19,999
     } else if (searchBatchStart === 19999) { //then kill the loop
-      loopBreak = 1;
       break searchloop;
     };
   } while (threads.length > 0);
 
-  if (loopBreak === 1) {
+  if (loopBreak !== 1) {
 
     sender_array.forEach(function (r) { // add the message counts to each sender in the the sender_array
       r.splice(1, 0, cObj[r[0]]);
