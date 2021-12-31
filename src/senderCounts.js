@@ -1,6 +1,5 @@
 function callCountSenders() {
   countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
-  Async.call('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
 }
 
 function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
