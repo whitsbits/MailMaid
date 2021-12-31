@@ -134,12 +134,16 @@ function initSchedule() {
   Logger.log(`${user} - Schedule Initialized`)
 }
 
+/**
+* Function to initialize the current rule for the UI pick list
+*/
 function initRules() {
   cache.putString('editRuleNum', 'rule0');
 }
 
 /**
 * Function to check initialization status of the app
+* @return {boolean}
 */
 function checkInitStatus() {
   if (userProperties.getProperty('initialized') === null ||

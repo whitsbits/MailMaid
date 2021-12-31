@@ -1,6 +1,18 @@
-function callCountSenders() {
-  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
-}
+/**
+ * Find messages pertaining to the search
+ * step through each thread batch set by 'inc' (default Global var set to 500)
+ * add the found threads to an array
+ * process the array into a count of messages from each uniqe email address
+ * format the array into a number of top numResults values by count or by messgaes greater than numResults
+ * Check that timer hasnt reach near 5 min Google time limit
+ * If time-out save the sate of the loop to the cache and set a trigger to restart in 60 min
+ * send the topResults array to emailReport()
+ * @param {Date} afterDate - msSinceEPOCH earliest date for search range
+ * @param {Date} beforeDate - msSinceEPOCH latest date for search range
+ * @param {Number} numResults - integer for results to be returned,
+ * @param {String} suggestionResultChoice - Pick list 'Top' for Top Count of numResults, or 'Greater Than' for greater than numResults
+ * 
+ */
 
 function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
