@@ -1,16 +1,21 @@
 function callCountSenders() {
-  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()),10,'Top');
-  Async.call ('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()),10,'Top');
+  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
+  Async.call('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
 }
 
 function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
   let loopBreak = 0;
-  const query  = suggestionSearchQueryBuilder(afterDate, beforeDate);
+
   /**  
 * check to see if the app is woken from sleep and get last count value  
 * and if count has been cached use value to resume count of the process
 */
+
+  var query = cache.getString('senderQueryCache');
+  if (query === null) {
+    query = suggestionSearchQueryBuilder(afterDate, beforeDate);
+  };
 
   var searchBatchStart = cache.getNumber('sendersCache');
   if (searchBatchStart === null) {
@@ -48,10 +53,10 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     for (var i = threadsCount; i < threads.length; i++) {
       var message = threads[i].getMessages();
       var sender = message[0].getFrom();
-      if (sender === Session.getActiveUser().getEmail()){
-          //skip the  current user as a suggestion target
-          continue;
-      }else if (uA.indexOf(sender) == -1) {
+      if (sender === Session.getActiveUser().getEmail()) {
+        //skip the  current user as a suggestion target
+        continue;
+      } else if (uA.indexOf(sender) == -1) {
         uA.push(sender);
         sender_array.push([sender]);
         cObj[sender] = 1;
@@ -62,6 +67,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
         /** * When script runs close to the 5 min timeout limit take the count, 
          * cache it and set a trigger to researt after 2 mins */
         Logger.log(`${user} - Timed out in Thread ${i}, Batch start ${searchBatchStart}. Values put in cache`);
+        cache.putString('senderQueryCache', query, ttl);
         cache.putNumber('sendersCache', searchBatchStart, ttl); // cache for 23 hours
         cache.putNumber('senderThreadsCache', i, ttl);
         cache.putObject('senderArr', sender_array, ttl); // cache for 23 hours
@@ -77,13 +83,13 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     searchBatchStart += inc;
     if (searchBatchStart === 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
       inc = 499; // reduce the increment to go to 19,999
-    }else if ( searchBatchStart === 19999) { //then kill the loop
+    } else if (searchBatchStart === 19999) { //then kill the loop
       loopBreak = 1;
       break searchloop;
     };
   } while (threads.length > 0);
 
-  if (loopBreak != 1) {
+  if (loopBreak === 1) {
 
     sender_array.forEach(function (r) { // add the message counts to each sender in the the sender_array
       r.splice(1, 0, cObj[r[0]]);
@@ -92,24 +98,27 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     sender_array.sort(decendingSort);
 
     var topValues = []; // set an array for the top values to send the user
-    if (suggestionResultChoice === 'Top'){
+    if (suggestionResultChoice === 'Top') {
       topValues = sender_array.slice(0, numResults);
-    }else if (suggestionResultChoice === 'Greater Than'){
-      sender_array.forEach(function(r){
-        if(r[1] >= numResults){
-          topValues.push([r[0],r[1]]);
+    } else if (suggestionResultChoice === 'Greater Than') {
+      sender_array.forEach(function (r) {
+        if (r[1] >= numResults) {
+          topValues.push([r[0], r[1]]);
         }
       })
     }
 
-    for (var i = 0; i < topValues.length; i++){ // stamp out the actual search string the user will paste into the UI
+    for (var i = 0; i < topValues.length; i++) { // stamp out the actual search string the user will paste into the UI
       var string = topValues[i][0];
-      var regex = /<(.*)>/g; // regex to parse teh email
+      var regex = /<(.*)>/g; // regex to parse the email
       var matches = regex.exec(string);
-      var text = `from:${matches[1]}`
+      if (matches !== null){
+        var text = `from:${matches[1]}`
+      }else{
+        var text = `from:${string}`;
+      }  
       topValues[i].push(text);
-    } 
-
+    }
 
     emailSendersCount(topValues);
     clearCache('sendersCache');
@@ -126,7 +135,7 @@ function emailSendersCount(topValues) {
 
 function suggestionSearchQueryBuilder(afterDate, beforeDate) {
   let query = '';
-    query = ('-in:spam' + " " + "after:" + afterDate + " before:" + beforeDate);
-  Logger.log (`${user} - Returning suggestion search query of: ${query}`)  
+  query = ('-in:spam' + " " + "after:" + afterDate + " before:" + beforeDate);
+  Logger.log(`${user} - Returning suggestion search query of: ${query}`)
   return query
 };
