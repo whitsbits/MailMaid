@@ -28,7 +28,7 @@ function captureRuleFormData(e) {
   }
 
   var rule = [action, search, days, ruleNum];
-  if (key === 'rule0') {
+  if (key === 'ruleX') {
     return notify("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
   }
   if (key === null) {

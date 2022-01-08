@@ -201,7 +201,7 @@ function mockFormCapture() {
 
 function loadRules() {
   clearAllRules();
-  cache.putString('editRuleNum', 'rule0');
+  cache.putString('editRuleNum', 'ruleX');
   userProperties.setProperties({rule1 : JSON.stringify(['Purge', 'category:promotions', '7', '1'])});
   userProperties.setProperties({rule2 : JSON.stringify(['Purge', 'subject:MailMaid Results', '3', '2'])});
   userProperties.setProperties({rule3 : JSON.stringify(['Purge', 'from:calendar-notification@google.com', '7', '3'])});

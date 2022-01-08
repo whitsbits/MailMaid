@@ -14,7 +14,7 @@ function getCacheArray() {
     { name: 'threadsCache', type: 'Number', synthValue: 82 },
     { name: 'counterCache', type: 'Number', synthValue: 31 },
     { name: 'result', type: 'Object', synthValue: [{ id: 3, counter: 31, action: "Purge", searchString: "category:promotions", days: 7 }] },
-    { name: 'editRuleNum', type: 'String', synthValue: 'rule0' },
+    { name: 'editRuleNum', type: 'String', synthValue: 'ruleX' },
     { name: 'senderQueryCache', type: 'String', synthValue: "-in:spam after:2021/01/01 before:2021/12/31" },
     { name: 'sendersCache', type: 'Number', synthValue: 1000 },
     { name: 'senderChoiceCache', type: 'String', synthValue: 'Top' },
