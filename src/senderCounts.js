@@ -155,7 +155,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
 
 function emailSendersCount(topValues) {
   Logger.log(`${user} - Returning top values of: ${topValues}`);
-  sendReportEmail('src/senders-email.html', topValues);
+  sendReportEmail('MailMaid Suggestions','src/senders-email.html', topValues);
 }
 
 function suggestionSearchQueryBuilder(afterDate, beforeDate) {

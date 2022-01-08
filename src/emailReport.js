@@ -15,10 +15,10 @@ function testSendEmail() {
  *                           one line per array element
 */
 
-function sendReportEmail(template, results) {
+function sendReportEmail(subject, template, results) {
 
   var recipient = Session.getActiveUser().getEmail();
-  var subject = 'MailMaid Results';
+  var subject = subject;
   var message = getEmailHTML(template, results)
 
   MailApp.sendEmail({

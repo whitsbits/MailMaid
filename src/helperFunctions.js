@@ -95,7 +95,7 @@ function clearRules() {
 */
 function clearSelectedRule(e) {
   let ruleNum = e.parameters.ruleNum.toString()
-  if (ruleNum === 'rule0') {
+  if (ruleNum === 'ruleX') {
     return notify('Please select a rule from the list above', rulesManagerCard())
   } else {
     userProperties.deleteProperty(ruleNum);
@@ -119,7 +119,7 @@ function clearSchedule() {
 * Function to initialize the schedule data to the userProperties
 */
 function initSchedule() {
-  let schedule = userProperties.getProperty('schedule')
+  let schedule = userProperties.getProperty('schedule');
   if (schedule === null) {
     var atHour = 1
     var everyDays = 1
@@ -127,19 +127,26 @@ function initSchedule() {
     let schedule = getScheduleArr();
     var atHour = schedule[1]
     var everyDays = schedule[0]
-  }
-  userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) })
+  };
+  userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) });
   removeTriggers('MailMaid');
-  setTrigger('MailMaid', atHour, everyDays)
-  Logger.log(`${user} - Schedule Initialized`)
-}
+  setTrigger('MailMaid', atHour, everyDays);
+  Logger.log(`${user} - Schedule Initialized`);
+};
 
 /**
-* Function to initialize the current rule for the UI pick list
+* Function to initialize the rules
+* ruleX for the UI pick list
+* defaultRule for the install smaple rule
 */
 function initRules() {
-  cache.putString('editRuleNum', 'rule0');
-}
+  cache.putString('editRuleNum', 'ruleX');
+  let defaultRule = userProperties.getProperty('rule0');
+  if (defaultRule === null) {
+    defaultRule = ['Purge', 'subject:(MailMaid Results)', 3, 0]
+    userProperties.setProperties({ 'rule0': JSON.stringify(defaultRule) });
+  };
+};
 
 /**
 * Function to check initialization status of the app
@@ -274,7 +281,8 @@ function reportRulesText() {
     var action = rules[i][0];
     var search = rules[i][1];
     var days = rules[i][2];
-    text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
+    var index = rules[i][3];
+    text += ("<b>Rule " + index + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
   if (licenseRead() === false) {
     text += (`\n<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will only clean Rule 1.\n\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
@@ -299,7 +307,8 @@ function reportRulesArr() {
     var action = rules[i][0];
     var search = rules[i][1];
     var days = rules[i][2];
-    reportRulesArr.push("<b>Rule </b>" + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
+    var index = rules[i][3];
+    reportRulesArr.push("<b>Rule </b>" + index + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
   Logger.log(`${user} - Returning reportRulesArr: \n ${reportRulesArr}`)
   return reportRulesArr
@@ -351,10 +360,10 @@ function reportSchedule() {
     keys.sort();
     clearRules();
 
-    for (i = 0; i < keys.length; i++) {
-      var newKey = `rule${i + 1}`;
+    for (i = 1; i < keys.length; i++) {
+      var newKey = `rule${i}`;
       rules[i].splice(3,1); //remove the prior index from the array
-      rules[i].push(i + 1); // add the new index to the array
+      rules[i].push(i); // add the new index to the array
       userProperties.setProperty(newKey,JSON.stringify(rules[i]));
       Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
     }
@@ -362,9 +371,9 @@ function reportSchedule() {
   };
   
 
-  function isValidTimestamp(_timestamp) {
-    const newTimestamp = new Date(_timestamp).getTime();
-    return isNumeric(newTimestamp);
+function isValidTimestamp(_timestamp) {
+  const newTimestamp = new Date(_timestamp).getTime();
+  return isNumeric(newTimestamp);
 }
 
 function isNumeric(n) {
