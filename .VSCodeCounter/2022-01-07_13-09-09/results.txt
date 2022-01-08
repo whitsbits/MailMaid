@@ -1,0 +1,67 @@
+Date : 2022-01-07 13:09:09
+Directory : d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention
+Total : 36 files,  5150 codes, 638 comments, 391 blanks, all 6179 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |      2,831 |         23 |          1 |      2,855 |
+| JavaScript |         29 |      2,182 |        615 |        373 |      3,170 |
+| HTML       |          3 |        131 |          0 |         11 |        142 |
+| Markdown   |          1 |          6 |          0 |          6 |         12 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                   |         36 |      5,150 |        638 |        391 |      6,179 |
+| legacy                                                                              |          8 |        231 |         28 |         38 |        297 |
+| legacy\html                                                                         |          1 |         66 |          0 |          5 |         71 |
+| src                                                                                 |         23 |      1,763 |        587 |        345 |      2,695 |
+| test                                                                                |          1 |        319 |          0 |          1 |        320 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                            | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\README.md                     | Markdown   |          6 |          0 |          6 |         12 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\appsscript.json               | JSON       |         29 |          0 |          0 |         29 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\countStart.js          | JavaScript |         17 |          0 |          1 |         18 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\enhancedCachesTests.js | JavaScript |         18 |          4 |          3 |         25 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\getInboxCount.js       | JavaScript |         34 |         15 |          9 |         58 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\html\index.html        | HTML       |         66 |          0 |          5 |         71 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\senderCountsAPI.js     | JavaScript |         59 |          3 |         14 |         76 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\test.js                | JavaScript |         17 |          1 |          4 |         22 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\tests.js               | JavaScript |          9 |          0 |          1 |         10 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\legacy\zgetCountStart.js      | JavaScript |         11 |          5 |          1 |         17 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\package-lock.json             | JSON       |      2,793 |          0 |          1 |      2,794 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\package.json                  | JSON       |          9 |         23 |          0 |         32 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\Async.js                  | JavaScript |         46 |         43 |          6 |         95 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\EnhancedCache.js          | JavaScript |        153 |         81 |         27 |        261 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\EnhancedCacheService.js   | JavaScript |          3 |         11 |          0 |         14 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\MD5hash.js                | JavaScript |         33 |         46 |          9 |         88 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\captureFormData.js        | JavaScript |         98 |         18 |         20 |        136 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\cleanMail.js              | JavaScript |        127 |         32 |         20 |        179 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\debuggingHelpers.js       | JavaScript |        155 |         55 |         31 |        241 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\deleteAllConfirm.js       | JavaScript |         20 |          2 |          4 |         26 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\emailReport.js            | JavaScript |         20 |         12 |          6 |         38 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\exportToDrive.js          | JavaScript |         16 |          0 |          7 |         23 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\helperFunctions.js        | JavaScript |        261 |         98 |         48 |        407 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\licenseManagement.js      | JavaScript |         28 |         11 |          6 |         45 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\main.js                   | JavaScript |        165 |         48 |         37 |        250 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\manageCaches.js           | JavaScript |         52 |         18 |         10 |         80 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\manageTriggers.js         | JavaScript |         60 |         29 |          9 |         98 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\previewRule.js            | JavaScript |         13 |          0 |          1 |         14 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\report-email.html         | HTML       |         35 |          0 |          3 |         38 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\rulesCard.js              | JavaScript |        165 |         19 |         38 |        222 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\scheduleCard.js           | JavaScript |         72 |         37 |         21 |        130 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\senderCounts.js           | JavaScript |        124 |         23 |         19 |        166 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\senders-email.html        | HTML       |         30 |          0 |          3 |         33 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\suggestionCard.js         | JavaScript |         83 |          0 |         20 |        103 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\src\timeOut.js                | JavaScript |          4 |          4 |          0 |          8 |
+| d:\Cloud Drives\OneDrive\GScriptsCode\GMail-Retention\test\synth getSenderArr.js    | JavaScript |        319 |          0 |          1 |        320 |
+| Total                                                                               |            |      5,150 |        638 |        391 |      6,179 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
