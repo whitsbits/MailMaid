@@ -19,11 +19,10 @@ function rulesManagerCard(e, action, search, days) {
             .setType(CardService.SelectionInputType.DROPDOWN)
             .setFieldName('editRule')
             .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
-            .addItem("Click here to select an existing Rule to edit", "rule0", true)
+            .addItem("Click here to select an existing Rule to edit", "ruleX", true)
 
         for (let i = 0; i < rules.length; i++) {
             var ruleNum = `rule${i}`;
-            Logger.log(ruleNum)
             var rulePres = `Rule ${rules[i][3]}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }
@@ -156,7 +155,6 @@ function rulesManagerCard(e, action, search, days) {
 */
 function onModeChange(e) {
     let ruleNum = (e.formInput.editRule);
-    Logger.log (e)
     cache.putString('editRuleNum', ruleNum);
     let ruleElementsArr = reportRulesArrElements(ruleNum);
     Logger.log(`${user} - The element array is: ${ruleElementsArr}`);

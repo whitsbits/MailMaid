@@ -38,8 +38,8 @@ function initLicense() {
 * Store the License Key Property Store
 */
 function setLicense(e) {
-  Logger.log(e)
   const number = e.formInput.number
   userProperties.setProperties({ "license": number });
+  Logger.log(`${user} - License key saved as ${number}`)
   return notify(`License key saved as ${number}`, onHomepage());
 }
