@@ -64,7 +64,14 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       threadsCount = threadsCached;
     };
 
-    var threads = GmailApp.search(query, searchBatchStart, inc);
+    try {
+      var threads = GmailApp.search(query, searchBatchStart, inc);
+    }
+    catch (e) {
+      Logger.log(`${user} - Error: ${e.toString()}`);
+      break searchloop;
+    }
+
     if (threads.length === 0) {
       break searchloop;
     }
