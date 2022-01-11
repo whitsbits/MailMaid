@@ -7,17 +7,27 @@
  */
 
 function MailMaid() {
-  clearAllCache();
-  removeTriggers('cleanMore');
-  cleanMail();
+  try {
+    clearAllCache();
+    removeTriggers('cleanMore');
+    cleanMail();
+  }
+  catch {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+  }
 }
 
 /**
  * Wrapper for the purge function called by timeOut trigger
  */
 function cleanMore() {
-  removeTriggers('cleanMore');
-  cleanMail();
+  try {
+    removeTriggers('cleanMore');
+    cleanMail();
+  } 
+  catch {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+  }
 }
 
 
@@ -25,8 +35,13 @@ function cleanMore() {
 * Wrapper for the purge function called by timeOut trigger
 */
 function countMoreSenders() {
+  try {
   removeTriggers('countMoreSenders');
   countSenders();
+  }
+  catch {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+  }
 }
 
 /**

@@ -165,31 +165,31 @@ function onModeChange(e) {
     return rulesManagerCard(e, action, search, days);
 }
 
-    function selectedRuleButtonSet() {
-        let ruleNum = cache.get('editRuleNum');
-        if (ruleNum === null){ruleNum='ruleX'};
+function selectedRuleButtonSet() {
+    let ruleNum = cache.get('editRuleNum');
+    if (ruleNum === null){ruleNum='ruleX'};
 
-        const replaceAction = CardService.newAction()
-            .setFunctionName('captureRuleFormData')
-            .setParameters({ruleNum: ruleNum})
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const replaceButton = CardService.newTextButton()
-            .setText('Replace Selected Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(replaceAction);
-            
-        const clearSelectedAction = CardService.newAction()
-            .setFunctionName('clearSelectedRule')
-            .setParameters({ruleNum: ruleNum})
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const clearSelectedButton = CardService.newTextButton()
-            .setText('Delete Selected Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(clearSelectedAction);
+    const replaceAction = CardService.newAction()
+        .setFunctionName('captureRuleFormData')
+        .setParameters({ruleNum: ruleNum})
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const replaceButton = CardService.newTextButton()
+        .setText('Replace Selected Rule')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(replaceAction);
+        
+    const clearSelectedAction = CardService.newAction()
+        .setFunctionName('clearSelectedRule')
+        .setParameters({ruleNum: ruleNum})
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const clearSelectedButton = CardService.newTextButton()
+        .setText('Delete Selected Rule')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(clearSelectedAction);
 
-            const selectedRuleButtonSet = CardService.newButtonSet()
-            .addButton(replaceButton)
-            .addButton(clearSelectedButton);
+    const selectedRuleButtonSet = CardService.newButtonSet()
+    .addButton(replaceButton)
+    .addButton(clearSelectedButton);
         
     return selectedRuleButtonSet;
     }
