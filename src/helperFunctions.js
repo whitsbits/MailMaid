@@ -12,7 +12,7 @@ function MailMaid() {
     removeTriggers('cleanMore');
     cleanMail();
   }
-  catch {
+  catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
   }
 }
@@ -25,7 +25,7 @@ function cleanMore() {
     removeTriggers('cleanMore');
     cleanMail();
   } 
-  catch {
+  catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
   }
 }
@@ -39,7 +39,7 @@ function countMoreSenders() {
   removeTriggers('countMoreSenders');
   countSenders();
   }
-  catch {
+  catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
   }
 }
