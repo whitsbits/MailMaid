@@ -22,11 +22,13 @@ function cleanMail() {
   };
 
 
-if (licenseRead() === false){
-  i,rules.length = 1
-}
-rulesloop:  
-for (let i = rulesCached; i < rules.length; i++) {
+  if (licenseRead() === false) {
+    i, rules.length = 1
+  }
+
+ 
+  rulesloop:
+  for (let i = rulesCached; i < rules.length; i++) {
 
     /**
     * Set the init for the start value or the cached value
@@ -44,12 +46,13 @@ for (let i = rulesCached; i < rules.length; i++) {
       var days = rules[i][2];
     } else {
       Logger.log(`${user} - No rules set for processing`)
-      sendReportEmail('MailMaid Results','src/report-email.html', ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
+      sendReportEmail('MailMaid Results', 'src/report-email.html', ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
       loopBreak = 1;
       break rulesloop;
     }
     searchString = searchQueryBuilder(action, searchString, days);
 
+    try{
     searchloop:
     while (loopBreak === 0) {
       let threadsCached = cache.getNumber('threadsCache');
@@ -78,29 +81,79 @@ for (let i = rulesCached; i < rules.length; i++) {
           threads[j].moveToTrash();
           ++counter;
         }
-
+        /** 
+       * When script runs close to the 5 min timeout limit take the count, 
+       * cache it and set a trigger to researt after an hour
+       */
         if (isTimeUp_(scriptStart, timeOutLimit)) {
-          timeOut(i, searchBatchStart, j, counter);
+          Logger.log(`${user} - Inbox rules loop time limit exceeded.`);
+          /**
+           * Cache all the placeholders to resume at exact spot after timout ends
+           */
+          cache.putNumber('rulesCache', i, ttl); // cache the rule loop location
+          cache.putNumber('searchBatchStartCache', searchBatchStart, ttl) // cache the count
+          cache.putNumber('threadsCache', j, ttl) // cache the count
+          cache.putNumber('counterCache', counter, ttl) // cache the count
+          Logger.log(`${user} - Timed out in Rule ${i}, Batch start ${searchBatchStart} and Thread ${j} with partial count of ${counter}. Values put in cache`);
+
+          /**
+           * Set the trigger to resume after timeout ends (60min for Add-ons)
+           */
+          if (triggerActive('cleanMore') === false) {
+            Logger.log(`${user} - Setting a trigger to call the cleanMore function.`)
+            setMoreTrigger('cleanMore');
+          } else {
+            Logger.log(`${user} - Next trigger already Set`)
+          }
           loopBreak = 1;
           break rulesloop;
         }
       } // End Threads loop (j)
 
       searchBatchStart += inc; // work through the inbox in incremental chunks
-      if (searchBatchStart = 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
-        inc = 499; // reduce the increment to go to 19,999
-      } else if (searchBatchStart = 19999) { //then kill the loop
-        loopBreak = 1;
-        break searchloop;
-      };
+
       clearCache('threadsCache');
     }; // END While Loop
-    recordResults(i, counter, action, searchString, days);
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+    var maxMet = true; // notify user that maximum quota was reached
+    var tallyCount = searchBatchStart + cache.getNumber('senderThreadsCache') 
+    // get a final tally of num of messages proccessed before quota for reporting to user
+    break rulesloop;
+  };
+  
+      /**
+       * Take the results and build the array needed for the report
+       * Store the array in the cache
+       * clean up the loop placeholder caches
+       */
+      let resultsCached = cache.getObject('result');
+      let resultsArr = resultsCached
+      if (resultsCached === null) {
+        resultsArr = [];
+      };
+      resultsArr.push({ id: (i + 1), counter: counter, action: action, searchString: searchString, days: days })
+      cache.putObject('result', resultsArr);
+      Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`);
+      clearCache('rulesCache');
+      clearCache('searchBatchStartCache');
+      clearCache('threadsCache');
+      clearCache('counterCache');
   } // End Rules loop (i)
+
 
   //If the loop didnt break, end the processing of the script
   if (loopBreak != 1) {
-    finishCleaning();
+    clearCache('ruleLoopCache');
+    removeTriggers('cleanMore')
+    var results = cache.getObject('result');
+    Logger.log(`${user} - Final tally: \n ${results}`);
+    var lastRun = JSON.stringify(Date.now());
+    userProperties.deleteProperty('lastRunEpoch')
+    userProperties.setProperties({ 'lastRunEpoch': lastRun })
+    Logger.log(`${user} - Setting last run data as ${lastRun}`)
+    sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, tallyCount, results);
   }
 };
 
@@ -112,67 +165,4 @@ function searchQueryBuilder(action, searchString, days) {
     query = (searchString + " " + "older_than:" + days + "d");
   }
   return query
-}
-
-
-/** 
- * When script runs close to the 5 min timeout limit take the count, 
- * cache it and set a trigger to researt after an hour
- */
-
-function timeOut(i, searchBatchStart, j, counter) {
-  Logger.log(`${user} - Inbox rules loop time limit exceeded.`);
-  /**
-   * Cache all the placeholders to resume at exact spot after timout ends
-   */
-  cache.putNumber('rulesCache', i, ttl); // cache the rule loop location
-  cache.putNumber('searchBatchStartCache', searchBatchStart, ttl) // cache the count
-  cache.putNumber('threadsCache', j, ttl) // cache the count
-  cache.putNumber('counterCache', counter, ttl) // cache the count
-  Logger.log(`${user} - Timed out in Rule ${i}, Batch start ${searchBatchStart} and Thread ${j} with partial count of ${counter}. Values put in cache`);
-  listCache();
-
-  /**
-   * Set the trigger to resume after timeout ends (60min for Add-ons)
-   */
-  if (triggerActive('cleanMore') === false) {
-    Logger.log(`${user} - Setting a trigger to call the cleanMore function.`)
-    setMoreTrigger('cleanMore');
-  } else {
-    Logger.log(`${user} - Next trigger already Set`)
-  }
 };
-
-/**
- * Take the results and build the array needed for the report
- * Store the array in the cache
- * clean up the loop placeholder caches
- */
-function recordResults(i, counter, action, searchString, days) {
-  let resultsCached = cache.getObject('result');
-  let resultsArr = resultsCached
-  if (resultsCached === null) {
-    resultsArr = [];
-  };
-  resultsArr.push({ id: (i + 1), counter: counter, action: action, searchString: searchString, days: days })
-  cache.putObject('result', resultsArr);
-  Logger.log(`${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`);
-  clearCache('rulesCache');
-  clearCache('searchBatchStartCache');
-  clearCache('threadsCache');
-  clearCache('counterCache');
-  listCache();
-}
-
-
-function finishCleaning() {
-  clearCache('ruleLoopCache');
-  removeTriggers('cleanMore')
-  var results = cache.getObject('result');
-  Logger.log(`${user} - Final tally: \n ${results}`);
-  var lastRun = JSON.stringify(Date.now());
-  userProperties.deleteProperty('lastRunEpoch')
-  userProperties.setProperties({ 'lastRunEpoch': lastRun })
-  Logger.log(`${user} - Setting last run data as ${lastRun}`)
-  sendReportEmail('MailMaid Results','src/report-email.html', results);
-}

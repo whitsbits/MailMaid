@@ -3,7 +3,10 @@
 
 <body>
     <img src="https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true" alt="MailMaid"><br>
-    <b>MailMaid successfully processed the following results:</b><br><br>
+    <b>MailMaid was able to process <?= tally ?> messages based on your rules</b><br>
+    <? if (maxMet === true) { ?>
+      MailMaid hit the daily quota limit of 20k messages, so not all emails in your inbox were processed.<br><br>
+    <? } ?>
 
     <table class="wp-table" style="border: 1px solid #ccc;table-layout: auto;border-collapse: collapse;border-spacing: 0;width: 40%;display: table;font-size: 13px!important;">
       <tr style="border-bottom: 1px solid #ddd;background-color: #347ff7;font-size:18px; color:white">
