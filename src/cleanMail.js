@@ -12,6 +12,7 @@ function cleanMail() {
   const scriptStart = new Date();
   var rules = getRulesArr();
   let loopBreak = 0;
+  var tallyCount = 0;
   /**  
   * check to see if the app is worken from sleep and get last count value  
   * and if count has been cached use value to resume count of the process
@@ -65,12 +66,13 @@ function cleanMail() {
         counter = counterCached;
       };
       const threads = GmailApp.search(searchString, searchBatchStart, inc);  // find a block of messages
-      let batch = (`${searchBatchStart} to ${searchBatchStart + threads.length}`);
-      Logger.log(`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, starting at thread ${threadsCount}.`);
       if (threads.length === 0) {
         break searchloop;
       }
+      let batch = (`${searchBatchStart} to ${searchBatchStart + threads.length}`);
+      Logger.log(`${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, starting at thread ${threadsCount}.`);
 
+      tallyCount += threads.length;
       for (let j = threadsCount; j < threads.length; j++) {  //Start looping the messages in threads
 
         if (action === 'Archive') {
@@ -108,17 +110,17 @@ function cleanMail() {
           loopBreak = 1;
           break rulesloop;
         }
+         
       } // End Threads loop (j)
 
       searchBatchStart += inc; // work through the inbox in incremental chunks
-
+       
       clearCache('threadsCache');
     }; // END While Loop
   }
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
     var maxMet = true; // notify user that maximum quota was reached
-    var tallyCount = searchBatchStart + cache.getNumber('senderThreadsCache') 
     // get a final tally of num of messages proccessed before quota for reporting to user
     break rulesloop;
   };
