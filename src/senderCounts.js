@@ -17,6 +17,7 @@
 function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
   let loopBreak = 0;
+  var tallyCount = 0;
 
   /**  
 * check to see if the app is woken from sleep and get last count value  
@@ -57,6 +58,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
   };
 
   searchloop:
+  try {
   do {
     let threadsCached = cache.getNumber('senderThreadsCache');
     let threadsCount = 0;
@@ -64,10 +66,13 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       threadsCount = threadsCached;
     };
 
-    var threads = GmailApp.search(query, searchBatchStart, inc);
+      var threads = GmailApp.search(query, searchBatchStart, inc);
+
     if (threads.length === 0) {
       break searchloop;
     }
+
+    tallyCount += threads.length;
     let batch = (`${searchBatchStart} to ${searchBatchStart + threads.length}`);
     Logger.log(`${user} - Processing batch ${batch} starting at thread ${threadsCount}.`);
     if (threads.length === 0) {
@@ -107,12 +112,13 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     }
     clearCache('senderThreadsCache');
     searchBatchStart += inc;
-    if (searchBatchStart === 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
-      inc = 499; // reduce the increment to go to 19,999
-    } else if (searchBatchStart === 19999) { //then kill the loop
-      break searchloop;
-    };
   } while (threads.length > 0);
+}
+catch (e) {
+  Logger.log(`${user} - Error: ${e.toString()}`);
+  var maxMet = true; // notify user that maximum quota was reached
+  // get a final tally of num of messages proccessed before quota for reporting to user
+}
 
   if (loopBreak !== 1) {
 
@@ -145,7 +151,8 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
       topValues[i].push(text);
     }
 
-    emailSendersCount(topValues);
+    Logger.log(`${user} - Returning top values of: ${topValues}`);
+    sendReportEmail('MailMaid Suggestions','src/senders-email.html', maxMet, tallyCount, topValues);
     clearCache('sendersCache');
     //clearCache('senderArr');
     clearCache('senderuA');
@@ -153,10 +160,6 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
   }
 }
 
-function emailSendersCount(topValues) {
-  Logger.log(`${user} - Returning top values of: ${topValues}`);
-  sendReportEmail('MailMaid Suggestions','src/senders-email.html', topValues);
-}
 
 function suggestionSearchQueryBuilder(afterDate, beforeDate) {
   let query = '';
