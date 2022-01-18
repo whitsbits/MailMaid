@@ -13,16 +13,17 @@ let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
 function saveUserInfo() {
-  if (!userProperties.getProperty('stored')) {
+  const stored = userProperties.getProperty('stored');
+  if (!stored || stored === 'false') {
+    userProperties.setProperties({ 'stored': true });
     var conn = Jdbc.getConnection('jdbc:mysql://34.72.191.212:3306/db_mailmaid',
                               {user: 'root', password: 'CbE4tkxG1pNbzyIf'});
     let stmt = conn.createStatement()
-    let query="insert into users(email) values('"+Session.getActiveUser()+"')";
+    let email = '' + Session.getActiveUser();
+    let query="insert into users(id, email, license) values('"+MD5(email, false)+"','"+email+"','"+MD5('trial', false)+"')";
     stmt.execute(query)
     stmt.close()
     conn.close()
-
-    userProperties.setProperties({ 'stored': true });
   }
 }
 
@@ -43,7 +44,6 @@ function initApp() {
     }
 
     var firstCard = onHomepage();
-
     saveUserInfo();
     return firstCard;
 }
