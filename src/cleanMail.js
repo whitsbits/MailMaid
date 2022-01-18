@@ -121,7 +121,7 @@ function cleanMail() {
   }
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
-    var maxMet = true; // notify user that maximum quota was reached
+    maxMet = true; // notify user that maximum quota was reached
     // get a final tally of num of messages proccessed before quota for reporting to user
     break rulesloop;
   };
