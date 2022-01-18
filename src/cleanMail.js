@@ -12,7 +12,8 @@ function cleanMail() {
   const scriptStart = new Date();
   var rules = getRulesArr();
   let loopBreak = 0;
-  var tallyCount = 0;
+  let tallyCount = 0;
+  let maxMet = false; 
   /**  
   * check to see if the app is worken from sleep and get last count value  
   * and if count has been cached use value to resume count of the process
@@ -47,7 +48,7 @@ function cleanMail() {
       var days = rules[i][2];
     } else {
       Logger.log(`${user} - No rules set for processing`)
-      sendReportEmail('MailMaid Results', 'src/report-email.html', ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
+      sendReportEmail('MailMaid Results', 'src/report-email.html', false, 0, ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
       loopBreak = 1;
       break rulesloop;
     }
@@ -156,6 +157,10 @@ function cleanMail() {
     userProperties.setProperties({ 'lastRunEpoch': lastRun })
     Logger.log(`${user} - Setting last run data as ${lastRun}`)
     sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, tallyCount, results);
+  }
+
+  function newFunction() {
+    return 0;
   }
 };
 
