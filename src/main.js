@@ -20,7 +20,7 @@ function saveUserInfo() {
                               {user: 'root', password: 'CbE4tkxG1pNbzyIf'});
     let stmt = conn.createStatement()
     let email = '' + Session.getActiveUser();
-    let query="insert into users(id, email, license) values('"+MD5(email, false)+"','"+email+"','"+MD5('trial', false)+"')";
+    let query="insert into users(id, email, license) values('"+MD5(email, false)+"','"+email+"','TRIAL')";
     stmt.execute(query)
     stmt.close()
     conn.close()
