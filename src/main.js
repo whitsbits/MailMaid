@@ -12,6 +12,22 @@ var inc = 500; // Inbox Message Iteration Increment
 let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
+function saveUserInfo() {
+  const stored = userProperties.getProperty('stored');
+  if (!stored || stored === 'false') {
+    userProperties.setProperties({ 'stored': true });
+    var conn = Jdbc.getConnection('jdbc:mysql://34.72.191.212:3306/db_mailmaid',
+                              {user: 'root', password: 'CbE4tkxG1pNbzyIf'});
+    let stmt = conn.createStatement()
+    let email = '' + Session.getActiveUser();
+    let query="insert into users(id, email, license) values('"+MD5(email, false)+"','"+email+"','TRIAL')";
+    stmt.execute(query)
+    stmt.close()
+    conn.close()
+  }
+}
+
+
 function initApp() {
     let init = checkInitStatus();
     if (init === false) {
@@ -28,6 +44,7 @@ function initApp() {
     }
 
     var firstCard = onHomepage();
+    saveUserInfo();
     return firstCard;
 }
 
