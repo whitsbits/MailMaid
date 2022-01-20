@@ -24,8 +24,8 @@ function checkUserInfoInDB(stmt, email) {
   const query = `select * from users where email='${email}'`;
 
   var results = stmt.executeQuery(query);
-
-  Logger.log(`checkUserInfoInDB - ${!!results.next()}`);
+  
+  return !!results.next();
 }
 
 /**
