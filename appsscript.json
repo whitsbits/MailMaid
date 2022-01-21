@@ -25,10 +25,6 @@
     "https://www.googleapis.com/auth/script.locale",
     "https://www.googleapis.com/auth/script.scriptapp",
     "https://www.googleapis.com/auth/gmail.modify",
-    
-    "https://www.googleapis.com/auth/cloud-platform",
-    "https://www.googleapis.com/auth/sqlservice",
-    "https://www.googleapis.com/auth/sqlservice.admin",
     "https://www.googleapis.com/auth/script.external_request"
   ]
 }
