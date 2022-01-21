@@ -154,15 +154,21 @@ function rulesManagerCard(e, action, search, days) {
 * TODO add @param to change the return function
 */
 function onModeChange(e) {
-    let ruleNum = (e.formInput.editRule);
-    cache.putString('editRuleNum', ruleNum);
-    let ruleElementsArr = reportRulesArrElements(ruleNum);
-    Logger.log(`${user} - The element array is: ${ruleElementsArr}`);
-    var action = ruleElementsArr[0];
-    var search = ruleElementsArr[1];
-    var days = ruleElementsArr[2];
-    Logger.log(`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
-    return rulesManagerCard(e, action, search, days);
+    try {
+        let ruleNum = (e.formInput.editRule);
+        Logger.log (`${user} - Getting elements for Rule: ${ruleNum}`)
+        cache.putString('editRuleNum', ruleNum);
+        let ruleElementsArr = reportRulesArrElements(ruleNum);
+        Logger.log(`${user} - The element array is: ${ruleElementsArr}`);
+        var action = ruleElementsArr[0];
+        var search = ruleElementsArr[1];
+        var days = ruleElementsArr[2];
+        Logger.log(`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
+        return rulesManagerCard(e, action, search, days);
+        }
+    catch(e) {
+        Logger.log(`${user} - onModeChange failed on processing ${ruleNum}: ${e.message}`);
+    }
 }
 
 function selectedRuleButtonSet() {

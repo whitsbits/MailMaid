@@ -336,6 +336,7 @@ function reportRulesArr() {
 */
 function reportRulesArrElements(ruleNum) {
   const rule = userProperties.getProperty(ruleNum);
+  Logger.log(`${user} - Fetching reportRulesArrElements for ${ruleNum}: \n ${rule}`)
   let ruleElemArray = [];
   ruleElemArray = rule
     .replace(/[\[\]"]/g, '')
