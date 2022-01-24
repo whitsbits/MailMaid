@@ -22,7 +22,7 @@ function rulesManagerCard(e, action, search, days) {
             .addItem("Click here to select an existing Rule to edit", "ruleX", true)
 
         for (let i = 0; i < rules.length; i++) {
-            var ruleNum = `rule${i}`;
+            var ruleNum = `rule${rules[i][3]}`;
             var rulePres = `Rule ${rules[i][3]}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }
