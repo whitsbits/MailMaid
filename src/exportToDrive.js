@@ -13,11 +13,18 @@ function exportToDrive(threads) {
         var msgRaw = msg.getRawContent();
 
         var msgBlob = Utilities.newBlob(msgRaw, 'message/rfc822', 'message.eml');
-        
-        var file = DriveApp.getFolderById(newFolder).createFile(msgBlob);
-        var filename = GmailApp.getMessageById(msgID).getSubject();
-        
-        file.setName(filename);
+        var slug = "-+"
+          for(let a = 0; a < 256; a++){
+            ++slug;
+          };
+
+        var thread =''
+        thread += (`${msgBlob} \n ${slug}`);
+
       }
   }
+  var file = DriveApp.getFolderById(newFolder).createFile(thread);
+  var filename = GmailApp.getMessageById(msgID).getSubject();
+  
+  file.setName(filename);
 }
