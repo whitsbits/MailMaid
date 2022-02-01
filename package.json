@@ -6,6 +6,11 @@
   "homepage": "http://whitman.app",
   "license": "MIT",
   "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "upload": "clasp push",
+    "redeploy": "npx clasp deploy -i AKfycbz8Irk2c3QbrEng2H4PuBrWh34uNjq1q8q0IGSuBiOs_pwFHXt6YmBzol-BMuP3iOwU",
+    "deploy": "npm run build && npm run upload",
     "lint": "eslint -c .eslintrc.json src/*.js",
     "lint:fix": "eslint -c .eslintrc.json --fix src/*.js"
   },
@@ -18,14 +23,19 @@
     "google-workspace"
   ],
   "devDependencies": {
-    "@google/clasp": "^2.3.0",
+    "@babel/core": "^7.16.12",
+    "@babel/preset-env": "^7.16.11",
+    "@google/clasp": "^2.4.1",
+    "babel-loader": "^8.2.3",
     "eslint": "^6.8.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "webpack": "^5.68.0"
   },
   "bugs": {
     "url": "https://github.com/slwhitman/GMail-Maintenance/issues"
   },
   "dependencies": {
-    "@types/google-apps-script": "^1.0.41"
+    "@types/google-apps-script": "^1.0.45",
+    "node-email-reply-parser": "^0.1.3"
   }
 }

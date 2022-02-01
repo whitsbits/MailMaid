@@ -1,30 +1,34 @@
 function exportToDrive(threads) {
+  
   var threads = GmailApp.search("from:Jessica_Zimmerman@ryecountryday.org", 0, 500);
 
   var newFolder = DriveApp.createFolder("MailMaidDownload").getId();
+  var slug = printSlug();
+
 
   for (var i=0; i< threads.length; i++) {
     var messages = threads[i].getMessages();
-
+      var thread = '';
       for (var j=0; j< messages.length; j++) {
 
         var msgID = messages[j].getId();
         var msg = GmailApp.getMessageById(msgID);
-        var msgRaw = msg.getRawContent();
+        var msgRaw = removeReply(msg.getPlainBody());
 
-        var msgBlob = Utilities.newBlob(msgRaw, 'message/rfc822', 'message.eml');
-        var slug = "-+"
-          for(let a = 0; a < 256; a++){
-            ++slug;
-          };
 
-        var thread =''
-        thread += (`${msgBlob} \n ${slug}`);
-
+        thread += (`${msgRaw} \n ${slug} \n`);
       }
-  }
-  var file = DriveApp.getFolderById(newFolder).createFile(thread);
+  var msgBlob = Utilities.newBlob(thread, 'message/rfc822', 'message.eml');
+  var file = DriveApp.getFolderById(newFolder).createFile(msgBlob);
   var filename = GmailApp.getMessageById(msgID).getSubject();
-  
   file.setName(filename);
+   }
+}
+
+function printSlug() {
+  let slug = "-="
+  for(let a = 0; a < 5; a++){
+    slug += slug;
+  };
+  return slug;
 }
