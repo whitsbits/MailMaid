@@ -42,16 +42,7 @@ function countMoreSenders() {
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
   }
-}
-
-/**
- * Header info for all log lines
- * @returns Header info for all logging
- */
-function logLine(message) {
-  let logLine = console.log(`${user} - ${message}`);
-  return logLine
-}
+};
 
 /**
  * Responds to trigger to chcek if MailMaid trigger has been disabled
