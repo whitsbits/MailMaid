@@ -95,3 +95,18 @@ function removeTriggers(triggerName) {
   Logger.log(`${user} - Trigger ${triggerName} removed`);
 }
 
+
+
+function webTrigger() {
+const params = {
+  method: 'get',
+  headers: { Authorization: `Bearer ${ScriptApp.getOAuthToken()}` },
+  followRedirects: true,
+  muteHttpExceptions: true,
+};
+
+// the following URL should be your "Current web app URL"
+const url = 'https://script.google.com/macros/s/AKfycbxvAzJykKrhNlYV9ij25fzXkmhuGo5C_BWFAcwIe83MEsCzMqcZtF1x90-Yqgq8YeKVJA/exec';
+const response = UrlFetchApp.fetch(url, params);
+console.log('UrlFetchApp response: ', response.getContentText());
+}

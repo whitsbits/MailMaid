@@ -54,6 +54,16 @@ function logLine(message) {
 }
 
 /**
+ * Responds to trigger to chcek if MailMaid trigger has been disabled
+ * 
+ */
+  function checkTrigger() {
+    if (checkLastRun()){
+      initSchedule();
+    };
+  };
+
+/**
  * Check that the schedule is working
  */
 
