@@ -172,7 +172,7 @@ function listProperties() {
   Logger.log(properties);
 }
 
-function clearRuleZero() {
+function clearProperty() {
   userProperties.deleteProperty(`rule2`);
 }
 
