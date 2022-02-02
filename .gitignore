@@ -1,7 +1,7 @@
 .clasp.json
 dist/**
 node_modules/
-.VSCodeCounter/**
-.vscode/**
-test/**
-images/**
+.VSCodeCounter/
+.vscode/
+test/
+images/
