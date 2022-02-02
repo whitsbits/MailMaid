@@ -1,8 +1,7 @@
-.DS_store/
 .clasp.json
-dist
+dist/**
 node_modules/
-.VSCodeCounter
-.vscode
-test/
-images/
+.VSCodeCounter/**
+.vscode/**
+test/**
+images/**
