@@ -1,7 +1,7 @@
-import * as replyParser from 'node-email-reply-parser';
+const replyParser = require ('node-email-reply-parser');
 
 function removeReply () {
-    return replyParser()
+    return replyParser();
 };
 
 export { removeReply };
