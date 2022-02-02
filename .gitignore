@@ -1,7 +1,14 @@
 .clasp.json
+.claspigniore
+.eslintignore
+.eslintrc
+.gitignore
+FETCH_HEAD
+HEAD
 dist/**
 node_modules/
 .VSCodeCounter/
 .vscode/
 test/
 images/
+info/
