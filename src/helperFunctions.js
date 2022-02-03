@@ -42,16 +42,17 @@ function countMoreSenders() {
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
   }
-}
+};
 
 /**
- * Header info for all log lines
- * @returns Header info for all logging
+ * Responds to trigger to chcek if MailMaid trigger has been disabled
+ * 
  */
-function logLine(message) {
-  let logLine = console.log(`${user} - ${message}`);
-  return logLine
-}
+  function checkTrigger() {
+    if (checkLastRun()){
+      initSchedule();
+    };
+  };
 
 /**
  * Check that the schedule is working
@@ -336,6 +337,7 @@ function reportRulesArr() {
 */
 function reportRulesArrElements(ruleNum) {
   const rule = userProperties.getProperty(ruleNum);
+  Logger.log(`${user} - Fetching reportRulesArrElements for ${ruleNum}: \n ${rule}`)
   let ruleElemArray = [];
   ruleElemArray = rule
     .replace(/[\[\]"]/g, '')
@@ -385,16 +387,24 @@ function reportSchedule() {
     Logger.log (`${user} - Rules property store reindexed`)
   };
   
-
+/**
+ * Checks that timestamp is valid and returns it
+ * @param {*} _timestamp 
+ * @returns {newTimestamp}
+ */
 function isValidTimestamp(_timestamp) {
   const newTimestamp = new Date(_timestamp).getTime();
   return isNumeric(newTimestamp);
 }
 
+/**
+ * Checks that an input is a number
+ * @param {*} n 
+ * @returns {boolean} true /false if n is number
+ */
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 
 function decendingSort(a, b) {
   if (b[1] === a[1]) {
@@ -403,8 +413,13 @@ function decendingSort(a, b) {
   else {
     return (b[1] < a[1]) ? -1 : 1;
   }
-}
+};
 
+/**
+ * Take EPOCH and converts and returns yyyy/mm/dd
+ * @param {*} epochTime 
+ * @returns {eTime} yyyy/mm/dd format
+ */
 function searchDateConverter(epochTime){
     epochTime = Number(epochTime);
     var eTime = new Date(epochTime);
@@ -425,6 +440,17 @@ function searchDateConverter(epochTime){
   return eTime;
 }
 
-
+  /**
+ * Checks the string for unsafe characters and replaces with appropriate HTML
+ */
+function escapeHtml(unsafe)
+{
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
 
 

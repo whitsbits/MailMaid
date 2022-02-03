@@ -22,7 +22,7 @@ function rulesManagerCard(e, action, search, days) {
             .addItem("Click here to select an existing Rule to edit", "ruleX", true)
 
         for (let i = 0; i < rules.length; i++) {
-            var ruleNum = `rule${i}`;
+            var ruleNum = `rule${rules[i][3]}`;
             var rulePres = `Rule ${rules[i][3]}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }
@@ -154,15 +154,21 @@ function rulesManagerCard(e, action, search, days) {
 * TODO add @param to change the return function
 */
 function onModeChange(e) {
-    let ruleNum = (e.formInput.editRule);
-    cache.putString('editRuleNum', ruleNum);
-    let ruleElementsArr = reportRulesArrElements(ruleNum);
-    Logger.log(`${user} - The element array is: ${ruleElementsArr}`);
-    var action = ruleElementsArr[0];
-    var search = ruleElementsArr[1];
-    var days = ruleElementsArr[2];
-    Logger.log(`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
-    return rulesManagerCard(e, action, search, days);
+    try {
+        let ruleNum = (e.formInput.editRule);
+        Logger.log (`${user} - Getting elements for Rule: ${ruleNum}`)
+        cache.putString('editRuleNum', ruleNum);
+        let ruleElementsArr = reportRulesArrElements(ruleNum);
+        Logger.log(`${user} - The element array is: ${ruleElementsArr}`);
+        var action = ruleElementsArr[0];
+        var search = ruleElementsArr[1];
+        var days = ruleElementsArr[2];
+        Logger.log(`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
+        return rulesManagerCard(e, action, search, days);
+        }
+    catch(e) {
+        Logger.log(`${user} - onModeChange failed on processing ${ruleNum}: ${e.message}`);
+    }
 }
 
 function selectedRuleButtonSet() {

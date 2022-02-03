@@ -1,5 +1,1 @@
-.DS_store/
-.clasp.json
-dist
-node_modules/
-.VSCodeCounter
+node_modules

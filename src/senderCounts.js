@@ -18,6 +18,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
   const scriptStart = new Date();
   let loopBreak = 0;
   var tallyCount = 0;
+  var maxMet = false;
 
   /**  
 * check to see if the app is woken from sleep and get last count value  
@@ -116,7 +117,7 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
 }
 catch (e) {
   Logger.log(`${user} - Error: ${e.toString()}`);
-  var maxMet = true; // notify user that maximum quota was reached
+  maxMet = true; // notify user that maximum quota was reached
   // get a final tally of num of messages proccessed before quota for reporting to user
 }
 
