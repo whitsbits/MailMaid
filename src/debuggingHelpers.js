@@ -33,8 +33,8 @@ function runDebugSendersNow() {
   //cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
   //cache.putObject('senderuA', uA, ttl)
   //cache.putObject('sendercObj', cObj, ttl)
-  countSenders();
-}
+  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
+  }
 
 /**
 * Wrapper for the purge function called by timeOut trigger
@@ -172,7 +172,7 @@ function listProperties() {
   Logger.log(properties);
 }
 
-function clearRuleZero() {
+function clearProperty() {
   userProperties.deleteProperty(`rule2`);
 }
 
@@ -201,7 +201,8 @@ function mockFormCapture() {
 
 function loadRules() {
   clearAllRules();
-  cache.putString('editRuleNum', 'rule0');
+  cache.putString('editRuleNum', 'ruleX');
+  userProperties.setProperties({rule0 : JSON.stringify(['Purge', 'subject:(MailMaid Results)', '3', '0'])});
   userProperties.setProperties({rule1 : JSON.stringify(['Purge', 'category:promotions', '7', '1'])});
   userProperties.setProperties({rule2 : JSON.stringify(['Purge', 'subject:MailMaid Results', '3', '2'])});
   userProperties.setProperties({rule3 : JSON.stringify(['Purge', 'from:calendar-notification@google.com', '7', '3'])});

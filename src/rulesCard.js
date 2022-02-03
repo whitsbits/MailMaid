@@ -19,11 +19,11 @@ function rulesManagerCard(e, action, search, days) {
             .setType(CardService.SelectionInputType.DROPDOWN)
             .setFieldName('editRule')
             .setOnChangeAction(CardService.newAction().setFunctionName('onModeChange'))
-            .addItem("Click here to select an existing Rule to edit", "rule0", true)
+            .addItem("Click here to select an existing Rule to edit", "ruleX", true)
 
         for (let i = 0; i < rules.length; i++) {
-            var ruleNum = `rule${i + 1}`;
-            var rulePres = `Rule ${i + 1}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
+            var ruleNum = `rule${rules[i][3]}`;
+            var rulePres = `Rule ${rules[i][3]}: ${rules[i][0]}, ${rules[i][1]}, ${rules[i][2]}`;
             selectRulesBodyWidget.addItem(rulePres, ruleNum, false);
         }
     }
@@ -154,42 +154,48 @@ function rulesManagerCard(e, action, search, days) {
 * TODO add @param to change the return function
 */
 function onModeChange(e) {
-    let ruleNum = (e.formInput.editRule);
-    cache.putString('editRuleNum', ruleNum);
-    let ruleElementsArr = reportRulesArrElements(ruleNum);
-    Logger.log(`${user} - The element array is: ${ruleElementsArr}`);
-    var action = ruleElementsArr[0];
-    var search = ruleElementsArr[1];
-    var days = ruleElementsArr[2];
-    Logger.log(`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
-    return rulesManagerCard(e, action, search, days);
+    try {
+        let ruleNum = (e.formInput.editRule);
+        Logger.log (`${user} - Getting elements for Rule: ${ruleNum}`)
+        cache.putString('editRuleNum', ruleNum);
+        let ruleElementsArr = reportRulesArrElements(ruleNum);
+        Logger.log(`${user} - The element array is: ${ruleElementsArr}`);
+        var action = ruleElementsArr[0];
+        var search = ruleElementsArr[1];
+        var days = ruleElementsArr[2];
+        Logger.log(`${user} - Returning onModeChange array of:${action}, ${search}, ${days}`)
+        return rulesManagerCard(e, action, search, days);
+        }
+    catch(e) {
+        Logger.log(`${user} - onModeChange failed on processing ${ruleNum}: ${e.message}`);
+    }
 }
 
-    function selectedRuleButtonSet() {
-        let ruleNum = cache.get('editRuleNum');
-        if (ruleNum === null){ruleNum='rule0'};
+function selectedRuleButtonSet() {
+    let ruleNum = cache.get('editRuleNum');
+    if (ruleNum === null){ruleNum='ruleX'};
 
-        const replaceAction = CardService.newAction()
-            .setFunctionName('captureRuleFormData')
-            .setParameters({ruleNum: ruleNum})
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const replaceButton = CardService.newTextButton()
-            .setText('Replace Selected Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(replaceAction);
-            
-        const clearSelectedAction = CardService.newAction()
-            .setFunctionName('clearSelectedRule')
-            .setParameters({ruleNum: ruleNum})
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const clearSelectedButton = CardService.newTextButton()
-            .setText('Delete Selected Rule')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(clearSelectedAction);
+    const replaceAction = CardService.newAction()
+        .setFunctionName('captureRuleFormData')
+        .setParameters({ruleNum: ruleNum})
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const replaceButton = CardService.newTextButton()
+        .setText('Replace Selected Rule')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(replaceAction);
+        
+    const clearSelectedAction = CardService.newAction()
+        .setFunctionName('clearSelectedRule')
+        .setParameters({ruleNum: ruleNum})
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const clearSelectedButton = CardService.newTextButton()
+        .setText('Delete Selected Rule')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(clearSelectedAction);
 
-            const selectedRuleButtonSet = CardService.newButtonSet()
-            .addButton(replaceButton)
-            .addButton(clearSelectedButton);
+    const selectedRuleButtonSet = CardService.newButtonSet()
+    .addButton(replaceButton)
+    .addButton(clearSelectedButton);
         
     return selectedRuleButtonSet;
     }

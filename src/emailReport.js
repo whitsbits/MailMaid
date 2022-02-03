@@ -11,15 +11,19 @@ function testSendEmail() {
 
 /**
  *  Generate a log, then email it to the person who ran the script.
- * @param {Object} results - Array for the message to be sent in the email.
+ * @param {String} subject - Subject for the message to be sent in the email.
+ * @param {Object} template - html file for the template of the email.
+ * @param {Boolean} maxMet - Bool as to if the Max Google Quota was hit
+ * @param {Number} tally - total number of message that were processed.
+ * @param {Object} results - Array for the results message to be sent in the email.
  *                           one line per array element
 */
 
-function sendReportEmail(template, results) {
+function sendReportEmail(subject, template, maxMet, tally, results) {
 
   var recipient = Session.getActiveUser().getEmail();
-  var subject = 'MailMaid Results';
-  var message = getEmailHTML(template, results)
+  var subject = subject;
+  var message = getEmailHTML(template, maxMet, tally, results)
 
   MailApp.sendEmail({
     to: recipient,
@@ -29,10 +33,20 @@ function sendReportEmail(template, results) {
   Logger.log(`${user} - Email sent to ${recipient}`)
 }
 
+/**
+ *  Get the template and process the server side scripts to build the html for the email  
+ * @param {Object} template - html file for the template of the email.
+ * @param {Boolean} maxMet - Bool as to if the Max Google Quota was hit
+ * @param {Number} tally - total number of message that were processed.
+ * @param {Object} results - Array for the results message to be sent in the email.
+ *                           one line per array element
+*/
 
-function getEmailHTML(template, results) {
+function getEmailHTML(template, maxMet, tally, results) {
   var templ = HtmlService.createTemplateFromFile(template);
   templ.results = results;
+  templ.tally = tally;
+  templ.maxMet = maxMet;
   var htmlBody = templ.evaluate().getContent();
   return htmlBody
 }

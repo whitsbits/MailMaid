@@ -7,17 +7,27 @@
  */
 
 function MailMaid() {
-  clearAllCache();
-  removeTriggers('cleanMore');
-  cleanMail();
+  try {
+    clearAllCache();
+    removeTriggers('cleanMore');
+    cleanMail();
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+  }
 }
 
 /**
  * Wrapper for the purge function called by timeOut trigger
  */
 function cleanMore() {
-  removeTriggers('cleanMore');
-  cleanMail();
+  try {
+    removeTriggers('cleanMore');
+    cleanMail();
+  } 
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+  }
 }
 
 
@@ -25,18 +35,24 @@ function cleanMore() {
 * Wrapper for the purge function called by timeOut trigger
 */
 function countMoreSenders() {
+  try {
   removeTriggers('countMoreSenders');
   countSenders();
-}
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+  }
+};
 
 /**
- * Header info for all log lines
- * @returns Header info for all logging
+ * Responds to trigger to chcek if MailMaid trigger has been disabled
+ * 
  */
-function logLine(message) {
-  let logLine = console.log(`${user} - ${message}`);
-  return logLine
-}
+  function checkTrigger() {
+    if (checkLastRun()){
+      initSchedule();
+    };
+  };
 
 /**
  * Check that the schedule is working
@@ -95,7 +111,7 @@ function clearRules() {
 */
 function clearSelectedRule(e) {
   let ruleNum = e.parameters.ruleNum.toString()
-  if (ruleNum === 'rule0') {
+  if (ruleNum === 'ruleX') {
     return notify('Please select a rule from the list above', rulesManagerCard())
   } else {
     userProperties.deleteProperty(ruleNum);
@@ -119,7 +135,7 @@ function clearSchedule() {
 * Function to initialize the schedule data to the userProperties
 */
 function initSchedule() {
-  let schedule = userProperties.getProperty('schedule')
+  let schedule = userProperties.getProperty('schedule');
   if (schedule === null) {
     var atHour = 1
     var everyDays = 1
@@ -127,19 +143,30 @@ function initSchedule() {
     let schedule = getScheduleArr();
     var atHour = schedule[1]
     var everyDays = schedule[0]
-  }
-  userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) })
+  };
+  userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) });
   removeTriggers('MailMaid');
-  setTrigger('MailMaid', atHour, everyDays)
-  Logger.log(`${user} - Schedule Initialized`)
-}
+  setTrigger('MailMaid', atHour, everyDays);
+  Logger.log(`${user} - Schedule Initialized`);
+};
 
+/**
+* Function to initialize the rules
+* ruleX for the UI pick list
+* defaultRule for the install smaple rule
+*/
 function initRules() {
-  cache.putString('editRuleNum', 'rule0');
-}
+  cache.putString('editRuleNum', 'ruleX');
+  let defaultRule = userProperties.getProperty('rule0');
+  if (defaultRule === null) {
+    defaultRule = ['Purge', 'subject:(MailMaid Results)', 3, 0]
+    userProperties.setProperties({ 'rule0': JSON.stringify(defaultRule) });
+  };
+};
 
 /**
 * Function to check initialization status of the app
+* @return {boolean}
 */
 function checkInitStatus() {
   if (userProperties.getProperty('initialized') === null ||
@@ -270,7 +297,8 @@ function reportRulesText() {
     var action = rules[i][0];
     var search = rules[i][1];
     var days = rules[i][2];
-    text += ("<b>Rule " + (i + 1) + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
+    var index = rules[i][3];
+    text += ("<b>Rule " + index + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
   }
   if (licenseRead() === false) {
     text += (`\n<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will only clean Rule 1.\n\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
@@ -295,7 +323,8 @@ function reportRulesArr() {
     var action = rules[i][0];
     var search = rules[i][1];
     var days = rules[i][2];
-    reportRulesArr.push("<b>Rule </b>" + (i + 1) + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
+    var index = rules[i][3];
+    reportRulesArr.push("<b>Rule </b>" + index + ":\n   Action to take: " + action + "\n   Search string: " + search + "\n   Take action after\: " + days + " days \n\n")
   }
   Logger.log(`${user} - Returning reportRulesArr: \n ${reportRulesArr}`)
   return reportRulesArr
@@ -308,6 +337,7 @@ function reportRulesArr() {
 */
 function reportRulesArrElements(ruleNum) {
   const rule = userProperties.getProperty(ruleNum);
+  Logger.log(`${user} - Fetching reportRulesArrElements for ${ruleNum}: \n ${rule}`)
   let ruleElemArray = [];
   ruleElemArray = rule
     .replace(/[\[\]"]/g, '')
@@ -335,6 +365,7 @@ function reportSchedule() {
   return text
 };
 
+<<<<<<< HEAD
 /**
 * Takes the array of rules and renumbers them in sequential order
 * for after a rule is deleted
@@ -358,15 +389,48 @@ function reIndexRules() {
 };
 
 
+=======
+  /**
+ * Takes the array of rules and renumbers them in sequential order
+ * for after a rule is deleted
+ * saves new index to userProperties.setProperty
+ */
+  function reIndexRules() {
+    var rules = getRulesArr();
+    var keys = getRuleKeys();
+    
+    keys.sort();
+    clearRules();
+
+    for (i = 1; i < keys.length; i++) {
+      var newKey = `rule${i}`;
+      rules[i].splice(3,1); //remove the prior index from the array
+      rules[i].push(i); // add the new index to the array
+      userProperties.setProperty(newKey,JSON.stringify(rules[i]));
+      Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+    }
+    Logger.log (`${user} - Rules property store reindexed`)
+  };
+  
+/**
+ * Checks that timestamp is valid and returns it
+ * @param {*} _timestamp 
+ * @returns {newTimestamp}
+ */
+>>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
 function isValidTimestamp(_timestamp) {
   const newTimestamp = new Date(_timestamp).getTime();
   return isNumeric(newTimestamp);
 }
 
+/**
+ * Checks that an input is a number
+ * @param {*} n 
+ * @returns {boolean} true /false if n is number
+ */
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 
 function decendingSort(a, b) {
   if (b[1] === a[1]) {
@@ -375,12 +439,24 @@ function decendingSort(a, b) {
   else {
     return (b[1] < a[1]) ? -1 : 1;
   }
-}
+};
 
+<<<<<<< HEAD
 function searchDateConverter(epochTime) {
   epochTime = Number(epochTime);
   var eTime = new Date(epochTime);
   var dd = eTime.getDate();
+=======
+/**
+ * Take EPOCH and converts and returns yyyy/mm/dd
+ * @param {*} epochTime 
+ * @returns {eTime} yyyy/mm/dd format
+ */
+function searchDateConverter(epochTime){
+    epochTime = Number(epochTime);
+    var eTime = new Date(epochTime);
+    var dd = eTime.getDate();
+>>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
 
   var mm = eTime.getMonth() + 1;
   var yyyy = eTime.getFullYear();
@@ -395,6 +471,17 @@ function searchDateConverter(epochTime) {
   return eTime;
 }
 
-
+  /**
+ * Checks the string for unsafe characters and replaces with appropriate HTML
+ */
+function escapeHtml(unsafe)
+{
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
 
 

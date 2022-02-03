@@ -11,6 +11,8 @@ function captureRuleFormData(e) {
   var days = e.formInput.days;
   var action = e.formInput.action;
 
+
+
   if (search === undefined) {
     return notify(`Please tell MailMaid which messages need to be removed by adding a search term`, rulesManagerCard())
   } else if (days === undefined) {
@@ -19,16 +21,18 @@ function captureRuleFormData(e) {
     return notify(`Please enter a number only for days`, rulesManagerCard())
   }
 
+  search=escapeHtml(search);
+  
   if (e.parameters.ruleNum === undefined) {
     var key = null;
-    var ruleNum = (countRules() + 1);
+    var ruleNum = (countRules());
   } else {
     var key = e.parameters.ruleNum.toString();
     var ruleNum = key.substring(4);
   }
 
   var rule = [action, search, days, ruleNum];
-  if (key === 'rule0') {
+  if (key === 'ruleX') {
     return notify("Select a rule from above to Replace, otherwise Save As a New Rule", rulesManagerCard())
   }
   if (key === null) {
