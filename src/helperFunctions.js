@@ -365,31 +365,6 @@ function reportSchedule() {
   return text
 };
 
-<<<<<<< HEAD
-/**
-* Takes the array of rules and renumbers them in sequential order
-* for after a rule is deleted
-* saves new index to userProperties.setProperty
-*/
-function reIndexRules() {
-  var rules = getRulesArr();
-  var keys = getRuleKeys();
-
-  keys.sort();
-  clearRules();
-
-  for (i = 0; i < keys.length; i++) {
-    var newKey = `rule${i + 1}`;
-    rules[i].splice(3, 1); //remove the prior index from the array
-    rules[i].push(i + 1); // add the new index to the array
-    userProperties.setProperty(newKey, JSON.stringify(rules[i]));
-    Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
-  }
-  Logger.log(`${user} - Rules property store reindexed`)
-};
-
-
-=======
   /**
  * Takes the array of rules and renumbers them in sequential order
  * for after a rule is deleted
@@ -417,7 +392,6 @@ function reIndexRules() {
  * @param {*} _timestamp 
  * @returns {newTimestamp}
  */
->>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
 function isValidTimestamp(_timestamp) {
   const newTimestamp = new Date(_timestamp).getTime();
   return isNumeric(newTimestamp);
@@ -441,12 +415,6 @@ function decendingSort(a, b) {
   }
 };
 
-<<<<<<< HEAD
-function searchDateConverter(epochTime) {
-  epochTime = Number(epochTime);
-  var eTime = new Date(epochTime);
-  var dd = eTime.getDate();
-=======
 /**
  * Take EPOCH and converts and returns yyyy/mm/dd
  * @param {*} epochTime 
@@ -456,7 +424,6 @@ function searchDateConverter(epochTime){
     epochTime = Number(epochTime);
     var eTime = new Date(epochTime);
     var dd = eTime.getDate();
->>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
 
   var mm = eTime.getMonth() + 1;
   var yyyy = eTime.getFullYear();
