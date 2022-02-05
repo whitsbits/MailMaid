@@ -54,7 +54,7 @@ function saveUserInfo() {
       
       userProperties.setProperties({ 'stored': true });
     } catch(e) {
-      Logger.log(`${user} - Storing info failed: ${e.message}`);
+      Logger.log(`${user} - Storing info in database failed: ${e.message}`);
     }
   }
 }
