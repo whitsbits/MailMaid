@@ -33,6 +33,7 @@ function checkUserInfoInDB(stmt, email) {
  */
 function saveUserInfo() {
   const stored = userProperties.getProperty('stored');
+  Logger.log (`${user} - User already stored in database`);
   if (stored !== 'true') {
     try {
       var conn = Jdbc.getConnection('jdbc:mysql://34.72.191.212:3306/db_mailmaid',
