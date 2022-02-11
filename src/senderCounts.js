@@ -18,7 +18,7 @@ function callCountSenders() {
  * 
  */
 
-function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
+ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
   let loopBreak = 0;
   const query = suggestionSearchQueryBuilder(afterDate, beforeDate);
