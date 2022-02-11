@@ -1,7 +1,3 @@
-function callCountSenders() {
-  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
-  Async.call('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
-}
 /**
  * Find messages pertaining to the search
  * step through each thread batch set by 'inc' (default Global var set to 500)
@@ -21,7 +17,6 @@ function callCountSenders() {
  function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
   let loopBreak = 0;
-  const query = suggestionSearchQueryBuilder(afterDate, beforeDate);
   var tallyCount = 0;
   var maxMet = false;
 
@@ -118,12 +113,6 @@ function callCountSenders() {
     }
     clearCache('senderThreadsCache');
     searchBatchStart += inc;
-    if (searchBatchStart === 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
-      inc = 499; // reduce the increment to go to 19,999
-    } else if (searchBatchStart === 19999) { //then kill the loop
-      loopBreak = 1;
-      break searchloop;
-    };
   } while (threads.length > 0);
 }
 catch (e) {
@@ -137,11 +126,6 @@ catch (e) {
     sender_array.forEach(function (r) { // add the message counts to each sender in the the sender_array
       r.splice(1, 0, cObj[r[0]]);
     });
-
-    const index = sender_array.findIndex(element => JSON.stringify(element.includes(Session.getActiveUser().getEmail()))); //remove the  current user as a suggestion target
-    if (index > -1) {
-      sender_array.splice(index, 1);
-    }
 
     sender_array.sort(decendingSort);
 
