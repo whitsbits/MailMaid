@@ -12,57 +12,17 @@ var inc = 500; // Inbox Message Iteration Increment
 let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
-/**
- * Return if user info already stored in DB.
- * 
- * @param stmt sql statement object
- * @param email user's info
- * 
- * @return boolean true if arleady stored in DB
- */
-function checkUserInfoInDB(stmt, email) {
-  const query = `select * from users where email='${email}'`;
-
-  var results = stmt.executeQuery(query);
-  
-  return !!results.next();
-}
-
-/**
- * save user's email and license status in first loading.
- */
-function saveUserInfo() {
-  const stored = userProperties.getProperty('stored');
-  if (stored !== 'true') {
-    try {
-      var conn = Jdbc.getConnection('jdbc:mysql://34.72.191.212:3306/db_mailmaid',
-                              {user: 'root', password: 'CbE4tkxG1pNbzyIf'});
-      let stmt = conn.createStatement()
-      let email = '' + Session.getActiveUser();
-
-      if (!checkUserInfoInDB(stmt, email)) {
-        const query="insert into users(id, email, license) values('"+MD5(email, false)+"','"+email+"','TRIAL')";
-        stmt.execute(query);
-
-        stmt.close();
-        conn.close();
-
-        Logger.log (`${user} - User successfully sent to database`);
-      } else {
-        Logger.log (`${user} - User already sent to database`);
-      }
-      
-      userProperties.setProperties({ 'stored': true });
-    } catch(e) {
-      Logger.log(`${user} - Storing info failed: ${e.message}`);
-    }
-  }
-}
-
 
 function initApp() {
-    let init = checkInitStatus();
-    if (init === false) {
+    removeDupeTriggers();
+    var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
+    if (authInfo.getAuthorizationStatus() ==
+    ScriptApp.AuthorizationStatus.REQUIRED) {
+        Logger.log(`${user} - Missing required scope authorizations`)
+    }else{
+        Logger.log(`${user} - Required scope authorizations present`)
+    }    
+    if (checkInitStatus() === false) {
         initSchedule();
         initRules();
         initLicense();
@@ -73,7 +33,9 @@ function initApp() {
     } else {
         if (checkLastRun()) { //clear any "This trigger has been disabled for an unknown reason."
             initSchedule();
-            setTrigger('checkTrigger', 1, 1);
+            if(!triggerActive('checkTrigger')){
+                setTrigger('checkTrigger', 1, 1);
+            } 
         }
         Logger.log(`${user} - App already initialized`);
     }
