@@ -1,9 +1,7 @@
-<<<<<<< HEAD
 function callCountSenders() {
   countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
   Async.call('countSenders', searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
 }
-=======
 /**
  * Find messages pertaining to the search
  * step through each thread batch set by 'inc' (default Global var set to 500)
@@ -19,18 +17,14 @@ function callCountSenders() {
  * @param {String} suggestionResultChoice - Pick list 'Top' for Top Count of numResults, or 'Greater Than' for greater than numResults
  * 
  */
->>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
 
 function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice) {
   const scriptStart = new Date();
   let loopBreak = 0;
-<<<<<<< HEAD
   const query = suggestionSearchQueryBuilder(afterDate, beforeDate);
-=======
   var tallyCount = 0;
   var maxMet = false;
 
->>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
   /**  
 * check to see if the app is woken from sleep and get last count value  
 * and if count has been cached use value to resume count of the process
@@ -124,15 +118,12 @@ function countSenders(afterDate, beforeDate, numResults, suggestionResultChoice)
     }
     clearCache('senderThreadsCache');
     searchBatchStart += inc;
-<<<<<<< HEAD
     if (searchBatchStart === 19500) { //Limit to less than max GMail quota of read/writes at 20k per day
       inc = 499; // reduce the increment to go to 19,999
     } else if (searchBatchStart === 19999) { //then kill the loop
       loopBreak = 1;
       break searchloop;
     };
-=======
->>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
   } while (threads.length > 0);
 }
 catch (e) {
@@ -147,14 +138,11 @@ catch (e) {
       r.splice(1, 0, cObj[r[0]]);
     });
 
-<<<<<<< HEAD
     const index = sender_array.findIndex(element => JSON.stringify(element.includes(Session.getActiveUser().getEmail()))); //remove the  current user as a suggestion target
     if (index > -1) {
       sender_array.splice(index, 1);
     }
 
-=======
->>>>>>> 90140988478d2dbcb1e1138f9b08b9e3b9695f1d
     sender_array.sort(decendingSort);
 
     var topValues = []; // set an array for the top values to send the user
