@@ -30,8 +30,9 @@ function saveUserInfo() {
     } catch(e) {
       Logger.log(`${user} - Storing info in database failed: ${e.message}`);
     }
-  }
-  Logger.log (`${user} - User already stored in database`);
+  }else{
+    Logger.log (`${user} - User already stored in database`);
+  };
 }
 
 /**
