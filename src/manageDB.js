@@ -23,7 +23,7 @@ function saveUserInfo() {
 
         Logger.log (`${user} - User successfully sent to database`);
       } else {
-        Logger.log (`${user} - User already sent to database`);
+        Logger.log (`${user} - User already exists in database`);
       }
       
       userProperties.setProperties({ 'stored': true });
