@@ -13,7 +13,7 @@ function exportToDrive(threads) {
 
         var msgID = messages[j].getId();
         var msg = GmailApp.getMessageById(msgID);
-        var msgRaw = EmailReplyParser(msg.getPlainBody());
+        var msgRaw = EmailReplyParser.parse_reply(msg.getPlainBody());
 
 
         thread += (`${msgRaw} \n ${slug} \n`);
