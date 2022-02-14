@@ -15,18 +15,19 @@ let ttl = 82800; //23 hours in seconds
 
 function initApp() {
     removeDupeTriggers();
+    
     var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
     if (authInfo.getAuthorizationStatus() ==
     ScriptApp.AuthorizationStatus.REQUIRED) {
         Logger.log(`${user} - Missing required scope authorizations`)
     }else{
         Logger.log(`${user} - Required scope authorizations present`)
-    }    
+    };
+    saveUserInfo();    
     if (checkInitStatus() === false) {
         initSchedule();
         initRules();
         initLicense();
-        saveUserInfo();
         setTrigger('checkTrigger', 1, 1);
         userProperties.setProperties({ 'initialized': true });
         Logger.log(`${user} - App Initialized`);
