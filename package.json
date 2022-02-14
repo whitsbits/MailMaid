@@ -11,7 +11,6 @@
     "lint": "eslint -c .eslintrc.json src/*.js",
     "lint:fix": "eslint -c .eslintrc.json --fix src/*.js"
   },
-  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/slwhitman/GMail-Retention.git"
