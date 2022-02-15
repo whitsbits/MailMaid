@@ -137,4 +137,37 @@ function captureSuggestionFormData(e) {
     return `Error: ${e.toString()}`;
   }
   return notify(`Emailing Sender Suggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`, suggestionCard());
+};
+
+
+
+/**
+* Capture inputs for downloading emails to Drive
+* 
+* @param {Object} e - Event from add-on server
+* @return {notify with Card to be built}
+*/
+
+function captureDownloadFormData(e) {
+  var search = e.formInput.search;
+  var downloadAction = e.formInput.downloadAction;
+  var saveFile = e.formInput.saveFile;
+  var fileTypeAction = e.formInput.fileTypeAction;
+
+  if (beforeDate === undefined || afterDate === undefined) {
+    return notify(`Please enter a before and after date for the suggestion search`, suggestionCard())
+  } else if (isValidTimestamp(beforeDate) || isValidTimestamp(afterDate)) {
+    return notify(`Please enter only date value for the start and end of the suggestion search`, suggestionCard())
+  }
+
+  Logger.log(`${user} - Sending ${downloadAction} for ${search} as ${fileTypeAction} ${saveFile}`);
+
+  try {
+      Async.call('exportToDrive', search, downloadAction, saveFile, fileTypeAction)
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+    return `Error: ${e.toString()}`;
+  }
+  return notify(`Starting download of ${search} results. We will email you when it is complete.`, onHomepage());
 }

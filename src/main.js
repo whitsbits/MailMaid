@@ -53,6 +53,7 @@ function initApp() {
  */
  function onHomepage(e) {
     card.addSection(homepageIntroSection());
+    card.addSection(downloadSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
     card.addSection(homepageLicenseSection());
@@ -86,6 +87,32 @@ function homepageIntroSection() {
         .addWidget(ruleSuggestionButton);
 
     return introBody;
+}
+
+/**
+* Callback for rendering the intro section.
+* @return {CardService.Section} Return the section to build the card.
+*/
+function downloadSection() {
+    var downloadText = "Use <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> to tell MailMaid which messages need to be downloaded and removed"
+    const dowloadBodyText = CardService.newTextParagraph()
+        .setText(
+            downloadText
+        );
+
+    const downloadAction = CardService.newAction()
+        .setFunctionName('downloadManagerCard')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const downloadButton = CardService.newTextButton()
+        .setText('Download EMails')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(downloadAction);
+    
+    const downloadBody = CardService.newCardSection()
+        .addWidget(dowloadBodyText)
+        .addWidget(downloadButton);
+
+    return downloadBody;
 }
 
 /**
