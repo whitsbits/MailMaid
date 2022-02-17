@@ -1,11 +1,11 @@
-//<div class="gmail_quote"
+///(<div class="gmail_quote")(.*?)(>).*(?=((?<=\S)\s+)).*/g
 
 // EmailReplyParser is a small library to parse plain text email content.  The
 // goal is to identify which fragments are quoted, part of a signature, or
 // original body content.  We want to support both top and bottom posters, so
 // no simple "REPLY ABOVE HERE" content is used.
 //
-// Beyond RFC 5322 (which is handled by the [Ruby mail gem][mail]), there aren't
+// Beyond RFC 5322 here aren't
 // any real standards for how emails are created.  This attempts to parse out
 // common conventions for things like replies:
 //
@@ -144,8 +144,11 @@ Email.prototype = {
 
 		// Check for multi-line reply headers. Some clients break up
 		// the "On DATE, NAME <EMAIL> wrote:" line into multiple lines.
-		var patt = /^(On\s(\n|.)*wrote:)$/m;
-		var doubleOnPatt = /^(On\s(\n|.)*(^(> )?On\s)((\n|.)*)wrote:)$/m;
+		//var patt = /^(On\s(\n|.)*wrote:)$/m; *original*
+    	var patt = /\nOn(.*?)wrote:(.*?)$/si //*modified for 80 char*
+		///(<div class="gmail_quote")(.*?)(>).*(?=((?<=\S)\s+)).*/g //html pattern
+		var doubleOnPatt = /^(On\s(\n|.)*(^(> )?On\s)((\n|.)*)wrote:)$/m; //*original*
+
 
 		if(patt.test(text) && !doubleOnPatt.test(text)) {
 			var reply_header = (patt.exec(text))[0];
@@ -316,4 +319,18 @@ Fragment.prototype = {
 	}
 };
 
-//console.log(EmailReplyParser.read("I get proper rendering as well.\n\nSent from a magnificent torch of pixels\n\nOn Dec 16, 2011, at 12:47 PM, Corey Donohoe\n<reply@reply.github.com>\nwrote:\n\n> Was this caching related or fixed already?  I get proper rendering here.\n>\n> ![](https://img.skitch.com/20111216-m9munqjsy112yqap5cjee5wr6c.jpg)\n>\n> ---\n> Reply to this email directly or view it on GitHub:\n> https://github.com/github/github/issues/2278#issuecomment-3182418\n"));
+
+/**
+ * Quoted Headers
+Quoted headers aren't picked up if there's an extra line break:
+
+On <date>, <author> wrote:
+
+> blah
+They also aren't picked up if the email client breaks it up into multiple lines, like gmail and it's 80 column automatic limit:
+
+On <date>, <author>
+wrote:
+> blah
+ */
+
