@@ -6,7 +6,9 @@
   const triggers = ScriptApp.getProjectTriggers();
   let triggerArr = [];
   for (var i = 0; i < triggers.length; i++) {
-    triggerArr.push(triggers[i].getHandlerFunction())
+    let triggerName = triggers[i].getHandlerFunction();
+    let triggerID = triggers[i].getUniqueId();
+    triggerArr.push(triggerID  + ", " + triggerName)
   }
   Logger.log(`${user} - getTriggerArr returning ${triggerArr}`)
   return triggerArr
