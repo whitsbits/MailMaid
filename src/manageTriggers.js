@@ -2,7 +2,7 @@
  * Get the current triggers for reporting to user
  */
 
-function getTriggersArr() {
+ function getTriggersArr() {
   const triggers = ScriptApp.getProjectTriggers();
   let triggerArr = [];
   for (var i = 0; i < triggers.length; i++) {
@@ -19,8 +19,9 @@ function getTriggersArr() {
  */
 function triggerActive(triggerName) {
   let triggerArr = getTriggersArr()
-  let triggerBool = triggerArr.includes(triggerName)
-  Logger.log(`${user} - triggerActive returning ${triggerName} as ${triggerBool}`)
+  let triggerBool = triggerArr.includes(triggerName);
+  let triggerID = ScriptApp.getUniqueID(triggerName);
+  Logger.log(`${user} - triggerActive returning ${triggerName} with ID ${triggerID} as ${triggerBool}`)
   return triggerBool
 }
 
@@ -53,7 +54,8 @@ function setTrigger(triggerName, atHour, everyDays) {
     .everyDays(everyDays) // Frequency is required if you are using atHour() or nearMinute()
     .inTimezone(userTimeZone)
     .create();
-  Logger.log(`${user} - Trigger ${triggerName} created`)
+  let triggerID = ScriptApp.getUniqueID(triggerName);
+  Logger.log(`${user} - Trigger ${triggerName} created with ID ${triggerID}`)
 }
 
 /**
@@ -66,6 +68,8 @@ function setTrigger(triggerName, atHour, everyDays) {
     .timeBased()
     .after(1)
     .create();
+  let triggerID = ScriptApp.getUniqueID(triggerName);
+  Logger.log(`${user} - Trigger ${triggerName} created with ID ${triggerID}`)
 }
 
 /**
@@ -78,6 +82,8 @@ function setMoreTrigger(triggerName) {
     .timeBased()
     .at(new Date(new Date().getTime() + 1000 * 60 * 60))
     .create();
+  let triggerID = ScriptApp.getUniqueID(triggerName);
+  Logger.log(`${user} - Trigger ${triggerName} created with ID ${triggerID}`)
 }
 
 /**
@@ -92,21 +98,6 @@ function removeTriggers(triggerName) {
       ScriptApp.deleteTrigger(trigger);
     }
   }
-  Logger.log(`${user} - Trigger ${triggerName} removed`);
-}
-
-
-
-function webTrigger() {
-const params = {
-  method: 'get',
-  headers: { Authorization: `Bearer ${ScriptApp.getOAuthToken()}` },
-  followRedirects: true,
-  muteHttpExceptions: true,
+  let triggerID = ScriptApp.getUniqueID(triggerName);
+  Logger.log(`${user} - Trigger ${triggerName} with ID ${triggerID} removed`);
 };
-
-// the following URL should be your "Current web app URL"
-const url = 'https://script.google.com/macros/s/AKfycbxvAzJykKrhNlYV9ij25fzXkmhuGo5C_BWFAcwIe83MEsCzMqcZtF1x90-Yqgq8YeKVJA/exec';
-const response = UrlFetchApp.fetch(url, params);
-console.log('UrlFetchApp response: ', response.getContentText());
-}
