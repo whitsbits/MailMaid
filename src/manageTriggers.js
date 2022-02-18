@@ -7,8 +7,7 @@
   let triggerArr = [];
   for (var i = 0; i < triggers.length; i++) {
     let triggerName = triggers[i].getHandlerFunction();
-    let triggerID = triggers[i].getUniqueId();
-    triggerArr.push(triggerID  + ", " + triggerName)
+    triggerArr.push(triggerName)
   }
   Logger.log(`${user} - getTriggerArr returning ${triggerArr}`)
   return triggerArr
@@ -22,8 +21,7 @@
 function triggerActive(triggerName) {
   let triggerArr = getTriggersArr()
   let triggerBool = triggerArr.includes(triggerName);
-  let triggerID = ScriptApp.getUniqueID(triggerName);
-  Logger.log(`${user} - triggerActive returning ${triggerName} with ID ${triggerID} as ${triggerBool}`)
+  Logger.log(`${user} - triggerActive returning ${triggerName} as ${triggerBool}`)
   return triggerBool
 }
 
@@ -56,8 +54,7 @@ function setTrigger(triggerName, atHour, everyDays) {
     .everyDays(everyDays) // Frequency is required if you are using atHour() or nearMinute()
     .inTimezone(userTimeZone)
     .create();
-  let triggerID = ScriptApp.getUniqueID(triggerName);
-  Logger.log(`${user} - Trigger ${triggerName} created with ID ${triggerID}`)
+  Logger.log(`${user} - Trigger ${triggerName} created.`)
 }
 
 /**
@@ -70,8 +67,7 @@ function setTrigger(triggerName, atHour, everyDays) {
     .timeBased()
     .after(1)
     .create();
-  let triggerID = ScriptApp.getUniqueID(triggerName);
-  Logger.log(`${user} - Trigger ${triggerName} created with ID ${triggerID}`)
+  Logger.log(`${user} - Trigger ${triggerName} created.`)
 }
 
 /**
@@ -84,8 +80,7 @@ function setMoreTrigger(triggerName) {
     .timeBased()
     .at(new Date(new Date().getTime() + 1000 * 60 * 60))
     .create();
-  let triggerID = ScriptApp.getUniqueID(triggerName);
-  Logger.log(`${user} - Trigger ${triggerName} created with ID ${triggerID}`)
+  Logger.log(`${user} - Trigger ${triggerName} created.`)
 }
 
 /**
@@ -100,6 +95,5 @@ function removeTriggers(triggerName) {
       ScriptApp.deleteTrigger(trigger);
     }
   }
-  let triggerID = ScriptApp.getUniqueID(triggerName);
-  Logger.log(`${user} - Trigger ${triggerName} with ID ${triggerID} removed`);
+  Logger.log(`${user} - Trigger ${triggerName}removed`);
 };
