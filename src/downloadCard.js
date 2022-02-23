@@ -5,9 +5,8 @@
 * @return {CardService.Card} The card to show to the user.
 */
 
-function downloadManagerCard() {
-
-    let cardHeader1 = CardService.newCardHeader()
+function downloadManagerCard(e,fileTypeAction) {
+    let downloadCardHeader = CardService.newCardHeader()
             .setTitle('Manage Downloads')
             .setImageUrl(
                 'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
@@ -18,7 +17,7 @@ function downloadManagerCard() {
     var downloadManagerSection = CardService.newCardSection();
 
     ///------------------START INPUT WIDGET--------------------------------//
-
+   //-----------------------contextual widget--------------------------//
         const _searchText = CardService.newTextParagraph()
             .setText('<b>Use <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to tell MailMaid which messages need to be Downloaded:</b>')
 
@@ -37,28 +36,39 @@ function downloadManagerCard() {
             .addItem('Download', 'Download', false);
 
         const _downloadActionHint = CardService.newTextParagraph()
-        .setText('<font color=\"#bcbcbc\">Download & Purge moves to Trash \nDownload keeps message in your Inbox</font>')     
+            .setText('<font color=\"#bcbcbc\">Download & Purge moves to Trash \nDownload keeps message in your Inbox</font>')     
 
-        const _saveFileText = CardService.newTextParagraph()
-            .setText('<b>How do you want MailMaid to save the messages into a file?</b>')
-
-        var _saveFileAction = CardService.newSelectionInput()
-            .setType(CardService.SelectionInputType.RADIO_BUTTON)
-            .setFieldName('saveFile')
-            .addItem('Individual Message per file', 'messageFile', true)
-            .addItem('Individual Thread per file', 'threadFile', false)
-            .addItem('All email in one file', 'oneFile', false);
-            
         const _fileTypeText = CardService.newTextParagraph()
             .setText('<b>Do you want to save as text only, html, or message files?</b>')
 
         var _fileTypeAction = CardService.newSelectionInput()
             .setType(CardService.SelectionInputType.RADIO_BUTTON)
             .setFieldName('fileTypeAction')
-            .addItem('Text Only', 'text', true)
-            .addItem('HTML', 'html', false)
-            .addItem('Message', 'eml', false);       
+            .setOnChangeAction(CardService.newAction().setFunctionName('downloadModeChange'))
+            .addItem('Text Only (.txt)', 'text', true)
+            .addItem('HTML (.html)', 'html', false)
+            .addItem('Message (.eml)', 'eml', false);       
 
+        
+            if (fileTypeAction === "eml"){
+            var _saveFileText = CardService.newTextParagraph()
+                    .setText('<b>.eml files only support one file per message</b>')
+
+            var _saveFileAction = CardService.newSelectionInput()
+                .setType(CardService.SelectionInputType.RADIO_BUTTON)
+                .setFieldName('saveFile')
+                .addItem('All email in one file', 'oneFile', true);
+            }else if (e === null || fileTypeAction === undefined){
+            var _saveFileText = CardService.newTextParagraph()
+                .setText('<b>How do you want MailMaid to save the messages into a file?</b>')
+
+            var _saveFileAction = CardService.newSelectionInput()
+                .setType(CardService.SelectionInputType.RADIO_BUTTON)
+                .setFieldName('saveFile')
+                .addItem('Individual Message per file', 'messageFile', true)
+                .addItem('Individual Thread per file', 'threadFile', false)
+                .addItem('All email in one file', 'oneFile', false);
+            }        
         downloadManagerSection
             .addWidget(_searchText)
             .addWidget(_search)
@@ -67,19 +77,19 @@ function downloadManagerCard() {
             .addWidget(_downloadAction)
             .addWidget(_downloadActionHint)
             .addWidget(cardSectionDivider)
-            .addWidget(_saveFileText)
-            .addWidget(_saveFileAction)
-            .addWidget(cardSectionDivider)
             .addWidget(_fileTypeText)
             .addWidget(_fileTypeAction)
             .addWidget(cardSectionDivider)
+            .addWidget(_saveFileText)
+            .addWidget(_saveFileAction)
+            .addWidget(cardSectionDivider)
             .addWidget(downloadButtonSet());
 
-        card.setHeader(cardHeader1);
+        card.setHeader(downloadCardHeader);
         card.addSection(downloadManagerSection);
         card.setFixedFooter(navFooter());
         return card.build();
-    }
+}
 
     //-----------------END DOWNLAOD INPUT WIDGET----------------------------//
 
@@ -90,14 +100,14 @@ function downloadManagerCard() {
 * @return {CardService.Card} The card to show to the user.
 * TODO add @param to change the return function
 */
-function onModeChange(e) {
+function downloadModeChange(e) {
     try {
-        let ruleNum = (e.formInput.search);
-        Logger.log(`${user} - Returning downlaod onModeChange of:`)
-        return downlaodManagerCard(e, );
+        let fileTypeAction = (e.formInput.fileTypeAction);
+        Logger.log(`${user} - Returning dowloandModeChange of:${fileTypeAction}`)
+        return downloadManagerCard(e, fileTypeAction);
         }
     catch(e) {
-        Logger.log(`${user} - onModeChange failed on processing ${ruleNum}: ${e.message}`);
+        Logger.log(`${user} - downloadModeChange failed on processing download modeChange: ${e.message}`);
     }
 };
 

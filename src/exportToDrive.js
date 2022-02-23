@@ -1,5 +1,4 @@
 /**
- * TODO: eml format can only do message, can't do thread or file. Disable those choices in UI
  * TODO: Add Reply parsing to html format
  * TODO: Add delete function for Downlaod & Purge
  * TODO: Add choice for parsing reply out
@@ -52,6 +51,12 @@ function exportToDrive(search, downloadAction, saveFile, fileTypeAction) {
   }
   if (saveFile === 'oneFile'){
     saveToFile(fileTypeAction, file, filename, newFolder);
+  }
+
+  if(downloadAction==="DownloadPurge"){
+    for (var k=0; k< threads.length; k++){ 
+      threads[k].moveToTrash();
+    }
   }
   return
 }
