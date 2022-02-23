@@ -1,55 +1,49 @@
-
-/**
- * TODO: Fixes for the library:
+/** Modified from EmailReplyParser
  * 
- * There are some gaps in the current code
- * Quoted Headers
- * Quoted headers aren't picked up if there's an extra line break:
+ * 
+ * Quoted headers are picked up if there's an extra line break:
  * 
  * On <date>, <author> wrote:
  * 
  * > blah
- * They also aren't picked up if the email client breaks it up into multiple lines, 
+ * 
+ * Also fixed if the email client breaks it up into multiple lines, 
  * like gmail and it's 80 column automatic limit:
  * 
  * On <date>, <author>
  * wrote:
  * > blah
  * 
- * The library only works for pure text emails, I want to also parse html from GMail
+ * And the library now works for html from GMail
  * If the text is HTML from GMail then the Quoted text is marked by
  * <div class="gmail_quote">
  * 
+ * Original Library - EmailReplyParser is a small library to parse plain text email content.
+ *   The goal is to identify which fragments are quoted, part of a signature, or
+ *   original body content.  We want to support both top and bottom posters, so
+ *   no simple "REPLY ABOVE HERE" content is used.
+ * Beyond RFC 5322 there aren't any real standards for how emails are created.
+ * This attempts to parse out common conventions for things like replies:
+
+     this is some text
+
+     On <date>, <author> wrote:
+     > blah blah
+     > blah blah
+
+ ... and signatures:
+
+     this is some text
+
+     --
+     Bob
+     http://homepage.com/~bob
+
+ Each of these are parsed into Fragment objects.
+
+ EmailReplyParser also attempts to figure out which of these blocks should
+ be hidden from users. 
  */
-
-
-
-// EmailReplyParser is a small library to parse plain text email content.  The
-// goal is to identify which fragments are quoted, part of a signature, or
-// original body content.  We want to support both top and bottom posters, so
-// no simple "REPLY ABOVE HERE" content is used.
-//
-// Beyond RFC 5322 there aren't any real standards for how emails are created.
-//  This attempts to parse out common conventions for things like replies:
-//
-//     this is some text
-//
-//     On <date>, <author> wrote:
-//     > blah blah
-//     > blah blah
-//
-// ... and signatures:
-//
-//     this is some text
-//
-//     --
-//     Bob
-//     http://homepage.com/~bob
-//
-// Each of these are parsed into Fragment objects.
-//
-// EmailReplyParser also attempts to figure out which of these blocks should
-// be hidden from users.
 
 
 var EmailReplyParser = {
@@ -168,16 +162,18 @@ Email.prototype = {
 		// Check for multi-line reply headers. Some clients break up
 		// the "On DATE, NAME <EMAIL> wrote:" line into multiple lines.
 		//var patt = /^(On\s(\n|.)*wrote:)$/m; *original*
-    	var patt = /\nOn(.*?)wrote:(.*?)$/si //*modified for 80 char*
-		///(<div class="gmail_quote")(.*?)(>).*(?=((?<=\S)\s+)).*/g //html pattern
-		var doubleOnPatt = /^(On\s(\n|.)*(^(> )?On\s)((\n|.)*)wrote:)$/m; //*original*
-
-
-		if(patt.test(text) && !doubleOnPatt.test(text)) {
+    	var patt = /\nOn(.*?)wrote:(.*?)$/si //*modified for GMail 80 char*
+		var htmlPatt = /(<div class="gmail_quote")(.*?)(>).*(?=((?<=\S)\s+)).*/s //html pattern
+		//var doubleOnPatt = /^(On\s(\n|.)*(^(> )?On\s)((\n|.)*)wrote:)$/m; //*original*
+		
+		if(patt.test(text)) {
 			var reply_header = (patt.exec(text))[0];
 			// Remove all new lines from the reply header.
-			text = text.replace(reply_header, reply_header.replace(/\n/g, ' '));
-		}
+			text = text.replace(reply_header, '');
+		}else if (htmlPatt.test(text)){
+      		var reply_header = (htmlPatt.exec(text))[0];
+      		text = text.replace(reply_header,'');
+    	}
 
 		// The text is reversed initially due to the way we check for hidden
 		// fragments.
@@ -220,7 +216,6 @@ Email.prototype = {
 	// Returns nothing.
 	scan_line: function(line) {
 		var SIG_REGEX = '(--|__|\\w-$)|(^(\\w+\\s*){1,3} ' + ("Sent from my").reverse() +  '$)';
-
 		line = line.chomp('\n');
 		if (!(new RegExp(SIG_REGEX)).test(line)) {
 			line = line.ltrim();

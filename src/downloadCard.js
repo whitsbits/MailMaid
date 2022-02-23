@@ -57,7 +57,7 @@ function downloadManagerCard(e,fileTypeAction) {
             var _saveFileAction = CardService.newSelectionInput()
                 .setType(CardService.SelectionInputType.RADIO_BUTTON)
                 .setFieldName('saveFile')
-                .addItem('All email in one file', 'oneFile', true);
+                .addItem('Individual Message per file', 'messageFile', true);
             }else if (e === null || fileTypeAction === undefined){
             var _saveFileText = CardService.newTextParagraph()
                 .setText('<b>How do you want MailMaid to save the messages into a file?</b>')
