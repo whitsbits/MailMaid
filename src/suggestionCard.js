@@ -1,5 +1,5 @@
 function suggestionCard() {
-        let cardHeader1 = CardService.newCardHeader()
+        let suggestionCardHeader = CardService.newCardHeader()
             .setTitle('Rule Suggestions')
             .setImageUrl(
                 'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
@@ -94,7 +94,7 @@ function suggestionCard() {
         card.setFixedFooter(navFooter());
             
         let suggestionCard = card
-            .setHeader(cardHeader1)
+            .setHeader(suggestionCardHeader)
             .addSection(cardSection1)
             .addSection(cardSection2)
             .addSection(cardSection3);
