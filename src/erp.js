@@ -1,13 +1,36 @@
-///(<div class="gmail_quote")(.*?)(>).*(?=((?<=\S)\s+)).*/g
+
+/**
+ * TODO: Fixes for the library:
+ * 
+ * There are some gaps in the current code
+ * Quoted Headers
+ * Quoted headers aren't picked up if there's an extra line break:
+ * 
+ * On <date>, <author> wrote:
+ * 
+ * > blah
+ * They also aren't picked up if the email client breaks it up into multiple lines, 
+ * like gmail and it's 80 column automatic limit:
+ * 
+ * On <date>, <author>
+ * wrote:
+ * > blah
+ * 
+ * The library only works for pure text emails, I want to also parse html from GMail
+ * If the text is HTML from GMail then the Quoted text is marked by
+ * <div class="gmail_quote">
+ * 
+ */
+
+
 
 // EmailReplyParser is a small library to parse plain text email content.  The
 // goal is to identify which fragments are quoted, part of a signature, or
 // original body content.  We want to support both top and bottom posters, so
 // no simple "REPLY ABOVE HERE" content is used.
 //
-// Beyond RFC 5322 here aren't
-// any real standards for how emails are created.  This attempts to parse out
-// common conventions for things like replies:
+// Beyond RFC 5322 there aren't any real standards for how emails are created.
+//  This attempts to parse out common conventions for things like replies:
 //
 //     this is some text
 //
@@ -27,6 +50,8 @@
 //
 // EmailReplyParser also attempts to figure out which of these blocks should
 // be hidden from users.
+
+
 var EmailReplyParser = {
 	VERSION: "0.4",
 
@@ -74,7 +99,6 @@ String.prototype.reverse = function() {
     return s;
 }
 
-//http://flochip.com/2011/09/06/rubys-string-gsub-in-javascript/
 String.prototype.gsub = function(source, pattern, replacement) {
 	var match, result;
 	if (!((pattern != null) && (replacement != null))) {
@@ -95,7 +119,6 @@ String.prototype.gsub = function(source, pattern, replacement) {
 	return result;
 };
 
-//http://3dmdesign.com/development/extending-javascript-strings-with-chomp-using-prototypes
 String.prototype.chomp = function() {
 	return this.replace(/(\n|\r)+$/, '');
 };
@@ -318,19 +341,4 @@ Fragment.prototype = {
 		return this.content.toString();
 	}
 };
-
-
-/**
- * Quoted Headers
-Quoted headers aren't picked up if there's an extra line break:
-
-On <date>, <author> wrote:
-
-> blah
-They also aren't picked up if the email client breaks it up into multiple lines, like gmail and it's 80 column automatic limit:
-
-On <date>, <author>
-wrote:
-> blah
- */
 
