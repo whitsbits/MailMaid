@@ -12,3 +12,16 @@ function buildSearchURL(e) {
     .setOpenLink(CardService.newOpenLink().setUrl(url).setOpenAs(CardService.OpenAs.OVERLAY))
     .build();
 }
+
+function buildDownloadURL(e) {
+  var search = e.formInput.search;
+  if (search === undefined){
+    return notify ("You must enter serarch criteria before you can preview the rule", downloadManagerCard())
+  }
+  var baseURL = `https://mail.google.com/mail/u/0/#search/`
+  let encoded = encodeURIComponent(search);
+  let url = baseURL + encoded;
+  return CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink().setUrl(url).setOpenAs(CardService.OpenAs.OVERLAY))
+    .build();
+}

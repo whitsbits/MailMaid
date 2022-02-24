@@ -158,10 +158,6 @@ function cleanMail() {
     Logger.log(`${user} - Setting last run data as ${lastRun}`)
     sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, tallyCount, results);
   }
-
-  function newFunction() {
-    return 0;
-  }
 };
 
 function searchQueryBuilder(action, searchString, days) {

@@ -154,20 +154,18 @@ function captureDownloadFormData(e) {
   var saveFile = e.formInput.saveFile;
   var fileTypeAction = e.formInput.fileTypeAction;
 
-  if (beforeDate === undefined || afterDate === undefined) {
-    return notify(`Please enter a before and after date for the suggestion search`, suggestionCard())
-  } else if (isValidTimestamp(beforeDate) || isValidTimestamp(afterDate)) {
-    return notify(`Please enter only date value for the start and end of the suggestion search`, suggestionCard())
-  }
-
+  if (search === undefined) {
+    return notify(`Please enter a search criteria above before downloading`, downloadManagerCard())
+  };
+  
   Logger.log(`${user} - Sending ${downloadAction} for ${search} as ${fileTypeAction} ${saveFile}`);
 
   try {
-      Async.call('exportToDrive', search, downloadAction, saveFile, fileTypeAction)
+      Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction)
   }
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
-  return notify(`Starting download of ${search} results. We will email you when it is complete.`, onHomepage());
+  return notify(`Starting download of ${search}.\n We will email you when it is complete.`, onHomepage());
 }
