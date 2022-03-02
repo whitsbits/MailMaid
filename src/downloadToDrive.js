@@ -1,16 +1,17 @@
 /**
+ * TODO: Add downalod and parse switches to UI
  * TODO: Loop & timeout for large search results
  */
 
-function downloadToDrive(search, downloadAction, saveFile, fileTypeAction) {
-  var search = "from:anniep519@me.com has:attachment"
+function downloadToDrive(search, downloadAction, saveFile, fileTypeAction, atchDownload, parseReply) {
+/*   var search = "from:anniep519@me.com has:attachment"
   var downloadAction = "Download"
   var saveFile = "threadFile"
   var fileTypeAction = ".txt";
   var atchDownload = true;
-  var parseReply = false;
+  var parseReply = false; */
 
-  Logger.log(`${user} - Processing ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile}.`)
+  Logger.log(`${user} - Processing ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile} with atchDownload=${atchDownload} and parseReply=${parseReply}.`)
   var threads = GmailApp.search(search, 0, inc);
   var slug = printSlug();
   var foldeName = "MailMaid Download" + "_" + search + "_" + searchDateConverter(Date.now());

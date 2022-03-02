@@ -153,15 +153,20 @@ function captureDownloadFormData(e) {
   var downloadAction = e.formInput.downloadAction;
   var saveFile = e.formInput.saveFile;
   var fileTypeAction = e.formInput.fileTypeAction;
+  var atchDownload = e.formInput.atchDownload;
+  var parseReply = e.formInput.parseReply;
+
+  Logger.log(e)
 
   if (search === undefined) {
     return notify(`Please enter a search criteria above before downloading`, downloadManagerCard())
   };
   
-  Logger.log(`${user} - Sending ${downloadAction} for ${search} as ${fileTypeAction} ${saveFile}`);
+  Logger.log(`${user} - Sending ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile} \
+with atchDownload=${atchDownload} and parseReply=${parseReply}.`);
 
   try {
-      Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction)
+      Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction, atchDownload, parseReply)
   }
   catch (e) {
     Logger.log(`${user} - Error: ${e.toString()}`);

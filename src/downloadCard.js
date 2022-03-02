@@ -37,8 +37,8 @@ function downloadManagerCard(e) {
     var _downloadAction = CardService.newSelectionInput()
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setFieldName('downloadAction')
-        .addItem('Download & Purge', 'DownloadPurge', true)
-        .addItem('Download', 'Download', false);
+        .addItem('Download', 'Download', true)
+        .addItem('Download & Purge', 'DownloadPurge', false);
 
     const _downloadActionHint = CardService.newTextParagraph()
         .setText('<font color=\"#bcbcbc\">Download & Purge moves to Trash \nDownload keeps message in your Inbox</font>')
@@ -102,6 +102,29 @@ function downloadManagerCard(e) {
         .addItem('Individual Thread per file', 'threadFile', false)
         .addItem('All email in one file', 'oneFile', false);
     }
+
+    let DownloadAtchControl = CardService.newSwitch()
+        .setControlType(CardService.SwitchControlType.SWITCH)
+        .setFieldName('atchDownload')
+        .setValue(true)
+        .setSelected(false);
+
+    let DownloadAtchSwitch = CardService.newDecoratedText()
+        .setTopLabel('Download Attachment to Drive')
+        .setText('Include Attachments')
+        .setSwitchControl(DownloadAtchControl);
+
+    let parseReplyControl = CardService.newSwitch()
+        .setControlType(CardService.SwitchControlType.SWITCH)
+        .setFieldName('parseReply')
+        .setValue(true)
+        .setSelected(true);
+
+    let parseReplySwitch = CardService.newDecoratedText()
+        .setTopLabel('Removed quoted reply text')
+        .setText('Remove Replies')
+        .setSwitchControl(parseReplyControl);
+
     downloadManagerSection
         .addWidget(_searchText)
         .addWidget(_search)
@@ -116,6 +139,8 @@ function downloadManagerCard(e) {
         .addWidget(_saveFileText)
         .addWidget(_saveFileAction)
         .addWidget(cardSectionDivider)
+        .addWidget(DownloadAtchSwitch)
+        .addWidget(parseReplySwitch)
         .addWidget(downloadButtonSet());
 
     card.setHeader(downloadCardHeader);
