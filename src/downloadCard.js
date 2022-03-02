@@ -47,15 +47,15 @@ function downloadManagerCard(e) {
         .setText('<b>Do you want to save as text only, html, or message files?</b>')
 
 
-    if (e.formInput.fileTypeAction === "eml") {
+    if (e.formInput.fileTypeAction === ".eml") {
 
         var _fileTypeAction = CardService.newSelectionInput()
             .setType(CardService.SelectionInputType.RADIO_BUTTON)
             .setFieldName('fileTypeAction')
             .setOnChangeAction(CardService.newAction().setFunctionName('downloadModeChange'))
-            .addItem('Text Only (.txt)', 'text', false)
-            .addItem('HTML (.html)', 'html', false)
-            .addItem('Message (.eml)', 'eml', true);
+            .addItem('Text Only (.txt)', '.txt', false)
+            .addItem('HTML (.html)', '.html', false)
+            .addItem('Message (.eml)', '.eml', true);
 
         var _saveFileText = CardService.newTextParagraph()
             .setText('<b>.eml files only support one file per message</b>')
@@ -65,14 +65,14 @@ function downloadManagerCard(e) {
             .setFieldName('saveFile')
             .addItem('Individual Message per file', 'messageFile', true);
 
-    } else if (e.formInput.fileTypeAction === "html"){
+    } else if (e.formInput.fileTypeAction === ".html"){
         var _fileTypeAction = CardService.newSelectionInput()
             .setType(CardService.SelectionInputType.RADIO_BUTTON)
             .setFieldName('fileTypeAction')
             .setOnChangeAction(CardService.newAction().setFunctionName('downloadModeChange'))
-            .addItem('Text Only (.txt)', 'text', false)
-            .addItem('HTML (.html)', 'html', true)
-            .addItem('Message (.eml)', 'eml', false);
+            .addItem('Text Only (.txt)', '.txt', false)
+            .addItem('HTML (.html)', '.html', true)
+            .addItem('Message (.eml)', '.eml', false);
 
         var _saveFileText = CardService.newTextParagraph()
             .setText('<b>How do you want MailMaid to save the messages into a file?</b>')
@@ -88,9 +88,9 @@ function downloadManagerCard(e) {
         .setType(CardService.SelectionInputType.RADIO_BUTTON)
         .setFieldName('fileTypeAction')
         .setOnChangeAction(CardService.newAction().setFunctionName('downloadModeChange'))
-        .addItem('Text Only (.txt)', 'text', true)
-        .addItem('HTML (.html)', 'html', false)
-        .addItem('Message (.eml)', 'eml', false);
+        .addItem('Text Only (.txt)', '.txt', true)
+        .addItem('HTML (.html)', '.html', false)
+        .addItem('Message (.eml)', '.eml', false);
 
     var _saveFileText = CardService.newTextParagraph()
         .setText('<b>How do you want MailMaid to save the messages into a file?</b>')
