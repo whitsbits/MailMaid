@@ -156,8 +156,6 @@ function captureDownloadFormData(e) {
   var atchDownload = e.formInput.atchDownload;
   var parseReply = e.formInput.parseReply;
 
-  Logger.log(e)
-
   if (search === undefined) {
     return notify(`Please enter a search criteria above before downloading`, downloadManagerCard())
   };

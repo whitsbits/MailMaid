@@ -156,7 +156,7 @@ function cleanMail() {
     userProperties.deleteProperty('lastRunEpoch')
     userProperties.setProperties({ 'lastRunEpoch': lastRun })
     Logger.log(`${user} - Setting last run data as ${lastRun}`)
-    sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, tallyCount, results);
+    sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, licenseRead(), tallyCount, results);
   }
 };
 

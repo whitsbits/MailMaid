@@ -14,10 +14,11 @@ function testSendEmail() {
  * @param {String} subject - Subject for the message to be sent in the email.
  * @param {Object} template - html file for the template of the email.
  * @param {Boolean} maxMet - Bool as to if the Max Google Quota was hit
+ * @param {Boolean} licensed - Bool as to if the product is licensed
  * @param {Number} tally - total number of message that were processed.
  * @param {Object} results - Array for the results message to be sent in the email.
  *                           one line per array element
- * @param {Boolean} licensed - Bool as to if the product is licensed
+ * 
 */
 
 function sendReportEmail(subject, template, maxMet, licensed, tally, results) {
