@@ -10,7 +10,7 @@ function saveUserInfo() {
   if (stored !== 'true') {
     try {
       var conn = Jdbc.getConnection('jdbc:mysql://34.72.191.212:3306/db_mailmaid',
-                              {user: 'root', password: 'CbE4tkxG1pNbzyIf'});
+                              {user: 'root', password: 'niGWS!3!g9MXZYI'});
       let stmt = conn.createStatement()
       let email = '' + Session.getActiveUser();
 
