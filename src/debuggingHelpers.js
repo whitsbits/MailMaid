@@ -74,7 +74,7 @@ function getHash() {
 }
 
 function zeroLicense() {
-  userProperties.setProperties({ "license": "" })
+  userProperties.deleteProperty(`license`);
 }
 
 /**

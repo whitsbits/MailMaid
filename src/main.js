@@ -14,7 +14,6 @@ let ttl = 82800; //23 hours in seconds
 
 
 function initApp() {
-    removeDupeTriggers();
     var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
     if (authInfo.getAuthorizationStatus() ==
     ScriptApp.AuthorizationStatus.REQUIRED) {
@@ -53,10 +52,10 @@ function initApp() {
  */
  function onHomepage(e) {
     card.addSection(homepageIntroSection());
+    card.addSection(homepageLicenseSection());
     card.addSection(downloadSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
-    card.addSection(homepageLicenseSection());
     card.addSection(disclosuresSection());
     card.setName('homepage')
 
@@ -74,17 +73,10 @@ function homepageIntroSection() {
             introText
         );
 
-    const ruleSuggestions = CardService.newAction()
-        .setFunctionName('suggestionCard')
-        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const ruleSuggestionButton = CardService.newTextButton()
-        .setText('Make Rule Suggestions')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-        .setOnClickAction(ruleSuggestions);
+    
     
     const introBody = CardService.newCardSection()
-        .addWidget(introBodyText)
-        .addWidget(ruleSuggestionButton);
+        .addWidget(introBodyText);
 
     return introBody;
 }
@@ -99,7 +91,15 @@ function downloadSection() {
         .setText(
             downloadText
         );
-
+    
+    const ruleSuggestions = CardService.newAction()
+        .setFunctionName('suggestionCard')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const ruleSuggestionButton = CardService.newTextButton()
+        .setText('Make Suggestions')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(ruleSuggestions); 
+        
     const downloadAction = CardService.newAction()
         .setFunctionName('downloadManagerCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
@@ -109,8 +109,10 @@ function downloadSection() {
         .setOnClickAction(downloadAction);
     
     const downloadBody = CardService.newCardSection()
-        .addWidget(dowloadBodyText)
+        //.addWidget(dowloadBodyText)
+        .addWidget(ruleSuggestionButton)
         .addWidget(downloadButton);
+        
 
     return downloadBody;
 }
@@ -170,39 +172,47 @@ function homepageScheduleSection() {
 };
 
 function homepageLicenseSection() {
-    if (licenseRead() === false) {
-        const licenseText = CardService.newTextParagraph()
-            .setText(`Enter your license information here`);
-        const licenseInput = CardService.newTextInput()
-            .setFieldName('number')
-            .setValue("")
-            .setHint('Paste license key sent to you here');
 
-        const addLicenseDataAction = CardService.newAction()
-            .setFunctionName('setLicense')
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const addLicenseDataButton = CardService.newTextButton()
-            .setText('Add License Key')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(addLicenseDataAction);
+    let licenseText = CardService.newTextParagraph()
+    .setText(`Initializing License`);
 
-        const licenseSection = CardService.newCardSection()
+    const upgradeLicenseButton = CardService.newTextButton()
+        .setText('UPGRADE License')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOpenLink(CardService.newOpenLink()
+            .setUrl('https://checkout.stripe.com/pay/cs_live_a1EH8BAvQ7NsZ9rNbIVXyPjn3pkN48X4syc4NIguB6u8jgGKdlCz149rAN#fidkdWxOYHwnPyd1blppbHNgWjA0T252NVJNSDRNfTQ8TGxnV2h9XUd3TH9Bdlx2cUoyb2NXQUFmVkQxbzRfc1R1fHVNdVRRZHNQRGRNRnxEXE9QdUJ9QUxiR3RxbGlEbkZrSUpDcERVMnN2NTVcf0g9cmZiMycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl')
+            .setOpenAs(CardService.OpenAs.OVERLAY)
+            .setOnClose(CardService.OnClose.NOTHING));
+
+    const refreshLicenseAction = CardService.newAction()
+        .setFunctionName('refreshLicense')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const refreshLicenseButton = CardService.newTextButton()
+        .setText('Refresh License')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(refreshLicenseAction);
+
+    let licenseSection = CardService.newCardSection()
+        .addWidget(licenseText)
+    
+    if (licenseRead() === 'false') {
+        licenseText = CardService.newTextParagraph()
+            .setText(`<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will stop after Rule 1 or\nafter downloading 1 thread.\n\nTo enable more, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`);
+        licenseSection = CardService.newCardSection()
             .addWidget(licenseText)
-            .addWidget(licenseInput)
-            .addWidget(addLicenseDataButton)
+            .addWidget(upgradeLicenseButton)
+            .addWidget(refreshLicenseButton);
 
-        return licenseSection;
+    }else if (licenseRead() === 'true') {
+        licenseText = CardService.newTextParagraph()
+            .setText(`Product is fully licensed.`);
 
-    } else {
-        const licenseNum = userProperties.getProperty("license")
-        const licenseText = CardService.newTextParagraph()
-            .setText(`License Key: ${licenseNum}`);
-        const licenseSection = CardService.newCardSection()
+        licenseSection = CardService.newCardSection()
             .addWidget(licenseText);
+    };        
 
         return licenseSection;
-    }
-}
+};
 
 function disclosuresSection() {
     const disclosureText = `MailMaid's use and transfer to any other app of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.`

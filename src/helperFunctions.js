@@ -299,11 +299,7 @@ function reportRulesText() {
     var days = rules[i][2];
     var index = rules[i][3];
     text += ("<b>Rule " + index + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
-  }
-  if (licenseRead() === false) {
-    text += (`\n<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will only clean Rule 1.\n\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
-  }
-
+  };
   Logger.log(`${user} - Returning reportRulesText: \n ${text}`)
   return text
 };
