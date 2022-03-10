@@ -23,7 +23,7 @@ function cleanMail() {
     rulesCached = 0;
   };
 
-
+  initLicense(); // when the backend trigger runs, check that the license is still valid
   if (licenseRead() === false) {
     i, rules.length = 1
   }
