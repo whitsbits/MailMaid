@@ -51,8 +51,18 @@ function initApp() {
  * @return {CardService.Card} The card to show to the user.
  */
  function onHomepage(e) {
-    card.addSection(homepageIntroSection());
+    let homepageCardHeader = CardService.newCardHeader()
+    .setTitle('MailMaid Homepage')
+    .setImageUrl(
+        'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
+    )
+    .setImageAltText('MailMaid')
+    .setImageStyle(CardService.ImageStyle.SQUARE);
+
+    card.setHeader(homepageCardHeader);
+    if (licenseRead() === 'false'){
     card.addSection(homepageLicenseSection());
+    }
     card.addSection(actionSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
@@ -66,51 +76,43 @@ function initApp() {
 * Callback for rendering the intro section.
 * @return {CardService.Section} Return the section to build the card.
 */
-function homepageIntroSection() {
-    var introText = "MailMaid automatically cleans your email by setting rules that find messages based on <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> and can archive or purge them for you, according to the number of days since the message was received."
-    const introBodyText = CardService.newTextParagraph()
-        .setText(
-            introText
-        );
-    
-    const introBody = CardService.newCardSection()
-        .addWidget(introBodyText);
-
-    return introBody;
-}
-
-/**
-* Callback for rendering the intro section.
-* @return {CardService.Section} Return the section to build the card.
-*/
 function actionSection() {
-    var actionText = "<b>Actions</b>\nGet rule suggestions and Download Emails"
+    
     const actionBodyText = CardService.newTextParagraph()
-        .setText(actionText);
+        .setText("<b>Actions</b>");
     
     const ruleSuggestions = CardService.newAction()
         .setFunctionName('suggestionCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const ruleSuggestionButton = CardService.newTextButton()
-        .setText('SUGGEST')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    const ruleSuggestionButton = CardService.newImageButton()
+        .setIconUrl(
+            'https://github.com/whitsbits/files/blob/main/suggestions(36).png?raw=true'
+        )
+        .setAltText('Suggestions')
         .setOnClickAction(ruleSuggestions); 
         
     const downloadAction = CardService.newAction()
         .setFunctionName('downloadManagerCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const downloadButton = CardService.newTextButton()
-        .setText('DOWNLOAD')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    const downloadButton = CardService.newImageButton()
+        .setIconUrl(
+            'https://github.com/whitsbits/files/blob/main/download(36).png?raw=true'
+        )
+        .setAltText('Download')
         .setOnClickAction(downloadAction);
 
-    const actionButtonGroup = CardService.newButtonSet()
-            .addButton(ruleSuggestionButton)
-            .addButton(downloadButton);
+    const suggestionDecoratedText = CardService.newDecoratedText()
+            .setText('<font color="#2772ed"><b>Make New Rule Suggestions</b></font>')
+            .setButton(ruleSuggestionButton);
+
+    const downloadDecoratedText = CardService.newDecoratedText()
+        .setText('<font color="#2772ed"><b>Download Old Emails</b></font>')
+        .setButton(downloadButton);       
     
     const actionBody = CardService.newCardSection()
         .addWidget(actionBodyText)
-        .addWidget(actionButtonGroup);
+        .addWidget(suggestionDecoratedText)
+        .addWidget(downloadDecoratedText);
         
     return actionBody;
 }
@@ -128,9 +130,11 @@ function homepageRulesSection() {
     const addRuleDataAction = CardService.newAction()
         .setFunctionName('rulesManagerCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const addRuleDataButton = CardService.newTextButton()
-        .setText('Manage Rules')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    const addRuleDataButton = CardService.newImageButton()
+    .setIconUrl(
+        'https://github.com/whitsbits/files/blob/main/rules(36).png?raw=true'
+    )
+    .setAltText('Rules')
         .setOnClickAction(addRuleDataAction);
 
     const clearAllAction = CardService.newAction()
@@ -141,10 +145,14 @@ function homepageRulesSection() {
         .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
         .setOnClickAction(clearAllAction);
 
+    const rulesDecoratedText = CardService.newDecoratedText()
+        .setText('<font color="#2772ed"><b>Manage Rules</b></font>')
+        .setButton(addRuleDataButton); 
+        
     const rulesBody = CardService.newCardSection()        
-    .addWidget(addRuleDataButton)
-    .addWidget(rulesBodyText)
-    .addWidget(clearAllButton);
+        .addWidget(rulesDecoratedText)
+        .addWidget(rulesBodyText)
+        .addWidget(clearAllButton);
 
     return rulesBody;
 };
@@ -157,25 +165,33 @@ function homepageScheduleSection() {
     const changeScheduleAction = CardService.newAction()
         .setFunctionName('scheduleCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-    const changeScheduleButton = CardService.newTextButton()
-        .setText('Manage Schedule')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    const changeScheduleButton = CardService.newImageButton()
+    .setIconUrl(
+        'https://github.com/whitsbits/files/blob/main/schedule(36).png?raw=true'
+    )
+    .setAltText('Schedule')
         .setOnClickAction(changeScheduleAction);
 
+    const scheduleDecoratedText = CardService.newDecoratedText()
+        .setText('<font color="#2772ed"><b>Manage Schedule</b></font>')
+        .setButton(changeScheduleButton); 
+        
     const scheduleSection = CardService.newCardSection()
-        .addWidget(changeScheduleButton)
+        .addWidget(scheduleDecoratedText)
         .addWidget(scheduleReportWidget());
 
     return scheduleSection;
 };
 
 function homepageLicenseSection() {
+    var introText = "MailMaid automatically cleans your email by setting rules that find messages based on <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> and can archive or purge them for you, according to the number of days since the message was received."
+    const introBodyText = CardService.newTextParagraph()
+        .setText(
+            introText
+        );
 
     const licenseBodyText = CardService.newTextParagraph()
         .setText('<b>License</b>');
-
-    let licenseText = CardService.newTextParagraph()
-    .setText(`Initializing License`);
 
     const upgradeLicenseButton = CardService.newTextButton()
         .setText('UPGRADE')
@@ -196,36 +212,21 @@ function homepageLicenseSection() {
     const licenseButtonGroup = CardService.newButtonSet()
         .addButton(upgradeLicenseButton)
         .addButton(refreshLicenseButton);
-    
-/*     const refreshDecorated = CardService.newDecoratedText()
-        .setText('If you have just purchased a license click here to refresh and apply the license')
-        .setButton(refreshLicenseButton); */
 
-    let licenseSection = CardService.newCardSection()
-        .addWidget(licenseBodyText)
-        .addWidget(licenseText);
-
-    if (licenseRead() === 'false') {
-        licenseText = CardService.newTextParagraph()
+        let licenseText = CardService.newTextParagraph()
             .setText(`<b><font color=\"#ff3355\">This is a trial version.</font></b>
 \nMailMaid will stop after Rule 1 or after downloading 1 thread. To enable more,
 UPGRADE your licesne at <a href="https://mailmaid.co">mailmaid.co</a> 
 If you have just purchased a license click REFRESH to apply it.`);
-        licenseSection = CardService.newCardSection()
+
+        let licenseSection = CardService.newCardSection()
             .addWidget(licenseBodyText)
+            .addWidget(introBodyText)
             .addWidget(licenseText)
             .addWidget(licenseButtonGroup);
 
-    }else if (licenseRead() === 'true') {
-        licenseText = CardService.newTextParagraph()
-            .setText(`Product is fully licensed.`);
+            return licenseSection;
 
-        licenseSection = CardService.newCardSection()
-            .addWidget(licenseBodyText)
-            .addWidget(licenseText);
-    };        
-
-        return licenseSection;
 };
 
 function disclosuresSection() {
