@@ -52,7 +52,7 @@ function initApp() {
  */
  function onHomepage(e) {
     let homepageCardHeader = CardService.newCardHeader()
-    .setTitle('MailMaid Homepage')
+    .setTitle('Homepage')
     .setImageUrl(
         'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
     )

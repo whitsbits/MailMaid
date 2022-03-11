@@ -1,6 +1,6 @@
 function suggestionCard() {
         let suggestionCardHeader = CardService.newCardHeader()
-            .setTitle('Rule Suggestions')
+            .setTitle('Suggestions')
             .setImageUrl(
                 'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
             )
