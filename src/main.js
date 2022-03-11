@@ -14,8 +14,6 @@ let ttl = 82800; //23 hours in seconds
 
 
 function initApp() {
-    removeDupeTriggers();
-    
     var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
     if (authInfo.getAuthorizationStatus() ==
     ScriptApp.AuthorizationStatus.REQUIRED) {
@@ -54,9 +52,10 @@ function initApp() {
  */
  function onHomepage(e) {
     card.addSection(homepageIntroSection());
+    card.addSection(homepageLicenseSection());
+    card.addSection(actionSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
-    card.addSection(homepageLicenseSection());
     card.addSection(disclosuresSection());
     card.setName('homepage')
 
@@ -73,20 +72,47 @@ function homepageIntroSection() {
         .setText(
             introText
         );
+    
+    const introBody = CardService.newCardSection()
+        .addWidget(introBodyText);
 
+    return introBody;
+}
+
+/**
+* Callback for rendering the intro section.
+* @return {CardService.Section} Return the section to build the card.
+*/
+function actionSection() {
+    var actionText = "<b>Actions</b>\nGet rule suggestions and Download Emails"
+    const actionBodyText = CardService.newTextParagraph()
+        .setText(actionText);
+    
     const ruleSuggestions = CardService.newAction()
         .setFunctionName('suggestionCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const ruleSuggestionButton = CardService.newTextButton()
-        .setText('Make Rule Suggestions')
+        .setText('SUGGEST')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-        .setOnClickAction(ruleSuggestions);
-    
-    const introBody = CardService.newCardSection()
-        .addWidget(introBodyText)
-        .addWidget(ruleSuggestionButton);
+        .setOnClickAction(ruleSuggestions); 
+        
+    const downloadAction = CardService.newAction()
+        .setFunctionName('downloadManagerCard')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const downloadButton = CardService.newTextButton()
+        .setText('DOWNLOAD')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(downloadAction);
 
-    return introBody;
+    const actionButtonGroup = CardService.newButtonSet()
+            .addButton(ruleSuggestionButton)
+            .addButton(downloadButton);
+    
+    const actionBody = CardService.newCardSection()
+        .addWidget(actionBodyText)
+        .addWidget(actionButtonGroup);
+        
+    return actionBody;
 }
 
 /**
@@ -144,39 +170,63 @@ function homepageScheduleSection() {
 };
 
 function homepageLicenseSection() {
-    if (licenseRead() === false) {
-        const licenseText = CardService.newTextParagraph()
-            .setText(`Enter your license information here`);
-        const licenseInput = CardService.newTextInput()
-            .setFieldName('number')
-            .setValue("")
-            .setHint('Paste license key sent to you here');
 
-        const addLicenseDataAction = CardService.newAction()
-            .setFunctionName('setLicense')
-            .setLoadIndicator(CardService.LoadIndicator.SPINNER);
-        const addLicenseDataButton = CardService.newTextButton()
-            .setText('Add License Key')
-            .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
-            .setOnClickAction(addLicenseDataAction);
+    const licenseBodyText = CardService.newTextParagraph()
+        .setText('<b>License</b>');
 
-        const licenseSection = CardService.newCardSection()
+    let licenseText = CardService.newTextParagraph()
+    .setText(`Initializing License`);
+
+    const upgradeLicenseButton = CardService.newTextButton()
+        .setText('UPGRADE')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOpenLink(CardService.newOpenLink()
+            .setUrl('https://us-central1-mailamidweb.cloudfunctions.net/getSessionUrl')
+            .setOpenAs(CardService.OpenAs.OVERLAY)
+            .setOnClose(CardService.OnClose.NOTHING));
+
+    const refreshLicenseAction = CardService.newAction()
+        .setFunctionName('refreshLicense')
+        .setLoadIndicator(CardService.LoadIndicator.SPINNER);
+    const refreshLicenseButton = CardService.newTextButton()
+        .setText('Refresh')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+        .setOnClickAction(refreshLicenseAction);
+
+    const licenseButtonGroup = CardService.newButtonSet()
+        .addButton(upgradeLicenseButton)
+        .addButton(refreshLicenseButton);
+    
+/*     const refreshDecorated = CardService.newDecoratedText()
+        .setText('If you have just purchased a license click here to refresh and apply the license')
+        .setButton(refreshLicenseButton); */
+
+    let licenseSection = CardService.newCardSection()
+        .addWidget(licenseBodyText)
+        .addWidget(licenseText);
+
+    if (licenseRead() === 'false') {
+        licenseText = CardService.newTextParagraph()
+            .setText(`<b><font color=\"#ff3355\">This is a trial version.</font></b>
+\nMailMaid will stop after Rule 1 or after downloading 1 thread. To enable more,
+UPGRADE your licesne at <a href="https://mailmaid.co">mailmaid.co</a> 
+If you have just purchased a license click REFRESH to apply it.`);
+        licenseSection = CardService.newCardSection()
+            .addWidget(licenseBodyText)
             .addWidget(licenseText)
-            .addWidget(licenseInput)
-            .addWidget(addLicenseDataButton)
+            .addWidget(licenseButtonGroup);
 
-        return licenseSection;
+    }else if (licenseRead() === 'true') {
+        licenseText = CardService.newTextParagraph()
+            .setText(`Product is fully licensed.`);
 
-    } else {
-        const licenseNum = userProperties.getProperty("license")
-        const licenseText = CardService.newTextParagraph()
-            .setText(`License Key: ${licenseNum}`);
-        const licenseSection = CardService.newCardSection()
+        licenseSection = CardService.newCardSection()
+            .addWidget(licenseBodyText)
             .addWidget(licenseText);
+    };        
 
         return licenseSection;
-    }
-}
+};
 
 function disclosuresSection() {
     const disclosureText = `MailMaid's use and transfer to any other app of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.`

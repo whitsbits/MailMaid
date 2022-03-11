@@ -137,4 +137,38 @@ function captureSuggestionFormData(e) {
     return `Error: ${e.toString()}`;
   }
   return notify(`Emailing Sender Suggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`, suggestionCard());
+};
+
+
+
+/**
+* Capture inputs for downloading emails to Drive
+* 
+* @param {Object} e - Event from add-on server
+* @return {notify with Card to be built}
+*/
+
+function captureDownloadFormData(e) {
+  var search = e.formInput.search;
+  var downloadAction = e.formInput.downloadAction;
+  var saveFile = e.formInput.saveFile;
+  var fileTypeAction = e.formInput.fileTypeAction;
+  var atchDownload = e.formInput.atchDownload;
+  var parseReply = e.formInput.parseReply;
+
+  if (search === undefined) {
+    return notify(`Please enter a search criteria above before downloading`, downloadManagerCard())
+  };
+  
+  Logger.log(`${user} - Sending ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile} \
+with atchDownload=${atchDownload} and parseReply=${parseReply}.`);
+
+  try {
+      Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction, atchDownload, parseReply)
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+    return `Error: ${e.toString()}`;
+  }
+  return notify(`Starting download of ${search}.\n We will email you when it is complete.`, onHomepage());
 }

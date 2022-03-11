@@ -87,7 +87,7 @@ function clearAllRules() {
   for (var i = 1; i < numRules + 1; i++) {
     userProperties.deleteProperty(`rule${i}`);
   };
-  Logger.log (`${user} - Deleted ${i - 1} rules.`);
+  Logger.log(`${user} - Deleted ${i - 1} rules.`);
   return notify(`Rules Cleared`, onHomepage());
 };
 
@@ -199,10 +199,10 @@ function getRulesArr() {
       .split(',');
     rulesArr.push(ruleValue)
   }
-  rulesArr.sort(function(a,b) {
-    return a[3]-b[3]
-});
-  Logger.log (`${user} - Returning getRulesArr ${rulesArr}`)
+  rulesArr.sort(function (a, b) {
+    return a[3] - b[3]
+  });
+  Logger.log(`${user} - Returning getRulesArr ${rulesArr}`)
   return rulesArr;
 };
 
@@ -299,11 +299,7 @@ function reportRulesText() {
     var days = rules[i][2];
     var index = rules[i][3];
     text += ("<b>Rule " + index + ":</b>\n   Action to take: <b><font color=\"#ff3355\">" + action + "</font></b>\n   Search string: <font color=\"#3366cc\">" + search + "</font>\n   Take action after\: <font color=\"#3366cc\">" + days + " days </font>\n\n")
-  }
-  if (licenseRead() === false) {
-    text += (`\n<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will only clean Rule 1.\n\nTo enable more than one rule, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`)
-  }
-
+  };
   Logger.log(`${user} - Returning reportRulesText: \n ${text}`)
   return text
 };
@@ -403,7 +399,7 @@ function isValidTimestamp(_timestamp) {
  * @returns {boolean} true /false if n is number
  */
 function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function decendingSort(a, b) {
@@ -425,18 +421,16 @@ function searchDateConverter(epochTime){
     var eTime = new Date(epochTime);
     var dd = eTime.getDate();
 
-  var mm = eTime.getMonth()+1; 
+  var mm = eTime.getMonth() + 1;
   var yyyy = eTime.getFullYear();
-  if(dd<10) 
-  {
-      dd='0'+dd;
-  } 
-
-  if(mm<10) 
-  {
-      mm='0'+mm;
+  if (dd < 10) {
+    dd = '0' + dd;
   }
-  eTime = yyyy+'/'+mm+'/'+dd;
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  eTime = yyyy + '/' + mm + '/' + dd;
   return eTime;
 }
 

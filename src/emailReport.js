@@ -1,5 +1,5 @@
 function testSendEmail() {
-  sendReportEmail('src/report-email.html', ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
+  sendReportEmail('Test', 'src/download-email.html', false, false, null, ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
   /*
   cache.getObject('result')
   [
@@ -14,16 +14,18 @@ function testSendEmail() {
  * @param {String} subject - Subject for the message to be sent in the email.
  * @param {Object} template - html file for the template of the email.
  * @param {Boolean} maxMet - Bool as to if the Max Google Quota was hit
+ * @param {Boolean} licensed - Bool as to if the product is licensed
  * @param {Number} tally - total number of message that were processed.
  * @param {Object} results - Array for the results message to be sent in the email.
  *                           one line per array element
+ * 
 */
 
-function sendReportEmail(subject, template, maxMet, tally, results) {
+function sendReportEmail(subject, template, maxMet, licensed, tally, results) {
 
   var recipient = Session.getActiveUser().getEmail();
   var subject = subject;
-  var message = getEmailHTML(template, maxMet, tally, results)
+  var message = getEmailHTML(template, maxMet, licensed, tally, results)
 
   MailApp.sendEmail({
     to: recipient,
@@ -40,13 +42,15 @@ function sendReportEmail(subject, template, maxMet, tally, results) {
  * @param {Number} tally - total number of message that were processed.
  * @param {Object} results - Array for the results message to be sent in the email.
  *                           one line per array element
+ * @param {Boolean} licensed - Bool as to if the product is licensed.
 */
 
-function getEmailHTML(template, maxMet, tally, results) {
+function getEmailHTML(template, maxMet, licensed, tally, results) {
   var templ = HtmlService.createTemplateFromFile(template);
   templ.results = results;
   templ.tally = tally;
   templ.maxMet = maxMet;
+  templ.licensed = licensed;
   var htmlBody = templ.evaluate().getContent();
   return htmlBody
 }
