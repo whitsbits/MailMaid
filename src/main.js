@@ -53,7 +53,7 @@ function initApp() {
  function onHomepage(e) {
     card.addSection(homepageIntroSection());
     card.addSection(homepageLicenseSection());
-    card.addSection(downloadSection());
+    card.addSection(actionSection());
     card.addSection(homepageScheduleSection());
     card.addSection(homepageRulesSection());
     card.addSection(disclosuresSection());
@@ -72,8 +72,6 @@ function homepageIntroSection() {
         .setText(
             introText
         );
-
-    
     
     const introBody = CardService.newCardSection()
         .addWidget(introBodyText);
@@ -85,18 +83,16 @@ function homepageIntroSection() {
 * Callback for rendering the intro section.
 * @return {CardService.Section} Return the section to build the card.
 */
-function downloadSection() {
-    var downloadText = "Use <a href=\"https://support.google.com/mail/answer/7190?hl=en\">GMail search criteria</a> to tell MailMaid which messages need to be downloaded and removed"
-    const dowloadBodyText = CardService.newTextParagraph()
-        .setText(
-            downloadText
-        );
+function actionSection() {
+    var actionText = "<b>Actions</b>\nGet rule suggestions and Download Emails"
+    const actionBodyText = CardService.newTextParagraph()
+        .setText(actionText);
     
     const ruleSuggestions = CardService.newAction()
         .setFunctionName('suggestionCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const ruleSuggestionButton = CardService.newTextButton()
-        .setText('Make Suggestions')
+        .setText('SUGGEST')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(ruleSuggestions); 
         
@@ -104,17 +100,19 @@ function downloadSection() {
         .setFunctionName('downloadManagerCard')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const downloadButton = CardService.newTextButton()
-        .setText('Download EMails')
+        .setText('DOWNLOAD')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(downloadAction);
-    
-    const downloadBody = CardService.newCardSection()
-        //.addWidget(dowloadBodyText)
-        .addWidget(ruleSuggestionButton)
-        .addWidget(downloadButton);
-        
 
-    return downloadBody;
+    const actionButtonGroup = CardService.newButtonSet()
+            .addButton(ruleSuggestionButton)
+            .addButton(downloadButton);
+    
+    const actionBody = CardService.newCardSection()
+        .addWidget(actionBodyText)
+        .addWidget(actionButtonGroup);
+        
+    return actionBody;
 }
 
 /**
@@ -173,14 +171,17 @@ function homepageScheduleSection() {
 
 function homepageLicenseSection() {
 
+    const licenseBodyText = CardService.newTextParagraph()
+        .setText('<b>License</b>');
+
     let licenseText = CardService.newTextParagraph()
     .setText(`Initializing License`);
 
     const upgradeLicenseButton = CardService.newTextButton()
-        .setText('UPGRADE License')
+        .setText('UPGRADE')
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOpenLink(CardService.newOpenLink()
-            .setUrl('https://checkout.stripe.com/pay/cs_live_a1EH8BAvQ7NsZ9rNbIVXyPjn3pkN48X4syc4NIguB6u8jgGKdlCz149rAN#fidkdWxOYHwnPyd1blppbHNgWjA0T252NVJNSDRNfTQ8TGxnV2h9XUd3TH9Bdlx2cUoyb2NXQUFmVkQxbzRfc1R1fHVNdVRRZHNQRGRNRnxEXE9QdUJ9QUxiR3RxbGlEbkZrSUpDcERVMnN2NTVcf0g9cmZiMycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl')
+            .setUrl('https://us-central1-mailamidweb.cloudfunctions.net/getSessionUrl')
             .setOpenAs(CardService.OpenAs.OVERLAY)
             .setOnClose(CardService.OnClose.NOTHING));
 
@@ -188,26 +189,39 @@ function homepageLicenseSection() {
         .setFunctionName('refreshLicense')
         .setLoadIndicator(CardService.LoadIndicator.SPINNER);
     const refreshLicenseButton = CardService.newTextButton()
-        .setText('Refresh License')
-        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setText('Refresh')
+        .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
         .setOnClickAction(refreshLicenseAction);
 
-    let licenseSection = CardService.newCardSection()
-        .addWidget(licenseText)
+    const licenseButtonGroup = CardService.newButtonSet()
+        .addButton(upgradeLicenseButton)
+        .addButton(refreshLicenseButton);
     
+/*     const refreshDecorated = CardService.newDecoratedText()
+        .setText('If you have just purchased a license click here to refresh and apply the license')
+        .setButton(refreshLicenseButton); */
+
+    let licenseSection = CardService.newCardSection()
+        .addWidget(licenseBodyText)
+        .addWidget(licenseText);
+
     if (licenseRead() === 'false') {
         licenseText = CardService.newTextParagraph()
-            .setText(`<b><font color=\"#ff3355\">This is a trial version.</font></b>\nMailMaid will stop after Rule 1 or\nafter downloading 1 thread.\n\nTo enable more, please purchase a licesne at <a href="https://mailmaid.co">mailmaid.co</a>`);
+            .setText(`<b><font color=\"#ff3355\">This is a trial version.</font></b>
+\nMailMaid will stop after Rule 1 or after downloading 1 thread. To enable more,
+UPGRADE your licesne at <a href="https://mailmaid.co">mailmaid.co</a> 
+If you have just purchased a license click REFRESH to apply it.`);
         licenseSection = CardService.newCardSection()
+            .addWidget(licenseBodyText)
             .addWidget(licenseText)
-            .addWidget(upgradeLicenseButton)
-            .addWidget(refreshLicenseButton);
+            .addWidget(licenseButtonGroup);
 
     }else if (licenseRead() === 'true') {
         licenseText = CardService.newTextParagraph()
             .setText(`Product is fully licensed.`);
 
         licenseSection = CardService.newCardSection()
+            .addWidget(licenseBodyText)
             .addWidget(licenseText);
     };        
 

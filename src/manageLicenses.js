@@ -33,5 +33,5 @@ function initLicense() {
 
 function refreshLicense() {
   initLicense()
-  return notify("Refreshing License", onHomepage())
+  return notify("License Refreshed", onHomepage())
 }
