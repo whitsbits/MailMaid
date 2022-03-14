@@ -6,19 +6,21 @@
   "homepage": "http://whitman.app",
   "license": "MIT",
   "scripts": {
+    "gas": "webpack --config webpack.gas.js ",
+    "deploy": "npm run gas && cd dist && clasp push",
     "lint": "eslint -c .eslintrc.json src/*.js",
     "lint:fix": "eslint -c .eslintrc.json --fix src/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/slwhitman/GMail-Retention"
+    "url": "git+https://github.com/slwhitman/GMail-Retention.git"
   },
   "keywords": [
     "google-apps-script",
     "google-workspace"
   ],
   "devDependencies": {
-    "@google/clasp": "^2.3.0",
+    "@google/clasp": "^2.4.1",
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0"
   },
@@ -26,6 +28,10 @@
     "url": "https://github.com/slwhitman/GMail-Maintenance/issues"
   },
   "dependencies": {
-    "@types/google-apps-script": "^1.0.41"
+    "@types/google-apps-script": "^1.0.45"
+  },
+  "main": "webpack.gas.js",
+  "directories": {
+    "test": "test"
   }
 }

@@ -23,7 +23,7 @@ function cleanMail() {
     rulesCached = 0;
   };
 
-
+  initLicense(); // when the backend trigger runs, check that the license is still valid
   if (licenseRead() === false) {
     i, rules.length = 1
   }
@@ -156,11 +156,7 @@ function cleanMail() {
     userProperties.deleteProperty('lastRunEpoch')
     userProperties.setProperties({ 'lastRunEpoch': lastRun })
     Logger.log(`${user} - Setting last run data as ${lastRun}`)
-    sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, tallyCount, results);
-  }
-
-  function newFunction() {
-    return 0;
+    sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, licenseRead(), tallyCount, results);
   }
 };
 

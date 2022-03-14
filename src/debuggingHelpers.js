@@ -74,7 +74,7 @@ function getHash() {
 }
 
 function zeroLicense() {
-  userProperties.setProperties({ "license": "" })
+  userProperties.deleteProperty(`license`);
 }
 
 /**
@@ -162,7 +162,7 @@ function getUserPropsArr() {
 /**
 * Clears the PropertyService of any stored userProperties
 */
-function clearProperties() {
+function clearAllProperties() {
   var userProperties = PropertiesService.getUserProperties();
   userProperties.deleteAllProperties();
 }

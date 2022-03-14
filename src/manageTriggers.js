@@ -2,11 +2,12 @@
  * Get the current triggers for reporting to user
  */
 
-function getTriggersArr() {
+ function getTriggersArr() {
   const triggers = ScriptApp.getProjectTriggers();
   let triggerArr = [];
   for (var i = 0; i < triggers.length; i++) {
-    triggerArr.push(triggers[i].getHandlerFunction())
+    let triggerName = triggers[i].getHandlerFunction();
+    triggerArr.push(triggerName)
   }
   Logger.log(`${user} - getTriggerArr returning ${triggerArr}`)
   return triggerArr
@@ -19,7 +20,7 @@ function getTriggersArr() {
  */
 function triggerActive(triggerName) {
   let triggerArr = getTriggersArr()
-  let triggerBool = triggerArr.includes(triggerName)
+  let triggerBool = triggerArr.includes(triggerName);
   Logger.log(`${user} - triggerActive returning ${triggerName} as ${triggerBool}`)
   return triggerBool
 }
@@ -53,7 +54,7 @@ function setTrigger(triggerName, atHour, everyDays) {
     .everyDays(everyDays) // Frequency is required if you are using atHour() or nearMinute()
     .inTimezone(userTimeZone)
     .create();
-  Logger.log(`${user} - Trigger ${triggerName} created`)
+  Logger.log(`${user} - Trigger ${triggerName} created.`)
 }
 
 /**
@@ -66,6 +67,7 @@ function setTrigger(triggerName, atHour, everyDays) {
     .timeBased()
     .after(1)
     .create();
+  Logger.log(`${user} - Trigger ${triggerName} created.`)
 }
 
 /**
@@ -78,6 +80,7 @@ function setMoreTrigger(triggerName) {
     .timeBased()
     .at(new Date(new Date().getTime() + 1000 * 60 * 60))
     .create();
+  Logger.log(`${user} - Trigger ${triggerName} created.`)
 }
 
 /**
@@ -92,21 +95,5 @@ function removeTriggers(triggerName) {
       ScriptApp.deleteTrigger(trigger);
     }
   }
-  Logger.log(`${user} - Trigger ${triggerName} removed`);
-}
-
-
-
-function webTrigger() {
-const params = {
-  method: 'get',
-  headers: { Authorization: `Bearer ${ScriptApp.getOAuthToken()}` },
-  followRedirects: true,
-  muteHttpExceptions: true,
+  Logger.log(`${user} - Trigger ${triggerName}removed`);
 };
-
-// the following URL should be your "Current web app URL"
-const url = 'https://script.google.com/macros/s/AKfycbxvAzJykKrhNlYV9ij25fzXkmhuGo5C_BWFAcwIe83MEsCzMqcZtF1x90-Yqgq8YeKVJA/exec';
-const response = UrlFetchApp.fetch(url, params);
-console.log('UrlFetchApp response: ', response.getContentText());
-}

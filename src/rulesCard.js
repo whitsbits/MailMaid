@@ -7,6 +7,15 @@
 */
 
 function rulesManagerCard(e, action, search, days) {
+
+    let rulesCardHeader = CardService.newCardHeader()
+    .setTitle('Rules')
+    .setImageUrl(
+        'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
+    )
+    .setImageAltText('MailMaid')
+    .setImageStyle(CardService.ImageStyle.SQUARE);
+
     var rules = getRulesArr();
     if (typeof rules === "string") {
         var selectRulesBodyWidget = CardService.newTextParagraph()
@@ -75,6 +84,7 @@ function rulesManagerCard(e, action, search, days) {
             .addWidget(cardSectionDivider)
             .addWidget(newRuleButtonSet());
 
+        card.setHeader(rulesCardHeader);
         card.addSection(rulesManagerSection);
         card.setFixedFooter(navFooter());
         return card.build();
@@ -141,6 +151,7 @@ function rulesManagerCard(e, action, search, days) {
 
     //-----------------END RULE INPUT WIDGET----------------------------//
 
+    card.setHeader(rulesCardHeader);
     card.addSection(rulesManagerSection);
     card.setFixedFooter(navFooter());
     return card.build();
