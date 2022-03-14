@@ -11,7 +11,8 @@
 
 function licenseRead() {
   var licenseCheck = userProperties.getProperty("license");
-  if (licenseCheck === null){
+
+  if (licenseCheck === null ||  licenseCheck.length > 5) { // check if userProperty is legacy MD5 ID or "false" or "true"
     initLicense();
   };
   Logger.log(`${user} - licenseRead returning ${licenseCheck}`)
