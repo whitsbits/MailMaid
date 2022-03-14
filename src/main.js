@@ -105,8 +105,8 @@ function actionSection() {
         .setOnClickAction(downloadAction);
 
     const actionButtonGroup = CardService.newButtonSet()
-            .addButton(ruleSuggestionButton)
-            .addButton(downloadButton);
+            .addButton(ruleSuggestionButton);
+            //.addButton(downloadButton);
     
     const actionBody = CardService.newCardSection()
         .addWidget(actionBodyText)
