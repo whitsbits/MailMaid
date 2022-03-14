@@ -8,7 +8,7 @@
 function downloadManagerCard(e) {
 
     let downloadCardHeader = CardService.newCardHeader()
-        .setTitle('Manage Downloads')
+        .setTitle('Download')
         .setImageUrl(
             'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
         )

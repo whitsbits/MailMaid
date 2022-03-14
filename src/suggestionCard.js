@@ -1,6 +1,6 @@
 function suggestionCard() {
         let suggestionCardHeader = CardService.newCardHeader()
-            .setTitle('Rule Suggestions')
+            .setTitle('Suggestions')
             .setImageUrl(
                 'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
             )
@@ -14,8 +14,7 @@ function suggestionCard() {
     
         let cardSection1 = CardService.newCardSection()
             .addWidget(cardSection1TextParagraph1);
-    
-        let cardSection2Divider1 = CardService.newDivider();
+
     
         let cardSection2TextParagraph1 = CardService.newTextParagraph()
             .setText('<b>In what range do you want to look  for suggestions?</b>');
@@ -41,14 +40,11 @@ function suggestionCard() {
             );
     
         let cardSection2 = CardService.newCardSection()
-            .addWidget(cardSection2Divider1)
             .addWidget(cardSection2TextParagraph1)
             .addWidget(cardSection2TextParagraph2)
             .addWidget(cardSection2DatePicker1)
             .addWidget(cardSection2DatePicker2)
             .addWidget(cardSection2TextParagraph3);
-    
-        let cardSection3Divider1 = CardService.newDivider();
     
         let cardSection3TextParagraph1 = CardService.newTextParagraph()
             .setText(
@@ -82,7 +78,6 @@ function suggestionCard() {
             .setOnClickAction(suggestionAction);
 
         let cardSection3 = CardService.newCardSection()
-            .addWidget(cardSection3Divider1)
             .addWidget(cardSection3TextParagraph1)
             .addWidget(cardSection3TextParagraph2)
             .addWidget(cardSection3SelectionInput1)

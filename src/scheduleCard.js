@@ -6,6 +6,15 @@
  * @return {CardService.Card} The card to show to the user.
  */
 function scheduleCard(e) {
+    let scheduleCardHeader = CardService.newCardHeader()
+    .setTitle('Schedule')
+    .setImageUrl(
+        'https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true'
+    )
+    .setImageAltText('MailMaid')
+    .setImageStyle(CardService.ImageStyle.SQUARE);
+    
+    card.setHeader(scheduleCardHeader);
     card.addSection(scheduleReportSection())
     card.addSection(scheduleFieldsSection());
     card.addSection(scheduleButtonsSection());
