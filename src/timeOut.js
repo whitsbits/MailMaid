@@ -6,3 +6,14 @@ function isTimeUp_(start, timer) {
   const now = new Date();
   return now.getTime() - start.getTime() > timer;
 }
+
+
+function checkTimeOutCache(element, initValue) {
+  let element = initValue;
+  let elementType = typeOf(initValue);
+  
+  if(cache.get[elementType](element) !== null) {
+    element =  cache.get[elementType](element);     
+  }
+  return element
+}
