@@ -95,5 +95,5 @@ function removeTriggers(triggerName) {
       ScriptApp.deleteTrigger(trigger);
     }
   }
-  Logger.log(`${user} - Trigger ${triggerName}removed`);
+  Logger.log(`${user} - Trigger ${triggerName} removed`);
 };
