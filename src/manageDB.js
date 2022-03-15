@@ -66,13 +66,19 @@ function saveUserInfo() {
  * @return licesense data for user
  */
  function checkLicesnseInDB(email) {
-  const query = `select license from users where email='${email}'`;
-  let stmt = getStmt();
-  var results = stmt.executeQuery(query)
-  if(results.next()){
-   var result = results.getString(1);
-  };
-  stmt.close();
-  Logger.log (`${user} - checkLicense returned ${result}`)
-  return result;
+  try {
+    const query = `select license from users where email='${email}'`;
+    let stmt = getStmt();
+    var results = stmt.executeQuery(query)
+    if(results.next()){
+    var result = results.getString(1);
+    };
+    stmt.close();
+    Logger.log (`${user} - checkLicense returned ${result}`)
+    return result;
+  }
+  catch (e) {
+    Logger.log(`${user} - Error: ${e.toString()}`);
+    return 'ERROR'
+  }
 };
