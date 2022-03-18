@@ -48,7 +48,7 @@ function cleanMail() {
       var days = rules[i][2];
     } else {
       Logger.log(`${user} - No rules set for processing`)
-      sendReportEmail('MailMaid Results', 'src/report-email.html', false, 0, ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
+      sendReportEmail('MailMaid Results', 'src/report-email.html', false, licenseRead(), null, ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
       loopBreak = 1;
       break rulesloop;
     }
