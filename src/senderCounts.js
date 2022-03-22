@@ -153,7 +153,7 @@ catch (e) {
     }
 
     Logger.log(`${user} - Returning top values of: ${topValues}`);
-    sendReportEmail('MailMaid Suggestions','src/senders-email.html', maxMet, tallyCount, topValues);
+    sendReportEmail('MailMaid Suggestions','src/senders-email.html', maxMet, licenseRead(), tallyCount, topValues);
     clearCache('sendersCache');
     //clearCache('senderArr');
     clearCache('senderuA');
