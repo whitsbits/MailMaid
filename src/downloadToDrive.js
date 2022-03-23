@@ -1,5 +1,4 @@
 /**
- * TODO: Add downalod and parse switches to UI
  * TODO: Loop & timeout for large search results
  */
 
