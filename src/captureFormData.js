@@ -157,7 +157,7 @@ function captureDownloadFormData(e) {
   var parseReply = e.formInput.parseReply;
 
   if (search === undefined) {
-    return notify(`Please enter a search criteria above before downloading`, downloadManagerCard())
+    return notify(`Please enter a search criteria above before downloading`, downloadManagerCard(e))
   };
   
   Logger.log(`${user} - Sending ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile} \

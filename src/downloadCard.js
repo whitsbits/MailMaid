@@ -22,10 +22,12 @@ function downloadManagerCard(e) {
     const _searchText = CardService.newTextParagraph()
         .setText('<b>Use <a href="https://support.google.com/mail/answer/7190?hl=en">GMail Search String</a> to tell MailMaid which messages need to be Downloaded:</b>')
     
-    let searchValue =""
+    let searchValue = "";
+
     if (e.formInput.search != null){
         searchValue=e.formInput.search;
     }
+
     var _search = CardService.newTextInput()
         .setFieldName('search')
         .setValue(searchValue)
