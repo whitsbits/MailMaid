@@ -13,7 +13,7 @@ function MailMaid() {
     cleanMail();
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()} from MailMaid`);
   }
 }
 
@@ -26,7 +26,7 @@ function cleanMore() {
     cleanMail();
   } 
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()} from cleanMore`);
   }
 }
 
@@ -40,7 +40,7 @@ function countMoreSenders() {
   countSenders();
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()} from countMore`);
   }
 };
 

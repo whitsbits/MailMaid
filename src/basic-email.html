@@ -3,7 +3,7 @@
 
 <body>
     <img src="https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true" alt="MailMaid"><br>
-    <b>MailMaid completed download of <?= tally ?> messages to your Drive</b><br><br>
+    <br><br>
     <? if (maxMet === true) { ?>
       MailMaid hit the daily quota limit of 20k messages, so not all messages in your inbox were processed.<br><br>
     <? } ?>
@@ -11,7 +11,7 @@
     <br><br>
     <?= results[1] ?>
     <? if (licensed === false) { ?>
-      <br><br><b>To enable download of more than one thread, please purchase a license at <a href="https://mailmaid.co">mailmaid.co</a></b>
+      <br><br><b>To enable more features, please purchase a license at <a href="https://mailmaid.co">mailmaid.co</a></b>
     <? } ?>  
 </body>
 </html>

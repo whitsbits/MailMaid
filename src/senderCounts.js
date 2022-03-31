@@ -116,7 +116,7 @@
   } while (threads.length > 0);
 }
 catch (e) {
-  Logger.log(`${user} - Error: ${e.toString()}`);
+  Logger.log(`${user} - ${e.toString()} from senderCount`);
   maxMet = true; // notify user that maximum quota was reached
   // get a final tally of num of messages proccessed before quota for reporting to user
 }
