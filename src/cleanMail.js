@@ -23,8 +23,7 @@ function cleanMail() {
     rulesCached = 0;
   };
 
-  initLicense(); // when the backend trigger runs, check that the license is still valid
-  if (licenseRead() === false) {
+  if (licenseRead() === false) { // when the backend trigger runs, check that the license is still valid
     i, rules.length = 1
   }
 
@@ -120,7 +119,7 @@ function cleanMail() {
     }; // END While Loop
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()} from cleanMail`);
     maxMet = true; // notify user that maximum quota was reached
     // get a final tally of num of messages proccessed before quota for reporting to user
     break rulesloop;

@@ -1,5 +1,8 @@
 function testSendEmail() {
-  sendReportEmail('Test', 'src/download-email.html', false, false, null, ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
+  sendReportEmail("MailMaid Needs your attention, please", "src/basic-email.html", false, licenseRead(), null,
+       ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
+       "If you no longer wish to use the application in Trial mode, click the three dots in the upper right of the app, select Manage add-on and then three dots again to Uninstall"])
+    
   /*
   cache.getObject('result')
   [

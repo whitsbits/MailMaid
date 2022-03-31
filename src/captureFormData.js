@@ -44,7 +44,7 @@ function captureRuleFormData(e) {
     userProperties.setProperties({ [key]: jarray });
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
   Logger.log(`${user} - Rule Saved as ${key}`);
@@ -91,7 +91,7 @@ function captureScheduleFormData(e) {
     setTrigger('MailMaid', atHour, everyDays);
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
   Logger.log(`${user} - MailMaid schedule saved to run every ${everyDays} day(s) at ${atHour}`);
@@ -133,7 +133,7 @@ function captureSuggestionFormData(e) {
       Async.call('countSenders', aDate, bDate, numResults, suggestionResultChoice)
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
   return notify(`Emailing Sender Suggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`, suggestionCard());
@@ -167,7 +167,7 @@ with atchDownload=${atchDownload} and parseReply=${parseReply}.`);
       Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction, atchDownload, parseReply)
   }
   catch (e) {
-    Logger.log(`${user} - Error: ${e.toString()}`);
+    Logger.log(`${user} - ${e.toString()}`);
     return `Error: ${e.toString()}`;
   }
   return notify(`Starting download of ${search}.\n We will email you when it is complete.`, onHomepage());
