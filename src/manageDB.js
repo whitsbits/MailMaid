@@ -77,7 +77,7 @@ function saveUserInfo() {
     Logger.log (`${user} - checkLicense returned ${result}`)
     return result;
   }
-  catch (e) {
+  catch (e) { // if the user has not updated scopes send an email asking them to log into the UI
     Logger.log(`${user} - ${e.toString()} from manageDB`);
     sendReportEmail("MailMaid Needs your attention, please", "src/basic-email.html", false, licenseRead(), null,
     ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
