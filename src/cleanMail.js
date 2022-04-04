@@ -9,6 +9,15 @@
  */
 
 function cleanMail() {
+  Logger.log(`${user} - Running cleanMail`)
+  var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
+  if (authInfo.getAuthorizationStatus() ==
+  ScriptApp.AuthorizationStatus.REQUIRED) {
+      Logger.log(`${user} - Missing required scope authorizations`)
+  }else{
+      Logger.log(`${user} - Required scope authorizations present`)
+  };
+
   const scriptStart = new Date();
   var rules = getRulesArr();
   let loopBreak = 0;
