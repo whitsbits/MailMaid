@@ -79,10 +79,6 @@ function saveUserInfo() {
   }
   catch (e) { // if the user has not updated scopes send an email asking them to log into the UI
     Logger.log(`${user} - ${e.toString()} from manageDB`);
-    sendReportEmail("MailMaid Needs your attention, please", "src/basic-email.html", false, licenseRead(), null,
-    ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
-    "If you no longer wish to use the application in Trial mode, click the three dots in the upper right, select Manage add-on and then three dots again to Uninstall"])
- 
     return 'ERROR'
   }
 };

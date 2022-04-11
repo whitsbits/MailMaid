@@ -77,6 +77,19 @@ function checkLastRun() {
   return false
 }
 
+function checkAuth() {
+  var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
+  if (authInfo.getAuthorizationStatus() == ScriptApp.AuthorizationStatus.REQUIRED) {
+      Logger.log(`${user} - Missing required scope authorizations`)
+      sendReportEmail("MailMaid Needs your attention, please", "src/basic-email.html", false, licenseRead(), null,
+  ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
+  "If you no longer wish to use the application in Trial mode, click the three dots in the upper right, select Manage add-on and then three dots again to Uninstall"])
+
+  }else{
+      Logger.log(`${user} - Required scope authorizations present`)
+  };
+}
+
 
 /**
 * Function to clear all rules data from the userProperties
