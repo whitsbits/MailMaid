@@ -35,7 +35,7 @@ function sendReportEmail(subject, template, maxMet, licensed, tally, results) {
     subject: subject,
     htmlBody: message
   });
-  Logger.log(`${user} - Email sent to ${recipient}`)
+  Logger.log(`${user} - Email ${subject} sent to ${recipient}`)
 }
 
 /**

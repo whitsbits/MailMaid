@@ -10,13 +10,14 @@
 
 function cleanMail() {
   Logger.log(`${user} - Running cleanMail`)
-  checkAuth();
 
   const scriptStart = new Date();
   var rules = getRulesArr();
   let loopBreak = 0;
   let tallyCount = 0;
   let maxMet = false; 
+
+
   /**  
   * check to see if the app is worken from sleep and get last count value  
   * and if count has been cached use value to resume count of the process
@@ -33,6 +34,12 @@ function cleanMail() {
  
   rulesloop:
   for (let i = rulesCached; i < rules.length; i++) {
+
+    if (!checkAuth()){
+      loopBreak = 1;
+      break rulesloop;
+    };
+
 
     /**
     * Set the init for the start value or the cached value

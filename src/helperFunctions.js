@@ -85,8 +85,10 @@ function checkAuth() {
   ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
   "If you no longer wish to use the application in Trial mode, click the three dots in the upper right, select Manage add-on and then three dots again to Uninstall"])
 
+      return false
   }else{
-      Logger.log(`${user} - Required scope authorizations present`)
+      Logger.log(`${user} - Required scope authorizations present`);
+      return true
   };
 }
 
