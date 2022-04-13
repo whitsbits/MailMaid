@@ -5,6 +5,7 @@ const EnhancedCacheService = wrap(CacheService.getUserCache());
 const cache = EnhancedCacheService;
 const card = CardService.newCardBuilder();
 const userProperties = PropertiesService.getUserProperties();
+const scriptProperties = PropertiesService.getScriptProperties();
 const whiteSpace = CardService.newTextParagraph()
     .setText('\n');
 const cardSectionDivider = CardService.newDivider();

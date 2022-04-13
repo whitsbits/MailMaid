@@ -2,3 +2,4 @@
 .clasp.json
 dist/
 node_modules
+src/.ENV.js

@@ -3,16 +3,23 @@
  */
 
 
-/**
+  /**
  * Function to set up any SQL dB call
+ * Offline file .ENV.js must be run from AppScript ProjectUI
+ * to initialize scriptProperties if dB config has changed
  * @returns JDBC Connection and Statement
  */
-function getStmt() {
-  var conn = Jdbc.getConnection('jdbc:mysql://34.72.191.212:3306/db_mailmaid',
-  {user: 'root', password: 'niGWS!3!g9MXZYI'});
-  let stmt = conn.createStatement()
-  return stmt
-}
+   function getStmt() {
+    var _user = scriptProperties.getProperty("user")
+    var _password = scriptProperties.getProperty("password")
+    var _url = scriptProperties.getProperty("dburl")
+    var conn = Jdbc.getConnection(_url,
+      {user: _user,
+      password: _password});
+    let stmt = conn.createStatement()
+    return stmt
+  }
+
 
 /**
  * save user's email and license status in first loading.

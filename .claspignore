@@ -3,3 +3,4 @@
 !src/*
 !*.html
 test.js
+src/.ENV.js
