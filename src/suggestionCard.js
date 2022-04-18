@@ -9,7 +9,7 @@ function suggestionCard() {
     
         let cardSection1TextParagraph1 = CardService.newTextParagraph()
             .setText(
-                'MailMaid can review your inbox and look at frequent senders and make reccomendations for new rules to help keep your inbox manageable.'
+                'MailMaid can review your inbox and find frequent senders to make new rules.'
             );
     
         let cardSection1 = CardService.newCardSection()
@@ -21,7 +21,7 @@ function suggestionCard() {
     
         let cardSection2TextParagraph2 = CardService.newTextParagraph()
             .setText(
-                'MailMaid can only look at 20k messages, so if you have a large inbox, tell MailMaid the date range where you want to look for suggestions.'
+                'Tell MailMaid the date range where you want to look for suggestions.'
             );
     
         let cardSection2DatePicker1 = CardService.newDatePicker()
@@ -36,7 +36,7 @@ function suggestionCard() {
     
         let cardSection2TextParagraph3 = CardService.newTextParagraph()
             .setText(
-                'If there are more than 20k messages in the range, MailMaid will stop and send the results of the 20k.'
+                'If there are more than 20k messages, MailMaid will stop and send the results.'
             );
     
         let cardSection2 = CardService.newCardSection()
@@ -52,7 +52,7 @@ function suggestionCard() {
     
         let cardSection3TextParagraph2 = CardService.newTextParagraph()
             .setText(
-                'MailMaid can give you the top (5,10,15, etc) results or results that are greater than a certain number of emails (any sender > 50 messages)'
+                'MailMaid can give you the top (5,10,15...) results or results greater than number of emails (any sender > 50 messages)'
             );
     
         let cardSection3SelectionInput1 = CardService.newSelectionInput()
