@@ -24,7 +24,7 @@ function cleanMore() {
   try {
     removeTriggers('cleanMore');
     cleanMail();
-  } 
+  }
   catch (e) {
     Logger.log(`${user} - ${e.toString()} from cleanMore`);
   }
@@ -36,8 +36,8 @@ function cleanMore() {
 */
 function countMoreSenders() {
   try {
-  removeTriggers('countMoreSenders');
-  countSenders();
+    removeTriggers('countMoreSenders');
+    countSenders();
   }
   catch (e) {
     Logger.log(`${user} - ${e.toString()} from countMore`);
@@ -48,11 +48,11 @@ function countMoreSenders() {
  * Responds to trigger to chcek if MailMaid trigger has been disabled
  * 
  */
-  function checkTrigger() {
-    if (checkLastRun()){
-      initSchedule();
-    };
+function checkTrigger() {
+  if (checkLastRun()) {
+    initSchedule();
   };
+};
 
 /**
  * Check that the schedule is working
@@ -78,17 +78,35 @@ function checkLastRun() {
 }
 
 function checkAuth() {
-  var authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
+  let checkAuthCount = userProperties.getProperty('authCount')
+  if (checkAuthCount > 5) {
+    if (!licenseRead) {
+      removeTriggers('MailMaid'); //kill the job from running
+      removeTriggers('checkTrigger');
+      sendReportEmail("MailMaid has been disabled", "src/basic-email.html", false, licenseRead(), null,
+        ["MailMaid has been disabled from running",
+          "If you wish to use the application again, click on the icon and approve the application to run"])
+          Logger.log(`${user} - Triggers turned off for TRIAL user`);
+    } else {
+      MailApp.sendEmail("support@mailmaid.co",
+        "MailMaid user failing authorization check",
+        "Please contact for support");
+        Logger.log(`${user} - checkAuth support email sent for PAID user`);
+    }
+    return false;
+  };
+  const authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
   if (authInfo.getAuthorizationStatus() == ScriptApp.AuthorizationStatus.REQUIRED) {
-      Logger.log(`${user} - Missing required scope authorizations`)
-      sendReportEmail("MailMaid Needs your attention, please", "src/basic-email.html", false, licenseRead(), null,
-  ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
-  "If you no longer wish to use the application in Trial mode, click the three dots in the upper right, select Manage add-on and then three dots again to Uninstall"])
-
-      return false
-  }else{
-      Logger.log(`${user} - Required scope authorizations present`);
-      return true
+    Logger.log(`${user} - Missing required scope authorizations`)
+    sendReportEmail("MailMaid Needs your attention, please", "src/basic-email.html", false, licenseRead(), null,
+      ["For MailMaid to continue to work, you need to launch the app from the right sidebar in your Gmail application and click AUTHORIZE ACCESS",
+        "If you no longer wish to use the application in Trial mode, click the three dots in the upper right, select Manage add-on and then three dots again to Uninstall"])
+    ++checkAuthCount;
+    userProperties.setProperty('authCount', checkAuthCount)
+    return false
+  } else {
+    Logger.log(`${user} - Required scope authorizations present`);
+    return true
   };
 }
 
@@ -376,28 +394,28 @@ function reportSchedule() {
   return text
 };
 
-  /**
- * Takes the array of rules and renumbers them in sequential order
- * for after a rule is deleted
- * saves new index to userProperties.setProperty
- */
-  function reIndexRules() {
-    var rules = getRulesArr();
-    var keys = getRuleKeys();
-    
-    keys.sort();
-    clearRules();
+/**
+* Takes the array of rules and renumbers them in sequential order
+* for after a rule is deleted
+* saves new index to userProperties.setProperty
+*/
+function reIndexRules() {
+  var rules = getRulesArr();
+  var keys = getRuleKeys();
 
-    for (i = 1; i < keys.length; i++) {
-      var newKey = `rule${i}`;
-      rules[i].splice(3,1); //remove the prior index from the array
-      rules[i].push(i); // add the new index to the array
-      userProperties.setProperty(newKey,JSON.stringify(rules[i]));
-      Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
-    }
-    Logger.log (`${user} - Rules property store reindexed`)
-  };
-  
+  keys.sort();
+  clearRules();
+
+  for (i = 1; i < keys.length; i++) {
+    var newKey = `rule${i}`;
+    rules[i].splice(3, 1); //remove the prior index from the array
+    rules[i].push(i); // add the new index to the array
+    userProperties.setProperty(newKey, JSON.stringify(rules[i]));
+    Logger.log(`${user} - Reindexed ${keys[i]} with value ${rules[i]} to ${newKey}.`)
+  }
+  Logger.log(`${user} - Rules property store reindexed`)
+};
+
 /**
  * Checks that timestamp is valid and returns it
  * @param {*} _timestamp 
@@ -431,10 +449,10 @@ function decendingSort(a, b) {
  * @param {*} epochTime 
  * @returns {eTime} yyyy/mm/dd format
  */
-function searchDateConverter(epochTime){
-    epochTime = Number(epochTime);
-    var eTime = new Date(epochTime);
-    var dd = eTime.getDate();
+function searchDateConverter(epochTime) {
+  epochTime = Number(epochTime);
+  var eTime = new Date(epochTime);
+  var dd = eTime.getDate();
 
   var mm = eTime.getMonth() + 1;
   var yyyy = eTime.getFullYear();
@@ -449,17 +467,16 @@ function searchDateConverter(epochTime){
   return eTime;
 }
 
-  /**
- * Checks the string for unsafe characters and replaces with appropriate HTML
- */
-function escapeHtml(unsafe)
-{
-    return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
- }
+/**
+* Checks the string for unsafe characters and replaces with appropriate HTML
+*/
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 
