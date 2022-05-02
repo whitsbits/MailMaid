@@ -80,7 +80,7 @@ function checkLastRun() {
 function checkAuth() {
   let checkAuthCount = userProperties.getProperty('authCount')
   if (checkAuthCount > 5) {
-    if (!licenseRead()) {
+    if (licenseRead()==='false') {
       removeTriggers('MailMaid'); //kill the job from running
       removeTriggers('checkTrigger');
       sendReportEmail("MailMaid has been disabled", "src/basic-email.html", false, licenseRead(), null,
