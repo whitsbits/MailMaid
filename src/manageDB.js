@@ -24,30 +24,30 @@
 /**
  * save user's email and license status in first loading.
  */
-function saveUserInfo() {
+ function saveUserInfo() {
   const stored = userProperties.getProperty('stored');
   if (stored !== 'true' || stored === null ) {
     try {
       let stmt = getStmt();
       let email = '' + Session.getActiveUser();
-
-      if (!checkUserInfoInDB(stmt, email)) {
+      if (checkUserInfoInDB(email) === true) {
+            userProperties.setProperties({ 'stored': true });
+            Logger.log (`${user} - User already stored in database`);
+      }else{
         const query="insert into users(id, email, license) values('"+MD5(email, false)+"','"+email+"','TRIAL')";
         stmt.execute(query);
 
         stmt.close();
 
         Logger.log (`${user} - User successfully sent to database`);
-      };
-      
-      userProperties.setProperties({ 'stored': true });
+      }
     } catch(e) {
       Logger.log(`${user} - Storing info in database failed: ${e.message}`);
     }
   }else{
     Logger.log (`${user} - User already stored in database`);
-  };
-}
+  }
+};
 
 /**
  * Return if user info already stored in DB.
