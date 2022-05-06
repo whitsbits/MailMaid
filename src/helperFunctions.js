@@ -92,6 +92,7 @@ function checkAuth() {
         "MailMaid user failing authorization check",
         "Please contact for support");
         Logger.log(`${user} - checkAuth support email sent for PAID user`);
+        userProperties.setProperty('authCount', 0)
     }
     return false;
   };

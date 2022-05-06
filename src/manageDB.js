@@ -26,7 +26,7 @@
  */
 function saveUserInfo() {
   const stored = userProperties.getProperty('stored');
-  if (stored !== 'true') {
+  if (stored !== 'true' || stored === null ) {
     try {
       let stmt = getStmt();
       let email = '' + Session.getActiveUser();
