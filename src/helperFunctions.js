@@ -178,10 +178,14 @@ function initSchedule() {
     var atHour = schedule[1]
     var everyDays = schedule[0]
   };
-  userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) });
-  removeTriggers('MailMaid');
-  setTrigger('MailMaid', atHour, everyDays);
-  Logger.log(`${user} - Schedule Initialized`);
+  try {
+    userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) });
+    removeTriggers('MailMaid');
+    setTrigger('MailMaid', parseInt(atHour, 10), parseInt(everyDays, 10));
+    Logger.log(`${user} - Schedule Initialized`);
+  }catch(e){
+    Logger.log(`${user} - ${e.toString()} from initSchedule with atHour:${atHour} as ${typeof(atHour)}, everyDays:${everyDays} as ${typeof(everyDays)}`);
+  } 
 };
 
 /**
