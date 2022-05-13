@@ -53,13 +53,22 @@ function scheduleReportWidget() {
  * @return {CardService.Section} The card to show to the user.
  */
 function scheduleFieldsSection() {
+    let schedule = userProperties.getProperty('schedule');
+    if (schedule === null) {
+        var _atHour = 1
+        var _everyDays = 1
+      } else {
+        let schedule = getScheduleArr();
+        var _atHour = schedule[1]
+        var _everyDays = schedule[0]
+      };
 
     const everyDaysText = CardService.newTextParagraph()
         .setText('<b>How often do you want MailMaid to clean?</b>');
 
     const everyDays = CardService.newTextInput()
         .setFieldName('everyDays')
-        .setValue('1')
+        .setValue(_everyDays)
         .setHint(`Set the frequency, in number of days (1-30), you want the schedule to run`);
 
     /*var atHour = CardService.newTimePicker()
@@ -74,7 +83,7 @@ function scheduleFieldsSection() {
 
     const atHour = CardService.newTextInput()
         .setFieldName('atHour')
-        .setValue('2')
+        .setValue(_atHour)
         .setHint('Set the hour of the day for the schedule to run (use whole number 24h time, like 2 for 2AM or 23 for 11PM)');
 
     const scheduleFieldsSection = CardService.newCardSection()

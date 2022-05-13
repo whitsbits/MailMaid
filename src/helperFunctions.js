@@ -80,19 +80,19 @@ function checkLastRun() {
 function checkAuth() {
   let checkAuthCount = userProperties.getProperty('authCount')
   if (checkAuthCount > 5) {
-    if (licenseRead()==='false') {
+    if (licenseRead() === 'false') {
       removeTriggers('MailMaid'); //kill the job from running
       removeTriggers('checkTrigger');
       sendReportEmail("MailMaid has been disabled", "src/basic-email.html", false, licenseRead(), null,
         ["MailMaid has been disabled from running",
           "If you wish to use the application again, click on the icon and approve the application to run"])
-          Logger.log(`${user} - Triggers turned off for TRIAL user`);
+      Logger.log(`${user} - Triggers turned off for TRIAL user`);
     } else {
       MailApp.sendEmail("support@mailmaid.co",
         "MailMaid user failing authorization check",
         "Please contact for support");
-        Logger.log(`${user} - checkAuth support email sent for PAID user`);
-        userProperties.setProperty('authCount', 0)
+      Logger.log(`${user} - checkAuth support email sent for PAID user`);
+      userProperties.setProperty('authCount', 0)
     }
     return false;
   };
@@ -171,21 +171,25 @@ function clearSchedule() {
 function initSchedule() {
   let schedule = userProperties.getProperty('schedule');
   if (schedule === null) {
-    var atHour = 1
     var everyDays = 1
+    var atHour = 1
   } else {
     let schedule = getScheduleArr();
-    var atHour = schedule[1]
     var everyDays = schedule[0]
+    var atHour = schedule[1]
+    
+  };
+  if (atHour > 23 || atHour < 0) {
+    atHour = 13;
   };
   try {
-    userProperties.setProperties({ 'schedule': JSON.stringify([atHour, everyDays]) });
+    userProperties.setProperties({ 'schedule': JSON.stringify([everyDays, atHour]) });
     removeTriggers('MailMaid');
     setTrigger('MailMaid', parseInt(atHour, 10), parseInt(everyDays, 10));
     Logger.log(`${user} - Schedule Initialized`);
-  }catch(e){
-    Logger.log(`${user} - ${e.toString()} from initSchedule with atHour:${atHour} as ${typeof(atHour)}, everyDays:${everyDays} as ${typeof(everyDays)}`);
-  } 
+  } catch (e) {
+    Logger.log(`${user} - ${e.toString()} from initSchedule with atHour:${atHour} as ${typeof (atHour)}, everyDays:${everyDays} as ${typeof (everyDays)}`);
+  }
 };
 
 /**
