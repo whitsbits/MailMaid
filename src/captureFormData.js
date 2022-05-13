@@ -21,8 +21,8 @@ function captureRuleFormData(e) {
     return notify(`Please enter a number only for days`, rulesManagerCard())
   }
 
-  search=escapeHtml(search);
-  
+  search = escapeHtml(search);
+
   if (e.parameters.ruleNum === undefined) {
     var key = null;
     var ruleNum = (countRules());
@@ -73,6 +73,8 @@ function captureScheduleFormData(e) {
     return notify(`Please enter the the time of day you want MailMaid to clean`, scheduleCard())
   } else if (isNaN(atHour)) {
     return notify(`Please enter a number only for time of day you want MailMaid to clean`, scheduleCard())
+  } else if (atHour > 23 || atHour < 0) {
+    return notify(`The hour must be between 0 and 23`, scheduleCard());
   }
 
   var schedule = [everyDays, atHour];
@@ -130,7 +132,7 @@ function captureSuggestionFormData(e) {
   Logger.log(`${user} - SenderSuggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`);
 
   try {
-      Async.call('countSenders', aDate, bDate, numResults, suggestionResultChoice)
+    Async.call('countSenders', aDate, bDate, numResults, suggestionResultChoice)
   }
   catch (e) {
     Logger.log(`${user} - ${e.toString()}`);
@@ -159,12 +161,12 @@ function captureDownloadFormData(e) {
   if (search === undefined) {
     return notify(`Please enter a search criteria above before downloading`, downloadManagerCard(e))
   };
-  
+
   Logger.log(`${user} - Sending ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile} \
 with atchDownload=${atchDownload} and parseReply=${parseReply}.`);
 
   try {
-      Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction, atchDownload, parseReply)
+    Async.call('downloadToDrive', search, downloadAction, saveFile, fileTypeAction, atchDownload, parseReply)
   }
   catch (e) {
     Logger.log(`${user} - ${e.toString()}`);
