@@ -21,7 +21,6 @@
     "https://www.googleapis.com/auth/gmail.addons.execute",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
-    "https://www.googleapis.com/auth/script.send_mail",
     "https://www.googleapis.com/auth/script.locale",
     "https://www.googleapis.com/auth/script.scriptapp",
     "https://www.googleapis.com/auth/gmail.modify",
@@ -29,6 +28,7 @@
     "https://www.googleapis.com/auth/script.external_request"
   ],
   "urlFetchWhitelist": [
-    "https://google.com/"
+    "https://google.com/",
+    "https://script.google.com/"
   ]
 }
