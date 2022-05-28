@@ -15,7 +15,6 @@ let ttl = 82800; //23 hours in seconds
 
 
 function initApp() {
-    checkAuth();
     saveUserInfo();    
     if (checkInitStatus() === false) {
         initSchedule();
