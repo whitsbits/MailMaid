@@ -22,10 +22,10 @@ function captureRuleFormData(e) {
   }
 
   search = escapeHtml(search);
-
+  
   if (e.parameters.ruleNum === undefined) {
     var key = null;
-    var ruleNum = (countRules());
+    var ruleNum = countRules();
   } else {
     var key = e.parameters.ruleNum.toString();
     var ruleNum = key.substring(4);
