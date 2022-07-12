@@ -26,7 +26,7 @@ function runDebugCleanMore() {
 }
 
 function runDebugSendersNow() {
-  timeOutLimit = 3000;
+  timeOutLimit = 300000;
   clearAllCache();
   removeTriggers('countMoreSenders');
   //cache.putNumber('sendersCache', total, ttl); // cache for 23 hours

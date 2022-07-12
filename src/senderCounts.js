@@ -83,10 +83,7 @@
     for (var i = threadsCount; i < threads.length; i++) {
       var message = threads[i].getMessages();
       var sender = message[0].getFrom();
-      if (sender === Session.getActiveUser().getEmail()) {
-        //skip the  current user as a suggestion target
-        continue;
-      } else if (uA.indexOf(sender) == -1) {
+      if (uA.indexOf(sender) == -1) {
         uA.push(sender);
         sender_array.push([sender]);
         cObj[sender] = 1;
@@ -164,7 +161,7 @@ catch (e) {
 
 function suggestionSearchQueryBuilder(afterDate, beforeDate) {
   let query = '';
-  query = ('-in:spam' + " " + "after:" + afterDate + " before:" + beforeDate);
+  query = ('-in:spam' + " " + '-in:sent' + " " + "after:" + afterDate + " before:" + beforeDate);
   Logger.log(`${user} - Returning suggestion search query of: ${query}`)
   return query
 };
