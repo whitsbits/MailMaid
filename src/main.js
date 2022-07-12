@@ -13,6 +13,9 @@ var inc = 500; // Inbox Message Iteration Increment
 let timeOutLimit = 285000; // just under 5  mins in MS
 let ttl = 82800; //23 hours in seconds
 
+// feature toggles (ft)
+let ftDownload = false;
+
 
 function initApp() {
     saveUserInfo();    
@@ -103,12 +106,19 @@ function actionSection() {
         .setText('<font color="#2772ed"><b>Download Old Emails</b></font>')
         .setButton(downloadButton);       
     
+    if (ftDownload){
     const actionBody = CardService.newCardSection()
         .addWidget(actionBodyText)
-        .addWidget(suggestionDecoratedText)
+        .addWidget(suggestionDecoratedText)   
         .addWidget(downloadDecoratedText);
-        
-    return actionBody;
+        return actionBody;
+    }else{
+        const actionBody = CardService.newCardSection()
+        .addWidget(actionBodyText)
+        .addWidget(suggestionDecoratedText)
+        return actionBody;
+    }
+    
 }
 
 /**
