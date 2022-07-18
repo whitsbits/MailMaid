@@ -65,7 +65,7 @@ function checkLastRun() {
     schedule = getScheduleArr();
   }
   let days = parseInt((schedule[0]), 10);
-  Logger.log(`${user} - Has schedule MailMaid every ${days}`)
+  Logger.log(`${user} - Has schedule to run MailMaid every ${days} days`)
   var maxTime = Math.round(+days * 86400000)
   var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'), 10);
   var elapsedTime = (Date.now() - lastRunEpoch);
