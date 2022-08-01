@@ -14,11 +14,11 @@
    const projectId = 'helloworld-d2767'
    const firestore = FirestoreApp.getFirestore(dbemail,key,projectId);
 
-    const _user = scriptProperties.getProperty("user")
+   /** const _user = scriptProperties.getProperty("user")
     const _password = scriptProperties.getProperty("password")
     const _url = scriptProperties.getProperty("dburl")
-    //const firestore = FirestoreApp.getFirestore(_user, _password, _url);
-    
+    const firestore = FirestoreApp.getFirestore(_user, _password, _url);
+     */
 
 
 
