@@ -171,9 +171,16 @@ function listProperties() {
   var properties = userProperties.getProperties();
   Logger.log(properties);
 }
+/**Clear all initializaiton properties to get base install */
+function clearInitProperty() {
+  userProperties.deleteProperty(`license`);
+  userProperties.deleteProperty(`stored`);
+  userProperties.deleteProperty(`initialized`);
+  checkLicesnseInDB("spencer.l.whitman@gmail.com")
+}
 
 function clearProperty() {
-  userProperties.deleteProperty(`rule2`);
+  userProperties.deleteProperty(`license`);
 }
 
 function makeSchedule() {
