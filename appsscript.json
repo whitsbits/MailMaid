@@ -39,6 +39,7 @@
     "https://google.com/",
     "https://script.google.com/",
     "https://oauth2.googleapis.com/token",
-    "https://firestore.googleapis.com/"
+    "https://firestore.googleapis.com/",
+    "https://api.sendgrid.com/v3/mail/send"
   ]
 }

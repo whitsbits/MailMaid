@@ -29,18 +29,8 @@ function sendReportEmail(subject, template, maxMet, licensed, tally, results) {
   var recipient = Session.getActiveUser().getEmail();
   var subject = subject;
   var body = getEmailHTML(template, maxMet, licensed, tally, results);
-  let config = {
-    "method": "post",
-    "muteHttpExceptions" : true,
-    "payload": {
-      "recipient": recipient,
-      "subject" : subject,
-      "body": body
-    }
-  };
-  var _url = scriptProperties.getProperty("emailService") //'https://httpbin.org/anything' for testing response
-  var response = UrlFetchApp.fetch(_url, config);
-  Logger.log(`${user} - ${response} - ${subject} sent to ${recipient}`)
+  sendGrid(recipient, subject, body);
+  Logger.log(`${user} - ${subject} sent to ${recipient}`)
 }
 
 /**
