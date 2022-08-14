@@ -1,5 +1,6 @@
 function sendGrid(recipient, subject, body) {
-var SENDGRID_KEY ='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';
+
+const SENDGRID_KEY = scriptProperties.getProperty("emailService");
 
   var headers = {
     "Authorization" : "Bearer " + SENDGRID_KEY, 
@@ -19,7 +20,8 @@ var SENDGRID_KEY ='SG.iaXNrJt1QDKBEmcEESJIFw.AUm5_f1RXyp9T9fGjuQN0Co-giUxCOqoxmk
     }
   ],
   "from": {
-    "email": "support@mailmaid.co"
+    "email": "support@mailmaid.co",
+    "name": "MailMaid Results"
   },
   "content": [
     {
