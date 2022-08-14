@@ -23,7 +23,7 @@ var SENDGRID_KEY ='SG.iaXNrJt1QDKBEmcEESJIFw.AUm5_f1RXyp9T9fGjuQN0Co-giUxCOqoxmk
   },
   "content": [
     {
-      "type": "html",
+      "type": "text/html",
       "value": body
     }
   ]
@@ -41,6 +41,5 @@ var SENDGRID_KEY ='SG.iaXNrJt1QDKBEmcEESJIFw.AUm5_f1RXyp9T9fGjuQN0Co-giUxCOqoxmk
 
  var response = UrlFetchApp.fetch("https://api.sendgrid.com/v3/mail/send",options);
 
-
- Logger.log(response); 
+ Logger.log(`${user} - sendGrid message process with response: ${response}`); 
  }
