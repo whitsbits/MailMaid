@@ -42,9 +42,9 @@ const SENDGRID_KEY = scriptProperties.getProperty("emailService");
 
 
  var response = UrlFetchApp.fetch("https://api.sendgrid.com/v3/mail/send", options);
- if (response === null){
-  response = '200: Success';
+ if (!response.toString()){
+  response = '200 - Success';
  }
-
- Logger.log(`${user} - sendGrid message process with response: ${response}`); 
+ 
+ Logger.log(`${user} - sendGrid message process with response: ${response.toString()}`); 
  }
