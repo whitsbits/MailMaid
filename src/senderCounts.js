@@ -114,8 +114,10 @@
 }
 catch (e) {
   Logger.log(`${user} - ${e.toString()} from senderCount`);
-  maxMet = true; // notify user that maximum quota was reached
-  // get a final tally of num of messages proccessed before quota for reporting to user
+  if (e.toString.includes("Service invoked too many times for one day")){
+    maxMet = true; // notify user that maximum quota was reached
+    // get a final tally of num of messages proccessed before quota for reporting to user
+  }
 }
 
   if (loopBreak !== 1) {
