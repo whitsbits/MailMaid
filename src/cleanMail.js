@@ -131,9 +131,11 @@ function cleanMail() {
   catch (e) {
     Logger.log(`${user} - ${e.toString()} from cleanMail`);
     if (e.message.includes("Mail service not enabled")){ //kill deadhead for non addon enabled accounts
+      Logger.log (`${user} - Removing triggers for dead head account`)
       removeTriggers('MailMaid');
       removeTriggers('checkTrigger');
     }else if (e.message.includes("Service invoked too many times for one day")){
+      Logger.log (`${user} - Maximum daily count met`)
       maxMet = true; // notify user that maximum quota was reached
       // get a final tally of num of messages proccessed before quota for reporting to user
     }
