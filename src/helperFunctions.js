@@ -70,7 +70,7 @@ function checkLastRun() {
   var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'), 10);
   var elapsedTime = (Date.now() - lastRunEpoch);
   if (elapsedTime > maxTime) {
-    Logger.log(`${user} - Schedule is failing`)
+    Logger.log(`${user} - Schedule is failing. Job has not run since ${searchDateConverter(elapsedTime)}`)
     return true
   }
   Logger.log(`${user} - Schedule is working`)
@@ -191,7 +191,8 @@ function initSchedule() {
     userProperties.setProperties({ 'schedule': JSON.stringify([everyDays, atHour]) });
     removeTriggers('MailMaid');
     setTrigger('MailMaid', parseInt(atHour, 10), parseInt(everyDays, 10));
-    Logger.log(`${user} - Schedule Initialized`);
+    Logger.log(`${user} - Schedule Initialized, restarting job to run now`);
+    MailMaid();
   } catch (e) {
     Logger.log(`${user} - ${e.toString()} from initSchedule with atHour:${atHour} as ${typeof (atHour)}, everyDays:${everyDays} as ${typeof (everyDays)}`);
   }
