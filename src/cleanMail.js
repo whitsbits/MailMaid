@@ -59,6 +59,7 @@ function cleanMail() {
       Logger.log(`${user} - No rules set for processing`)
       sendReportEmail('MailMaid Results', 'src/report-email.html', false, licenseRead(), null, ["MailMaid had no rules to process your Inbox", "Please set up your rules in the app."]);
       loopBreak = 1;
+      lastRun();
       break rulesloop;
     }
     searchString = searchQueryBuilder(action, searchString, days);
@@ -168,13 +169,17 @@ function cleanMail() {
     removeTriggers('cleanMore')
     var results = cache.getObject('result');
     Logger.log(`${user} - Final tally: \n ${results}`);
-    var lastRun = JSON.stringify(Date.now());
-    userProperties.deleteProperty('lastRunEpoch')
-    userProperties.setProperties({ 'lastRunEpoch': lastRun })
-    Logger.log(`${user} - Setting last run data as ${lastRun}`)
+    lastRun();
     sendReportEmail('MailMaid Results', 'src/report-email.html', maxMet, licenseRead(), tallyCount, results);
   }
 };
+
+function lastRun(){
+  var lastRun = JSON.stringify(Date.now());
+    userProperties.deleteProperty('lastRunEpoch')
+    userProperties.setProperties({ 'lastRunEpoch': lastRun })
+    Logger.log(`${user} - Setting last run data as ${lastRun}`)
+}
 
 function searchQueryBuilder(action, searchString, days) {
   let query = '';
