@@ -13,7 +13,7 @@ function downloadToDrive(search, downloadAction, saveFile, fileTypeAction, atchD
   Logger.log(`${user} - Processing ${downloadAction} with ${search} as type ${fileTypeAction} to ${saveFile} with atchDownload=${atchDownload} and parseReply=${parseReply}.`)
   var threads = GmailApp.search(search, 0, inc);
   var slug = printSlug();
-  var foldeName = "MailMaid Download" + "_" + search + "_" + searchDateConverter(Date.now());
+  var foldeName = "MailMaid Download" + "_" + search + "_" + epochDateConverter(Date.now());
   var newFolder = DriveApp.createFolder(foldeName).getId();
 
   var file = '';

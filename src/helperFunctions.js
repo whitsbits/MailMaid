@@ -70,7 +70,7 @@ function checkLastRun() {
   var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'), 10);
   var elapsedTime = (Date.now() - lastRunEpoch);
   if (elapsedTime > maxTime) {
-    Logger.log(`${user} - Schedule is failing. Job has not run since ${searchDateConverter(elapsedTime)}`)
+    Logger.log(`${user} - Schedule is failing. Job has not run since ${epochDateConverter(elapsedTime)}`)
     return true
   }
   Logger.log(`${user} - Schedule is working`)
@@ -464,7 +464,7 @@ function decendingSort(a, b) {
  * @param {*} epochTime 
  * @returns {eTime} yyyy/mm/dd format
  */
-function searchDateConverter(epochTime) {
+function epochDateConverter(epochTime) {
   epochTime = Number(epochTime);
   var eTime = new Date(epochTime);
   var dd = eTime.getDate();

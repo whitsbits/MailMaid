@@ -33,7 +33,7 @@ function runDebugSendersNow() {
   //cache.putNumber('senderArr', sender_array, ttl); // cache for 23 hours
   //cache.putObject('senderuA', uA, ttl)
   //cache.putObject('sendercObj', cObj, ttl)
-  countSenders(searchDateConverter(1640031285000), searchDateConverter(Date.now()), 10, 'Top');
+  countSenders(epochDateConverter(1640031285000), epochDateConverter(Date.now()), 10, 'Top');
   }
 
 /**

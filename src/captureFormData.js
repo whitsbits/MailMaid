@@ -127,8 +127,8 @@ function captureSuggestionFormData(e) {
     return notify(`Please enter a number greater than 5 or less than 100.`, suggestionCard());
   };
 
-  let bDate = searchDateConverter(beforeDate);
-  let aDate = searchDateConverter(afterDate);
+  let bDate = epochDateConverter(beforeDate);
+  let aDate = epochDateConverter(afterDate);
   Logger.log(`${user} - SenderSuggestions for ${aDate} to ${bDate} for ${suggestionResultChoice} ${numResults} results`);
 
   try {
