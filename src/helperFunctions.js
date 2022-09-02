@@ -70,10 +70,10 @@ function checkLastRun() {
   var lastRunEpoch = parseInt(userProperties.getProperty('lastRunEpoch'), 10);
   var elapsedTime = (Date.now() - lastRunEpoch);
   if (elapsedTime > maxTime) {
-    Logger.log(`${user} - Schedule is failing. Job has not run since ${epochDateConverter(elapsedTime)}`)
+    Logger.log(`${user} - Schedule is failing. Job has not run since ${epochDateConverter(lastRunEpoch)}`)
     return true
   }
-  Logger.log(`${user} - Schedule is working`)
+  Logger.log(`${user} - Schedule is working. Job last ran ${epochDateConverter(lastRunEpoch)}`)
   return false
 }
 
