@@ -71,6 +71,7 @@ function getHash() {
   const userString = String(user)
   const userhash = MD5(userString, false);
   Logger.log(userhash)
+  return userhash
 }
 
 function zeroLicense() {
