@@ -87,10 +87,9 @@ function checkAuth() {
         ["MailMaid has been disabled from running",
           "If you wish to use the application again, click on the icon and approve the application to run"])
       Logger.log(`${user} - Triggers turned off for TRIAL user`);
-    } else {
-      MailApp.sendEmail("support@mailmaid.co",
-        "MailMaid user failing authorization check",
-        "Please contact for support");
+    } else { 
+      sendReportEmail("MailMaid user failing authorization check", "src/basic-email.html", false, licenseRead(), null,
+        ["Please contact support@mailmaid.co for support"]);
       Logger.log(`${user} - checkAuth support email sent for PAID user`);
       userProperties.setProperty('authCount', 0)
     }

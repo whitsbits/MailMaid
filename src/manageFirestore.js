@@ -56,7 +56,7 @@
   try{
     let docRef = `users/${email}` 
     let results = firestore.getDocument(docRef)
-    Logger.log (`${user} - checkUserInfoInDB returned ${result}`)
+    Logger.log (`${user} - checkUserInfoInDB returned ${results}`)
     return (results !== null);
   } catch{
      Logger.log (`${user} - checkUserInfoInDB returned null`)
