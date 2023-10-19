@@ -191,7 +191,7 @@ function initSchedule() {
     removeTriggers('MailMaid');
     setTrigger('MailMaid', parseInt(atHour, 10), parseInt(everyDays, 10));
     Logger.log(`${user} - Schedule Initialized, restarting job to run now`);
-    MailMaid();
+    Async.call(MailMaid);
   } catch (e) {
     Logger.log(`${user} - ${e.toString()} from initSchedule with atHour:${atHour} as ${typeof (atHour)}, everyDays:${everyDays} as ${typeof (everyDays)}`);
   }
