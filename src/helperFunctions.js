@@ -493,4 +493,17 @@ function escapeHtml(unsafe) {
     .replace(/'/g, "&#039;");
 }
 
-
+/**
+ * Unescapes HTML entities in a string.
+ * 
+ * @param {string} escapedHtml - The HTML string with escaped entities.
+ * @returns {string} The unescaped HTML string.
+ */
+function unescapeHtml(escapedHtml) {
+  return escapedHtml
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'");
+}

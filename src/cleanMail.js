@@ -62,7 +62,7 @@ function cleanMail() {
       lastRun();
       break rulesloop;
     }
-    searchString = searchQueryBuilder(action, searchString, days);
+    searchString = searchQueryBuilder(action, unescapeHtml(searchString), days);
 
     try{
     searchloop:
