@@ -1,5 +1,6 @@
 .DS_store/
 .clasp.json
+.clasprc.json
 dist/
 node_modules
 src/.ENV.js
