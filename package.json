@@ -1,12 +1,12 @@
 {
   "name": "gmailretention",
-  "version": "1.0.0",
+  "version": "1.6.3.2",
   "description": "Allow scheduled management of GMail retention",
   "author": "Stewart Whitman <stewart.l.whitman@gmail.com>",
   "homepage": "http://whitman.app",
   "license": "MIT",
   "scripts": {
-    "gas": "webpack --config webpack.gas.js ",
+    "gas": "webpack --config webpack.gas.js",
     "deploy": "npm run gas && cd dist && clasp push",
     "lint": "eslint -c .eslintrc.json src/*.js",
     "lint:fix": "eslint -c .eslintrc.json --fix src/*.js"

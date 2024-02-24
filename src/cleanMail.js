@@ -26,7 +26,7 @@ function cleanMail() {
     rulesCached = 0;
   }
 
-  if (licenseRead() === false) {
+  if (licenseRead() === "false") {
     // when the backend trigger runs, check that the license is still valid
     i, (rules.length = 1);
   }
@@ -53,7 +53,7 @@ function cleanMail() {
       var days = rules[i][2];
     } else {
       Logger.log(`${user} - No rules set for processing`);
-      if (licenseRead() === true) {
+      if (licenseRead() === "true") {
         sendReportEmail(
           "MailMaid Results",
           "src/report-email.html",
@@ -194,7 +194,7 @@ function cleanMail() {
     var results = cache.getObject("result");
     Logger.log(`${user} - Final tally: \n ${results}`);
     lastRun();
-    if (licenseRead() === true) {
+    if (licenseRead() === "true") {
       sendReportEmail(
         "MailMaid Results",
         "src/report-email.html",
