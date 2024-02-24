@@ -182,7 +182,7 @@ function homepageScheduleSection() {
 
 function homepageLicenseSection() {
   var introText =
-    'MailMaid automatically cleans your email by setting rules that find messages based on <a href="https://support.google.com/mail/answer/7190?hl=en">GMail search criteria</a> and can archive or purge them for you, according to the number of days since the message was received.';
+    'MailMaid automatically cleans your email by setting rules that find messages based on <a href="https://support.google.com/mail/answer/7190?hl=en">GMail™ search criteria</a> and can archive or purge them for you, according to the number of days since the message was received.';
   const introBodyText = CardService.newTextParagraph().setText(introText);
 
   const licenseBodyText =
