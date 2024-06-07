@@ -179,7 +179,7 @@ function cleanMail() {
     clearCache("ruleLoopCache");
     removeTriggers("cleanMore");
     var results = cache.getObject("result");
-    Logger.log(`${user} - Final tally: \n ${results}`);
+    Logger.log(`${user} - Final tally: ${results.length} rules processed.`);
     lastRun();
   }
 }
