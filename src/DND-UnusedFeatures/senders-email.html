@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <img src="https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true" alt="MailMaid"><br>
+    <b>MailMaid reviewed <?= tally ?> messages looking for suggestions</b><br>
+    <? if (maxMet === true) { ?>
+      MailMaid hit the daily quota limit of 20k messages, so not all emails in your inbox were reviewed.<br>
+    <? } ?><br>
+
+    <b>You should look at building rules around the following high volume senders:</b><br>
+    Right click and select "Copy email address" to paste into the MailMaid rules manger search string.<br><br>
+
+    <table class="wp-table" style="border: 1px solid #ccc;table-layout: auto;border-collapse: collapse;border-spacing: 0;width: 40%;display: table;font-size: 13px!important;">
+      <tr style="border-bottom: 1px solid #ddd;background-color: #347ff7;font-size:18px; color:white">
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Sender</td>
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Count</td>
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Search String<br><p style="font-size: 10px">Right click to copy,<br>then paste into your<br>MailMaid rule.</p></td>
+      </tr>
+      <? for (var i = 0; i < results.length; i++) { ?>
+        <? if (i % 2 === 0) { ?>
+        <tr style="border-bottom: 1px solid #ddd;background-color: #fff">
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][0] ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][1] ?></td>         
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][2] ?></td>         
+        </tr>
+        <? }else {?>  
+        <tr style="border-bottom: 1px solid #ddd;background-color: #f1f1f1;">
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][0] ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][1] ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i][2] ?></td>
+    </tr>
+        <? } ?>
+      <? } ?>
+    </table>
+    <? if (licensed === false) { ?>
+      <br><br><b>To enable more than one rule, please purchase a license at <a href="https://mailmaid.co/?utm_source=suggestions&utm_medium=email">mailmaid.co</a></b>
+    <? } ?>  
+</body>
+</html>

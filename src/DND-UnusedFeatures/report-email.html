@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <img src="https://github.com/slwhitman/files/blob/main/MailMaidLogo(128px).png?raw=true" alt="MailMaid"><br>
+    <b>MailMaid processed <?= tally ?> threads based on your rules</b><br>
+    <? if (maxMet === true) { ?>
+      MailMaid hit the daily quota limit of 20k messages, so not all emails in your inbox were processed.<br><br>
+    <? } ?>
+
+    <table class="wp-table" style="border: 1px solid #ccc;table-layout: auto;border-collapse: collapse;border-spacing: 0;width: 40%;display: table;font-size: 13px!important;">
+      <tr style="border-bottom: 1px solid #ddd;background-color: #347ff7;font-size:18px; color:white">
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Rule No.</td>
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Count</td>
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Action</td>
+        <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;">Search String</td>
+      </tr>
+      <? for (var i = 0; i < results.length; i++) { ?>
+        <? if (i % 2 === 0) { ?>
+        <tr style="border-bottom: 1px solid #ddd;background-color: #fff">
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].id ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].counter ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].action ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].searchString ?></td>
+        </tr>
+        <? }else {?>  
+        <tr style="border-bottom: 1px solid #ddd;background-color: #f1f1f1;">
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].id ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].counter ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].action ?></td>
+          <td style="padding: 8px 8px;width: 20%;display: table-cell;text-align: left;vertical-align: top;padding-left: 16px;"><?= results[i].searchString ?></td>
+  </tr>
+        <? } ?>
+      <? } ?>
+    </table>
+    <? if (licensed === false) { ?>
+      <br><br><b>To enable more than one rule, please purchase a license at <a href="https://mailmaid.co/?utm_source=results&utm_medium=email">mailmaid.co</a></b>
+    <? } ?>  
+</body>
+</html>
