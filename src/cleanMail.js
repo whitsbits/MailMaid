@@ -53,19 +53,6 @@ function cleanMail() {
       var days = rules[i][2];
     } else {
       Logger.log(`${user} - No rules set for processing`);
-      if (licenseRead() === "true") {
-        sendReportEmail(
-          "MailMaid Results",
-          "src/report-email.html",
-          false,
-          licenseRead(),
-          null,
-          [
-            "MailMaid had no rules to process your Inbox",
-            "Please set up your rules in the app.",
-          ]
-        );
-      }
       loopBreak = 1;
       lastRun();
       break rulesloop;
@@ -91,7 +78,7 @@ function cleanMail() {
           searchBatchStart + threads.length
         }`;
         Logger.log(
-          `${user} - Processing batch ${batch} with rule set: ${action}, ${searchString}, starting at thread ${threadsCount}.`
+          `${user} - Processing rule ${i}, batch ${batch} with rule set: ${action}, starting at thread ${threadsCount}.`
         );
 
         tallyCount += threads.length;
@@ -179,7 +166,7 @@ function cleanMail() {
     });
     cache.putObject("result", resultsArr);
     Logger.log(
-      `${user} - Finished processing rule set: ${action}, ${searchString}, ${days}.\n ${counter} total threads ${action}d`
+      `${user} - Finished processing rule set ${i}: ${action}. ${counter} total threads ${action}d`
     );
     clearCache("rulesCache");
     clearCache("searchBatchStartCache");
@@ -194,16 +181,6 @@ function cleanMail() {
     var results = cache.getObject("result");
     Logger.log(`${user} - Final tally: \n ${results}`);
     lastRun();
-    if (licenseRead() === "true") {
-      sendReportEmail(
-        "MailMaid Results",
-        "src/report-email.html",
-        maxMet,
-        licenseRead(),
-        tallyCount,
-        results
-      );
-    }
   }
 }
 

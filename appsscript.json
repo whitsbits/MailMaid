@@ -35,14 +35,12 @@
     "https://www.googleapis.com/auth/userinfo.profile",
     "https://www.googleapis.com/auth/script.locale",
     "https://www.googleapis.com/auth/script.scriptapp",
-    "https://www.googleapis.com/auth/gmail.modify",
-    "https://www.googleapis.com/auth/script.external_request"
+    "https://www.googleapis.com/auth/gmail.modify"
   ],
   "urlFetchWhitelist": [
     "https://google.com/",
     "https://script.google.com/",
     "https://oauth2.googleapis.com/token",
-    "https://firestore.googleapis.com/",
-    "https://api.sendgrid.com/v3/mail/send"
+    "https://firestore.googleapis.com/"
   ]
 }

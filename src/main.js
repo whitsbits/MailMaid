@@ -110,9 +110,7 @@ function actionSection() {
       .addWidget(downloadDecoratedText);
     return actionBody;
   } else {
-    const actionBody = CardService.newCardSection()
-      .addWidget(actionBodyText)
-      .addWidget(suggestionDecoratedText);
+    const actionBody = CardService.newCardSection().addWidget(actionBodyText);
     return actionBody;
   }
 }

@@ -87,27 +87,8 @@ function checkAuth() {
     if (licenseRead() === "false") {
       removeTriggers("MailMaid"); //kill the job from running
       removeTriggers("checkTrigger");
-      sendReportEmail(
-        "MailMaid has been disabled",
-        "src/basic-email.html",
-        false,
-        licenseRead(),
-        null,
-        [
-          "MailMaid has been disabled from running",
-          "If you wish to use the application again, click on the icon and approve the application to run",
-        ]
-      );
       Logger.log(`${user} - Triggers turned off for TRIAL user`);
     } else {
-      sendReportEmail(
-        "MailMaid user failing authorization check",
-        "src/basic-email.html",
-        false,
-        licenseRead(),
-        null,
-        ["Please contact support@mailmaid.co for support"]
-      );
       Logger.log(`${user} - checkAuth support email sent for PAID user`);
       userProperties.setProperty("authCount", 0);
     }
@@ -119,22 +100,10 @@ function checkAuth() {
   ) {
     Logger.log(`${user} - Missing required scope authorizations`);
     try {
-      sendReportEmail(
-        "MailMaid Needs your attention, please",
-        "src/basic-email.html",
-        false,
-        licenseRead(),
-        null,
-        [
-          "For MailMaid to continue to work, you need to launch the app from the right sidebar in your GMail™ application and click AUTHORIZE ACCESS",
-          "If you no longer wish to use the application in Trial mode, click the three dots in the upper right, select Manage add-on and then three dots again to Uninstall",
-        ]
-      );
+      //disabled for now
     } catch (e) {
       Logger.log(`${user} - ${e.toString()}`);
-      Logger.log(
-        `${user} - Can not call UrlFetchApp.fetch to send automated email`
-      );
+      Logger.log(`${user} - Can not send automated email`);
     }
     ++checkAuthCount;
     userProperties.setProperty("authCount", checkAuthCount);

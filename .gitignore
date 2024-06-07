@@ -5,3 +5,4 @@ dist/
 node_modules
 src/.ENV.js
 client_secret*
+DND*
