@@ -16,17 +16,20 @@ let ttl = 82800; //23 hours in seconds
 let ftDownload = false;
 
 function initApp() {
-  saveUserInfo();
+  //saveUserInfo();
   if (checkInitStatus() === false) {
+    removeDupeTriggers();
+    removeTriggers("checkTrigger");
     initSchedule();
     initRules();
     initLicense();
-    removeTriggers("checkTrigger");
     userProperties.setProperties({ initialized: true });
     Logger.log(`${user} - App Initialized`);
   } else {
     if (checkLastRun()) {
       //clear any "This trigger has been disabled for an unknown reason."
+      removeDupeTriggers();
+      removeTriggers("checkTrigger");
       initSchedule();
     }
     Logger.log(`${user} - App already initialized`);
