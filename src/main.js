@@ -18,8 +18,7 @@ let ftDownload = false;
 function initApp() {
   //saveUserInfo();
   if (checkInitStatus() === false) {
-    removeDupeTriggers();
-    removeTriggers("checkTrigger");
+    deleteAllTimeBasedTriggers();
     initSchedule();
     initRules();
     initLicense();
@@ -28,8 +27,7 @@ function initApp() {
   } else {
     if (checkLastRun()) {
       //clear any "This trigger has been disabled for an unknown reason."
-      removeDupeTriggers();
-      removeTriggers("checkTrigger");
+      deleteAllTimeBasedTriggers();
       initSchedule();
     }
     Logger.log(`${user} - App already initialized`);

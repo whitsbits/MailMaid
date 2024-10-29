@@ -27,15 +27,12 @@ function licenseRead() {
 
 function initLicense() {
   //let email = '' + Session.getActiveUser();
-  userProperties.setProperties({ license: true });
-  /*
   let license = checkLicesnseInDB(email);
-    if (license === 'TRIAL' || license === 'ERROR' ){
-      userProperties.setProperties({ "license": false })
-    } else {
-      userProperties.setProperties({ "license": true })
-    };
-    */
+  if (license === "TRIAL" || license === "ERROR") {
+    userProperties.setProperties({ license: false });
+  } else {
+    userProperties.setProperties({ license: true });
+  }
 }
 
 function refreshLicense() {
