@@ -10,7 +10,7 @@
 
 function cleanMail() {
   Logger.log(`${user} - Running cleanMail`);
-
+  deleteAllTimeBasedTriggers();
   const scriptStart = new Date();
   var rules = getRulesArr();
   let loopBreak = 0;
