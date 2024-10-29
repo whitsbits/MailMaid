@@ -21,16 +21,13 @@ function initApp() {
     initSchedule();
     initRules();
     initLicense();
-    setTrigger("checkTrigger", 1, 1);
+    removeTriggers("checkTrigger");
     userProperties.setProperties({ initialized: true });
     Logger.log(`${user} - App Initialized`);
   } else {
     if (checkLastRun()) {
       //clear any "This trigger has been disabled for an unknown reason."
       initSchedule();
-      if (!triggerActive("checkTrigger")) {
-        setTrigger("checkTrigger", 1, 1);
-      }
     }
     Logger.log(`${user} - App already initialized`);
   }
