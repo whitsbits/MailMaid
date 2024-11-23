@@ -26,7 +26,7 @@ function licenseRead() {
  */
 
 function initLicense() {
-  //let email = '' + Session.getActiveUser();
+  let email = "" + Session.getActiveUser();
   let license = checkLicesnseInDB(email);
   if (license === "TRIAL" || license === "ERROR") {
     userProperties.setProperties({ license: false });
